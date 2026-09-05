@@ -35,12 +35,12 @@ button,input,textarea{font:inherit;color:inherit}
 .sandbox{background:#2E2016;color:#F3EADB;font-size:12px;letter-spacing:.06em;text-align:center;padding:5px 12px}
 .sandbox b{color:var(--accent-1)}
 /* header */
-/* the terrace photo filtered into faint coloured lines (tools/photo-to-lines.py) sits behind the header only */
+/* the terrace photo as a soft pastel cartoon (tools/photo-to-pastel.py), edges dissolving into the page, behind the header only */
 .mhead{text-align:center;padding:44px 22px 26px;overflow:hidden;min-height:clamp(320px,42vw,540px);display:flex;flex-direction:column;justify-content:center;align-items:center}
-.mhead-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.5;pointer-events:none;z-index:0}
+.mhead-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.95;pointer-events:none;z-index:0}
 .mhead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(180deg,rgba(251,246,236,0),var(--field-2));z-index:0;pointer-events:none}
 .mhead>*:not(.mhead-art){position:relative;z-index:1}
-@media(max-width:900px){.mhead{min-height:300px}.mhead-art{object-position:center 45%;opacity:.45}}
+@media(max-width:900px){.mhead{min-height:300px}.mhead-art{object-position:center 45%;opacity:.9}}
 .mhead .kicker{font-size:12px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--accent-3)}
 .mhead h1{font-size:clamp(34px,7vw,58px);letter-spacing:.06em;text-indent:.06em;color:#2A1B10;text-transform:uppercase;margin:10px 0 0}
 .mhead .dek{max-width:58ch;margin:14px auto 0;color:var(--ink-dim)}
@@ -155,7 +155,7 @@ header.mhead,.shop{position:relative;z-index:1}
 <div class="sandbox" data-i18n="sb.banner">Voorbeeld — geen echte bestellingen, geen betaling</div>
 
 <header class="mhead">
-  <img class="mhead-art" src="terrace-lines.webp" alt="" aria-hidden="true" width="1200" height="653" decoding="async">
+  <img class="mhead-art" src="terrace-pastel.webp" alt="" aria-hidden="true" width="1200" height="653" decoding="async">
   <div class="kicker" data-i18n="hdr.kicker">Eetcafé · Stavenisse · Zeeland</div>
   <h1 data-i18n="o.title">Afhalen</h1>
   <p class="dek" data-i18n="o.dek">Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.</p>
