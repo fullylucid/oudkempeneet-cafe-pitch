@@ -32,7 +32,7 @@ button,input,textarea{font:inherit;color:inherit}
 .lang button:last-child{border-right:0}.lang button[aria-pressed="true"]{background:var(--accent-2);color:#241300;font-weight:600}
 @media(max-width:600px){.nav-back{display:none}}
 /* sandbox banner */
-.sandbox{background:#2E2016;color:#F3EADB;font-size:12.5px;letter-spacing:.06em;text-align:center;padding:7px 12px}
+.sandbox{background:#2E2016;color:#F3EADB;font-size:12px;letter-spacing:.06em;text-align:center;padding:5px 12px}
 .sandbox b{color:var(--accent-1)}
 /* header */
 .mhead{text-align:center;padding:40px 22px 8px}
@@ -43,13 +43,13 @@ button,input,textarea{font:inherit;color:inherit}
 .state{display:inline-flex;align-items:center;gap:10px;margin:16px auto 0;padding:9px 16px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:14px}
 .state .dot{width:9px;height:9px;border-radius:50%;background:var(--ok)}.state.shut .dot{background:var(--warn)}
 .state b{font-weight:600}.state .seg{white-space:nowrap}
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,8px);z-index:90;background:#2E2016;color:#F3EADB;padding:10px 16px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:92vw;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translate(-50%,8px);z-index:90;background:#2E2016;color:#F3EADB;padding:10px 16px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:92vw;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
 @media(min-width:901px){.toast{bottom:28px}}
 .skip{position:absolute;left:-999px;top:8px;background:var(--paper);padding:8px 12px;border:1px solid var(--line);z-index:100}.skip:focus{left:8px}
 /* layout */
 .shop{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:34px;align-items:start;padding:22px 0 60px}
 .shop>.col{min-width:0}
-@media(max-width:900px){.shop{grid-template-columns:minmax(0,1fr);padding-bottom:110px}}
+@media(max-width:900px){.shop{grid-template-columns:minmax(0,1fr);padding-bottom:170px}}
 /* category strip — a TRANSPARENT CONTROL SURFACE for the vertical scroll (Schyler, 2026-09-05).
    Dragging it sideways drives one eased, inertial vertical scroll; the category bubbles are an
    overlay translated from the page position after the fact. The strip never scrolls itself, so
@@ -68,6 +68,7 @@ button,input,textarea{font:inherit;color:inherit}
 .catarr{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--accent-3);font-size:16px;line-height:1;cursor:pointer;box-shadow:0 6px 16px -8px rgba(36,24,19,.5)}
 .catarr.l{left:6px}.catarr.r{right:6px}
 @media(hover:hover) and (pointer:fine){.catwrap.more-l .catarr.l,.catwrap.more-r .catarr.r{display:inline-flex;align-items:center;justify-content:center}}
+@media(max-width:900px){.catwrap{position:fixed;top:auto;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));z-index:60;margin:0;border-top:1px solid rgba(122,106,87,.18);background:rgba(251,248,242,.96)}.cats{padding:8px 12px}}
 /* items */
 .menu-cat{margin-top:34px}
 .cat-head{display:flex;align-items:center;gap:16px;margin-bottom:14px}
@@ -132,7 +133,6 @@ footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-d
 </head>
 <body>
 <a class="skip" href="#menu" data-i18n="a.skip">Naar de kaart</a>
-<div class="sandbox" data-i18n="sb.banner">Voorbeeld — geen echte bestellingen, geen betaling</div>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="https://www.oudkempeneetcafe.nl/" aria-label="Oud-Kempen Eetcafé — home"><span class="nb-name">Oud-Kempen</span><span class="nb-eet" aria-hidden="true"><i class="nb-fl"></i>Eetcafé<i class="nb-fl"></i></span></a>
   <div class="nav-right">
@@ -140,6 +140,7 @@ footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-d
     <div class="lang" role="group" aria-label="Taal" data-i18n-aria="a.lang"><button type="button" data-lang="nl" aria-pressed="true">NL</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="de" aria-pressed="false">DE</button></div>
   </div>
 </div></nav>
+<div class="sandbox" data-i18n="sb.banner">Voorbeeld — geen echte bestellingen, geen betaling</div>
 
 <header class="mhead">
   <div class="kicker" data-i18n="hdr.kicker">Eetcafé · Stavenisse · Zeeland</div>
@@ -350,12 +351,14 @@ document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListene
    overlay. Our loop yields the moment a scroll we did not cause arrives. */
 var secs=[], catsEl=document.getElementById('cats'), rowEl=document.getElementById('catrow'), catwrap=document.getElementById('catwrap');
 var REDUCED=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
-function stickyH(){ return document.querySelector('.nav').offsetHeight+catwrap.offsetHeight; }
+function stripAtBottom(){ return getComputedStyle(catwrap).position==='fixed'; }
+function stickyH(){ return document.querySelector('.nav').offsetHeight+(stripAtBottom()?0:catwrap.offsetHeight); }
 function chips(){ return Array.prototype.slice.call(rowEl.querySelectorAll('a')); }
 function tops(){ return secs.map(function(sec){ return sec.offsetTop-stickyH()-8; }); }
 function maxY(){ return Math.max(0,document.documentElement.scrollHeight-window.innerHeight); }
 function rowLen(){ return Math.max(0,rowEl.scrollWidth-catsEl.clientWidth); }   /* how far the bubbles can slide */
-function gain(){ var L=rowLen(); return L>0?maxY()/L:0; }                        /* page px per strip px — linear, steady */
+var SLOW=2.6;                                                                    /* Schyler 2026-09-05: 'still too fast' — a full traverse is ~2.6 strip widths */
+function gain(){ var L=rowLen(); return L>0?maxY()/(L*SLOW):0; }                 /* page px per strip px — linear, steady */
 function clamp(v){ return Math.max(0,Math.min(maxY(),v)); }
 function activeIndexForY(y){ var t=tops(), cur=0; for(var i=0;i<t.length;i++){ if(t[i]<=y+12) cur=i; } if(secs.length&&y>=maxY()-2) cur=secs.length-1; return cur; }
 function highlight(i){ chips().forEach(function(a,k){ a.classList.toggle('on',k===i); }); }
