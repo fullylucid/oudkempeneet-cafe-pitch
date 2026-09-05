@@ -12,7 +12,7 @@
   --paper:#FBF7EF;--ink:#2E2016;--ink-dim:#6B5A48;--muted:#75634E;--ok:#3E6B3A;--warn:#A6603A;
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;}
-*{box-sizing:border-box}html{scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*{box-sizing:border-box}html{scroll-behavior:auto}
 body{margin:0;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;overflow-x:clip;
   background:linear-gradient(180deg,#FFFFFF 0,#FBF6EC 360px,var(--field) 1250px) no-repeat var(--field);-webkit-font-smoothing:antialiased}
 a{color:inherit}h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0}
@@ -50,15 +50,15 @@ button,input,textarea{font:inherit;color:inherit}
 .shop{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:34px;align-items:start;padding:22px 0 60px}
 .shop>.col{min-width:0}
 @media(max-width:900px){.shop{grid-template-columns:minmax(0,1fr);padding-bottom:110px}}
-/* category jump bar — the ONLY thing on the page that scrolls sideways. The menu column is
-   minmax(0,1fr) so this bar can never widen the page; it scrolls inside itself, follows the
-   section in view, and is reachable by touch, wheel (vertical wheel mapped to horizontal), keyboard
-   and, on hover devices, two arrows. */
+/* category strip — a TRANSPARENT CONTROL SURFACE for the vertical scroll (Schyler, 2026-09-05).
+   Dragging it sideways drives one eased, inertial vertical scroll; the category bubbles are an
+   overlay translated from the page position after the fact. The strip never scrolls itself, so
+   there is no scroll-event feedback loop; the overlay is transform-only (compositor, no layout). */
 .catwrap{position:sticky;top:57px;z-index:40;margin:0;background:rgba(251,248,242,.92);backdrop-filter:blur(8px)}
-.cats{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:10px 2px;scrollbar-width:none;cursor:grab;touch-action:pan-x}
-.cats::-webkit-scrollbar{display:none}
-.cats:active{cursor:grabbing}
-.cats a{flex:0 0 auto;user-select:none;-webkit-user-select:none;font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink-dim);padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--paper);white-space:nowrap;min-height:34px;display:inline-flex;align-items:center}
+.cats{position:relative;overflow:hidden;padding:10px 2px;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.cats.drag{cursor:grabbing}
+.cats .row{display:flex;gap:6px;will-change:transform;transform:translate3d(0,0,0)}
+.cats a{flex:0 0 auto;font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink-dim);padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--paper);white-space:nowrap;min-height:34px;display:inline-flex;align-items:center;-webkit-tap-highlight-color:transparent}
 .cats a.on{background:var(--accent-2);border-color:var(--accent-2);color:#241300;font-weight:600}
 .cats a:focus-visible{outline:2px solid var(--accent-3);outline-offset:2px}
 .catwrap::before,.catwrap::after{content:"";position:absolute;top:0;bottom:0;width:34px;pointer-events:none;z-index:1;opacity:0;transition:opacity .2s}
@@ -151,7 +151,7 @@ footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-d
 
 <div class="wrap shop">
   <div class="col">
-    <div class="catwrap" id="catwrap"><button class="catarr l" type="button" aria-label="Eerdere categorieën" data-i18n-aria="a.prev">‹</button><nav class="cats" id="cats" aria-label="Categorieën" data-i18n-aria="a.cats"></nav><button class="catarr r" type="button" aria-label="Volgende categorieën" data-i18n-aria="a.next">›</button></div>
+    <div class="catwrap" id="catwrap"><button class="catarr l" type="button" aria-label="Eerdere categorieën" data-i18n-aria="a.prev">‹</button><nav class="cats" id="cats" aria-label="Categorieën" data-i18n-aria="a.cats"><div class="row" id="catrow"></div></nav><button class="catarr r" type="button" aria-label="Volgende categorieën" data-i18n-aria="a.next">›</button></div>
     <div id="menu"></div>
   </div>
   <aside class="cart" id="cart" aria-label="Bestelling" data-i18n-aria="a.cart">
@@ -269,10 +269,10 @@ function renderState(){ ST=orderingState(); var el=document.getElementById('stat
   t.innerHTML=txt.split(' · ').map(function(x){ return '<span class="seg">'+esc(x)+'</span>'; }).join(' · '); }
 /* menu */
 var ORDER=['start','main','lunch','indo','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
-function renderMenu(){ var root=document.getElementById('menu'), cats=document.getElementById('cats'); root.innerHTML=''; cats.innerHTML='';
+function renderMenu(){ var root=document.getElementById('menu'), cats=document.getElementById('catrow'); root.innerHTML=''; cats.innerHTML='';
   ORDER.forEach(function(cat){ var items=MENU.filter(function(m){return m.cat===cat;}); if(!items.length) return;
     var label=(CATS[lang]&&CATS[lang][cat])||CATS.nl[cat]||cat;
-    var a=document.createElement('a'); a.href='#cat-'+cat; a.textContent=label; cats.appendChild(a);
+    var a=document.createElement('a'); a.href='#cat-'+cat; a.textContent=label; a.draggable=false; cats.appendChild(a);
     var sec=document.createElement('section'); sec.className='menu-cat'; sec.id='cat-'+cat;
     sec.innerHTML='<div class="cat-head"><h2>'+esc(label)+'</h2><span class="cat-rule"></span></div>';
     var grid=document.createElement('div'); grid.className='items';
@@ -343,47 +343,61 @@ function applyLang(l){ lang=l; document.documentElement.lang=l; try{localStorage
   document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed',String(b.dataset.lang===l)); });
   renderState(); renderMenu(); renderCart(); secs=Array.prototype.slice.call(document.querySelectorAll('.menu-cat')); pageToStrip(); }
 document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.dataset.lang); }); });
-/* category bar = a SCRUBBER (Schyler, 2026-09-05, refined the same day): sliding the strip sideways
-   moves the page vertically, scrolling the page moves the strip. The map is LINEAR in page pixels —
-   strip fraction = page fraction — so the vertical motion is steady and smooth regardless of how
-   long each category is (the chips pass under the strip's centre at varying horizontal speeds; that
-   is fine). The highlight always shows the section actually in view. One direction drives at a
-   time (whichever the user touched last, 220 ms hold), so the two handlers never echo each other. */
-var secs=[], catsEl=document.getElementById('cats'), catwrap=document.getElementById('catwrap');
-var SMOOTH=(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
-var driver=null, driverT=null;           // 'strip' | 'page' | null
-function drive(who){ driver=who; clearTimeout(driverT); driverT=setTimeout(function(){ driver=null; },220); }
+/* ---- the strip as a transparent control for the vertical scroll ----
+   Gesture (touch or mouse) on the strip → a TARGET page position; one rAF loop eases the real
+   scroll toward it (snappy, ~0.28/frame) and, on release, coasts with the finger's velocity.
+   The page's own scroll (finger on the page, wheel, keyboard) stays native; it just repaints the
+   overlay. Our loop yields the moment a scroll we did not cause arrives. */
+var secs=[], catsEl=document.getElementById('cats'), rowEl=document.getElementById('catrow'), catwrap=document.getElementById('catwrap');
+var REDUCED=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function stickyH(){ return document.querySelector('.nav').offsetHeight+catwrap.offsetHeight; }
-function chips(){ return Array.prototype.slice.call(catsEl.querySelectorAll('a')); }
+function chips(){ return Array.prototype.slice.call(rowEl.querySelectorAll('a')); }
 function tops(){ return secs.map(function(sec){ return sec.offsetTop-stickyH()-8; }); }
-function maxY(){ return document.documentElement.scrollHeight-window.innerHeight; }
-function fades(){ var max=catsEl.scrollWidth-catsEl.clientWidth; catwrap.classList.toggle('more-l',catsEl.scrollLeft>4); catwrap.classList.toggle('more-r',catsEl.scrollLeft<max-4); }
-function activeIndexForY(y){ var t=tops(), cur=0; for(var i=0;i<t.length;i++){ if(t[i]<=y+12) cur=i; }
-  if(secs.length&&window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2) cur=secs.length-1; return cur; }
+function maxY(){ return Math.max(0,document.documentElement.scrollHeight-window.innerHeight); }
+function rowLen(){ return Math.max(0,rowEl.scrollWidth-catsEl.clientWidth); }   /* how far the bubbles can slide */
+function gain(){ var L=rowLen(); return L>0?maxY()/L:0; }                        /* page px per strip px — linear, steady */
+function clamp(v){ return Math.max(0,Math.min(maxY(),v)); }
+function activeIndexForY(y){ var t=tops(), cur=0; for(var i=0;i<t.length;i++){ if(t[i]<=y+12) cur=i; } if(secs.length&&y>=maxY()-2) cur=secs.length-1; return cur; }
 function highlight(i){ chips().forEach(function(a,k){ a.classList.toggle('on',k===i); }); }
-function maxSL(){ return Math.max(0,catsEl.scrollWidth-catsEl.clientWidth); }
-/* page → strip (linear) */
-function pageToStrip(){ var my=maxY(); var f=my>0?Math.max(0,Math.min(1,window.scrollY/my)):0;
-  catsEl.scrollLeft=f*maxSL(); highlight(activeIndexForY(window.scrollY)); fades(); }
-/* strip → page (linear) */
-function stripToPage(){ var ms=maxSL(); var f=ms>0?Math.max(0,Math.min(1,catsEl.scrollLeft/ms)):0; var y=f*maxY();
-  window.scrollTo({top:y,behavior:'auto'}); highlight(activeIndexForY(y)); fades(); }
-var rafP=false; window.addEventListener('scroll',function(){ if(driver==='strip') return; drive('page'); if(!rafP){ rafP=true; requestAnimationFrame(function(){ pageToStrip(); rafP=false; }); } },{passive:true});
-var rafS=false; catsEl.addEventListener('scroll',function(){ if(driver==='page'){ fades(); return; } drive('strip'); if(!rafS){ rafS=true; requestAnimationFrame(function(){ stripToPage(); rafS=false; }); } },{passive:true});
-window.addEventListener('resize',function(){ pageToStrip(); });
-/* ways to slide the strip: touch (native), vertical wheel over it, mouse drag, the arrows, keyboard on a chip */
-catsEl.addEventListener('wheel',function(e){ if(catsEl.scrollWidth<=catsEl.clientWidth) return; var d=Math.abs(e.deltaY)>Math.abs(e.deltaX)?e.deltaY:e.deltaX; if(!d) return; drive('strip'); catsEl.scrollLeft+=d; e.preventDefault(); },{passive:false});
-var drag=null; catsEl.addEventListener('pointerdown',function(e){ if(e.pointerType!=='mouse') return; drag={x:e.clientX,sl:catsEl.scrollLeft,moved:false}; catsEl.setPointerCapture(e.pointerId); });
-catsEl.addEventListener('pointermove',function(e){ if(!drag) return; var dx=e.clientX-drag.x; if(Math.abs(dx)>3) drag.moved=true; if(drag.moved){ drive('strip'); catsEl.scrollLeft=drag.sl-dx; } });
-function endDrag(e){ if(!drag) return; var moved=drag.moved; drag=null; if(moved){ catsEl.dataset.dragged='1'; setTimeout(function(){ delete catsEl.dataset.dragged; },0); } }
-catsEl.addEventListener('pointerup',endDrag); catsEl.addEventListener('pointercancel',endDrag);
-catsEl.addEventListener('touchstart',function(){ drive('strip'); },{passive:true});
-catwrap.querySelector('.catarr.l').addEventListener('click',function(){ drive('strip'); catsEl.scrollBy({left:-catsEl.clientWidth*0.6,behavior:SMOOTH}); });
-catwrap.querySelector('.catarr.r').addEventListener('click',function(){ drive('strip'); catsEl.scrollBy({left:catsEl.clientWidth*0.6,behavior:SMOOTH}); });
-/* a chip tap still jumps straight to its section */
-catsEl.addEventListener('click',function(e){ var a=e.target.closest('a'); if(!a) return; e.preventDefault(); if(catsEl.dataset.dragged) return;
-  var i=chips().indexOf(a); var y=Math.min(maxY(),tops()[i]); drive('page'); window.scrollTo({top:y,behavior:SMOOTH}); highlight(i); history.replaceState(null,'',a.getAttribute('href')); });
-function hl(){ pageToStrip(); }
+var lastOverlayY=-1;
+function paintOverlay(y){ if(y===lastOverlayY) return; lastOverlayY=y; var my=maxY(), f=my>0?y/my:0, x=-f*rowLen();
+  rowEl.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'; highlight(activeIndexForY(y)); catwrap.classList.toggle('more-l',f>0.01); catwrap.classList.toggle('more-r',f<0.99); }
+/* the one animation loop */
+var target=null, running=false, lastT=0;
+var TAU=70;                                                   /* ms — time constant of the ease; frame-rate independent */
+function setY(v){ v=clamp(v); window.scrollTo({top:v,behavior:'instant'}); paintOverlay(window.scrollY); }
+function tick(now){ if(!running) return; var y=window.scrollY, d=target-y;
+  if(Math.abs(d)<0.6){ setY(target); running=false; document.documentElement.style.scrollBehavior=''; return; }
+  var dt=Math.min(64,Math.max(1,now-lastT)); lastT=now; var k=REDUCED?1:(1-Math.exp(-dt/TAU));
+  setY(y+d*k); requestAnimationFrame(tick); }
+function goTo(y){ target=clamp(y); if(!running){ running=true; lastT=performance.now(); document.documentElement.style.scrollBehavior='auto'; requestAnimationFrame(tick); } }
+function stopAnim(){ running=false; document.documentElement.style.scrollBehavior=''; }
+window.addEventListener('scroll',function(){ if(!running) requestAnimationFrame(function(){ paintOverlay(window.scrollY); }); },{passive:true});
+/* the user taking the page back (finger on the page, wheel off the strip, scroll keys) ends our animation at once.
+   Scroll events themselves are NOT used for this: they arrive a frame late and would read as a takeover. */
+function userTakeover(e){ if(!running) return; if(e.target&&catsEl.contains(e.target)) return; stopAnim(); }
+window.addEventListener('wheel',userTakeover,{passive:true}); window.addEventListener('touchstart',userTakeover,{passive:true});
+window.addEventListener('keydown',function(e){ if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].indexOf(e.key)>=0) userTakeover(e); });
+window.addEventListener('resize',function(){ lastOverlayY=-1; paintOverlay(window.scrollY); });
+/* gesture on the strip: horizontal finger/mouse movement → vertical page target, with inertia */
+var g=null;
+catsEl.addEventListener('dragstart',function(e){ e.preventDefault(); });   /* links are draggable by default; a native drag cancels the pointer stream */
+catsEl.addEventListener('pointerdown',function(e){ if(e.button&&e.button!==0) return; if(e.pointerType==='mouse') e.preventDefault(); g={id:e.pointerId,x0:e.clientX,y0:window.scrollY,x:e.clientX,t:performance.now(),v:0,moved:false,a:e.target.closest('a')};
+  catsEl.setPointerCapture(e.pointerId); catsEl.classList.add('drag'); stopAnim(); });
+catsEl.addEventListener('pointermove',function(e){ if(!g||e.pointerId!==g.id) return; var now=performance.now(), dt=now-g.t; if(dt>0){ g.v=0.7*g.v+0.3*((e.clientX-g.x)/dt); } g.x=e.clientX; g.t=now;
+  var dx=e.clientX-g.x0; if(!g.moved&&Math.abs(dx)>4) g.moved=true; if(g.moved) goTo(g.y0-dx*gain()); });
+function endGesture(e){ if(!g||e.pointerId!==g.id) return; var gg=g; g=null; catsEl.classList.remove('drag');
+  if(!gg.moved){ if(gg.a){ var i=chips().indexOf(gg.a); if(i>=0){ e.preventDefault(); goTo(tops()[i]); history.replaceState(null,'',gg.a.getAttribute('href')); } } return; }
+  var fling=-gg.v*gain()*(REDUCED?0:220);                       /* coast: velocity × gain × ~220 ms */
+  if(Math.abs(fling)>2) goTo((target==null?window.scrollY:target)+fling); }
+catsEl.addEventListener('pointerup',endGesture); catsEl.addEventListener('pointercancel',endGesture);
+catsEl.addEventListener('click',function(e){ if(e.target.closest('a')) e.preventDefault(); });      /* the tap is handled on pointerup */
+rowEl.addEventListener('keydown',function(e){ var a=e.target.closest('a'); if(!a||(e.key!=='Enter'&&e.key!==' ')) return; e.preventDefault(); goTo(tops()[chips().indexOf(a)]); });
+/* trackpad/wheel over the strip: sideways delta drives the page; a vertical wheel stays native */
+catsEl.addEventListener('wheel',function(e){ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&e.deltaX){ e.preventDefault(); goTo((running?target:window.scrollY)+e.deltaX*gain()); } },{passive:false});
+catwrap.querySelector('.catarr.l').addEventListener('click',function(){ goTo((running?target:window.scrollY)-catsEl.clientWidth*0.6*gain()); });
+catwrap.querySelector('.catarr.r').addEventListener('click',function(){ goTo((running?target:window.scrollY)+catsEl.clientWidth*0.6*gain()); });
+function pageToStrip(){ lastOverlayY=-1; paintOverlay(window.scrollY); }
 applyLang(lang); secs=Array.prototype.slice.call(document.querySelectorAll('.menu-cat')); pageToStrip();
 setInterval(function(){ renderState(); renderCart(); },60000);
 })();
