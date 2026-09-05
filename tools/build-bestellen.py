@@ -13,7 +13,6 @@ for l in cats:
         elif k.startswith('dc.'): cats[l][k[3:]]=v
 slim=[{"id":m['id'],"kind":m['kind'],"cat":m['cat'],"name":m['name'],"desc":m['desc'],"price_cents":m['price_cents'],"vat_rate":m['vat_rate'],"orderable":m['orderable'],"orderable_note":m['orderable_note'] or ''} for m in menu]
 t=open('ordering/bestellen.template.html',encoding='utf-8').read()
-scene=open('ordering/art/terrace-tracing.svg',encoding='utf-8').read().strip()
-t=t.replace('/*__SCENE__*/',scene).replace('/*__TALLY__*/',tally).replace('/*__MENU__*/[]',json.dumps(slim,ensure_ascii=False,separators=(',',':'))).replace('/*__CATS__*/{}',json.dumps(cats,ensure_ascii=False,separators=(',',':')))
+t=t.replace('/*__TALLY__*/',tally).replace('/*__MENU__*/[]',json.dumps(slim,ensure_ascii=False,separators=(',',':'))).replace('/*__CATS__*/{}',json.dumps(cats,ensure_ascii=False,separators=(',',':')))
 out=sys.argv[1] if len(sys.argv)>1 else 'ordering/site/index.html'
 open(out,'w',encoding='utf-8').write(t); print('wrote',out,len(t),'bytes',len(slim),'items')

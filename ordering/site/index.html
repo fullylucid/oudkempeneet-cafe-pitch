@@ -35,7 +35,12 @@ button,input,textarea{font:inherit;color:inherit}
 .sandbox{background:#2E2016;color:#F3EADB;font-size:12px;letter-spacing:.06em;text-align:center;padding:5px 12px}
 .sandbox b{color:var(--accent-1)}
 /* header */
-.mhead{text-align:center;padding:40px 22px 8px}
+/* the terrace photo filtered into faint coloured lines (tools/photo-to-lines.py) sits behind the header only */
+.mhead{text-align:center;padding:44px 22px 26px;overflow:hidden;min-height:clamp(320px,42vw,540px);display:flex;flex-direction:column;justify-content:center;align-items:center}
+.mhead-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.5;pointer-events:none;z-index:0}
+.mhead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(180deg,rgba(251,246,236,0),var(--field-2));z-index:0;pointer-events:none}
+.mhead>*:not(.mhead-art){position:relative;z-index:1}
+@media(max-width:900px){.mhead{min-height:300px}.mhead-art{object-position:center 45%;opacity:.45}}
 .mhead .kicker{font-size:12px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--accent-3)}
 .mhead h1{font-size:clamp(34px,7vw,58px);letter-spacing:.06em;text-indent:.06em;color:#2A1B10;text-transform:uppercase;margin:10px 0 0}
 .mhead .dek{max-width:58ch;margin:14px auto 0;color:var(--ink-dim)}
@@ -135,118 +140,11 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .modal h2{font-size:18px;margin-bottom:8px}.modal pre{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:10px;overflow:auto;border-radius:3px}
 .modal .cl{margin-top:12px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:3px;background:transparent;cursor:pointer}
 footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-dim);position:relative;z-index:1}footer a{text-decoration:none}
-/* backdrop: a faint stylized tracing of the terrace photo (opening flyer) — decoration only */
-.scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.17}
-.scene svg{position:absolute;right:-6vw;bottom:6vh;width:min(1240px,118vw);height:auto;transform:translateZ(0)}
-@media(max-width:900px){.scene{opacity:.15}.scene svg{right:-40vw;bottom:calc(150px + env(safe-area-inset-bottom));width:190vw}}
 header.mhead,.shop{position:relative;z-index:1}
 </style>
 </head>
 <body>
 <a class="skip" href="#menu" data-i18n="a.skip">Naar de kaart</a>
-<div class="scene" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 653" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Oud-Kempen terrace, traced from assets/terrace.webp (1200×653). Stroke-only, stylized. -->
-  <g id="trees" stroke="#6E7F3A" stroke-width="2.2">
-    <!-- big tree top right: trunk-less canopy sweeps -->
-    <path d="M1200 12 C1120 30 1060 60 1010 120 C980 160 940 170 900 200"/>
-    <path d="M1200 60 C1140 90 1110 130 1070 175 C1050 200 1010 215 990 230"/>
-    <path d="M1160 0 C1130 40 1090 70 1050 80 C1010 90 960 60 930 30"/>
-    <path d="M1080 140 C1060 150 1040 145 1020 160"/>
-    <path d="M1000 180 C985 195 960 190 945 205"/>
-    <path d="M1130 200 C1110 205 1090 220 1085 245 C1080 265 1090 290 1105 300"/>
-    <path d="M1195 240 C1170 255 1160 280 1175 300"/>
-    <!-- leaf tufts -->
-    <path d="M1060 40 c6 -12 18 -14 26 -4 c8 8 4 20 -8 22 c-10 2 -20 -6 -18 -18z"/>
-    <path d="M980 150 c5 -10 16 -12 22 -3 c6 8 2 18 -8 19 c-9 1 -17 -6 -14 -16z"/>
-    <path d="M1120 110 c5 -10 16 -12 22 -3 c6 8 2 18 -8 19 c-9 1 -17 -6 -14 -16z"/>
-    <!-- left tree: soft canopy edge -->
-    <path d="M0 40 C40 20 90 30 130 60 C170 90 200 80 230 120 C250 150 240 200 215 240 C200 270 150 280 120 300"/>
-    <path d="M0 140 C30 130 60 150 80 180 C100 210 90 250 70 280"/>
-    <path d="M0 330 C30 320 60 340 90 360 C110 375 120 400 120 420"/>
-    <path d="M60 300 C80 290 110 300 118 322"/>
-  </g>
-  <g id="building" stroke="#A8502A" stroke-width="2.4">
-    <!-- barn: steep grey roof -->
-    <path d="M540 300 L612 128 L1165 300"/>
-    <path d="M612 128 L1165 300" stroke-width="1.4" opacity=".7"/>
-    <!-- roof ribs (corrugation hint) -->
-    <path d="M700 300 L660 175 M800 300 L735 150 M900 300 L820 178 M1000 300 L905 205 M1090 300 L1000 232" stroke-width="1.1" opacity=".6"/>
-    <!-- chimney -->
-    <path d="M628 214 L628 178 L650 178 L650 222"/>
-    <!-- eave line and facade -->
-    <path d="M540 300 L1165 300 L1165 400"/>
-    <path d="M540 300 L540 400"/>
-    <!-- glass veranda -->
-    <path d="M640 322 L1050 322 L1050 362 L640 362 Z"/>
-    <path d="M700 322 V362 M760 322 V362 M820 322 V362 M880 322 V362 M940 322 V362 M1000 322 V362" stroke-width="1.2" opacity=".7"/>
-    <path d="M640 342 H1050" stroke-width="1" opacity=".5"/>
-    <!-- door + brick wall right -->
-    <path d="M755 362 V420 M795 362 V420 M755 380 H795" stroke-width="1.6"/>
-    <path d="M1060 340 H1140 V400" stroke-width="1.4" opacity=".7"/>
-    <!-- red-roof wing -->
-    <path d="M250 300 L325 212 L540 212" />
-    <path d="M325 212 L330 300" stroke-width="1.2" opacity=".6"/>
-    <path d="M250 300 L540 300"/>
-    <path d="M240 300 L240 410 M240 410 L540 410"/>
-    <!-- roof tile rows -->
-    <path d="M300 258 L540 258 M275 280 L540 280 M310 236 L540 236" stroke-width="1" opacity=".55"/>
-    <!-- windows -->
-    <path d="M270 340 H310 V380 H270 Z M345 336 H400 V385 H345 Z M420 340 H455 V380 H420 Z" stroke-width="1.5"/>
-  </g>
-  <g id="umbrellas" stroke-width="2.2">
-    <!-- white/cream umbrella left -->
-    <g stroke="#C9A96A">
-      <path d="M110 335 Q200 292 290 335"/>
-      <path d="M110 335 q22 -10 45 0 q22 -10 45 0 q22 -10 45 0 q22 -10 45 0" stroke-width="1.6"/>
-      <path d="M200 296 V420"/>
-      <path d="M200 296 L140 332 M200 296 L260 332" stroke-width="1.2" opacity=".7"/>
-    </g>
-    <!-- pink umbrella centre -->
-    <g stroke="#C4837C">
-      <path d="M335 300 Q455 250 575 300"/>
-      <path d="M335 300 q24 -11 48 0 q24 -11 48 0 q24 -11 48 0 q24 -11 48 0 q24 -11 48 0" stroke-width="1.6"/>
-      <path d="M455 254 V432"/>
-      <path d="M455 254 L385 296 M455 254 L525 296" stroke-width="1.2" opacity=".7"/>
-    </g>
-    <!-- pink umbrella right -->
-    <g stroke="#C4837C">
-      <path d="M525 322 Q615 282 705 322"/>
-      <path d="M525 322 q22.5 -10 45 0 q22.5 -10 45 0 q22.5 -10 45 0 q22.5 -10 45 0" stroke-width="1.6"/>
-      <path d="M615 286 V428"/>
-    </g>
-  </g>
-  <g id="terrace" stroke="#7A6A57" stroke-width="1.9">
-    <!-- tables: ellipse tops on pedestals -->
-    <g>
-      <ellipse cx="265" cy="470" rx="44" ry="9"/><path d="M265 479 V520 M245 522 H285"/>
-      <ellipse cx="430" cy="452" rx="40" ry="8"/><path d="M430 460 V500 M412 502 H448"/>
-      <ellipse cx="535" cy="446" rx="34" ry="7"/><path d="M535 453 V488 M520 490 H550"/>
-      <ellipse cx="665" cy="478" rx="46" ry="9"/><path d="M665 487 V530 M643 532 H687"/>
-    </g>
-    <!-- rattan chair backs: rounded arcs -->
-    <g stroke-width="1.7">
-      <path d="M170 480 q0 -28 28 -28 q28 0 28 28 v30 M175 500 h46"/>
-      <path d="M320 470 q0 -26 26 -26 q26 0 26 26 v28"/>
-      <path d="M380 455 q0 -24 24 -24 q24 0 24 24 v26"/>
-      <path d="M480 452 q0 -24 24 -24 q24 0 24 24 v24"/>
-      <path d="M570 470 q0 -28 28 -28 q28 0 28 28 v34 M574 492 h48"/>
-      <path d="M715 470 q0 -30 30 -30 q30 0 30 30 v40"/>
-      <path d="M760 440 q0 -22 22 -22 q22 0 22 22 v24"/>
-    </g>
-    <!-- wicker sofa front-left -->
-    <path d="M70 520 H330 V600 H70 Z" stroke-width="2"/>
-    <path d="M70 520 Q70 500 90 500 H310 Q330 500 330 520" stroke-width="1.6"/>
-    <path d="M100 520 V600 M130 520 V600 M160 520 V600 M190 520 V600 M220 520 V600 M250 520 V600 M280 520 V600 M310 520 V600" stroke-width=".9" opacity=".5"/>
-    <!-- planter + shrub -->
-    <path d="M820 440 H880 V470 H820 Z"/>
-    <path d="M830 440 c5 -18 22 -22 30 -8 c8 -14 26 -10 30 8" stroke="#6E7F3A"/>
-    <!-- bicycle right -->
-    <g stroke-width="1.8">
-      <circle cx="988" cy="482" r="27"/><circle cx="1062" cy="482" r="27"/>
-      <path d="M988 482 L1015 440 L1050 440 L1062 482 M1015 440 L1030 482 L988 482 M1030 482 L1050 440 M1012 430 H1024 M1046 434 L1060 428"/>
-    </g>
-  </g>
-</svg></div>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="https://www.oudkempeneetcafe.nl/" aria-label="Oud-Kempen Eetcafé — home"><span class="nb-name">Oud-Kempen</span><span class="nb-eet" aria-hidden="true"><i class="nb-fl"></i>Eetcafé<i class="nb-fl"></i></span></a>
   <div class="nav-right">
@@ -257,6 +155,7 @@ header.mhead,.shop{position:relative;z-index:1}
 <div class="sandbox" data-i18n="sb.banner">Voorbeeld — geen echte bestellingen, geen betaling</div>
 
 <header class="mhead">
+  <img class="mhead-art" src="terrace-lines.webp" alt="" aria-hidden="true" width="1200" height="653" decoding="async">
   <div class="kicker" data-i18n="hdr.kicker">Eetcafé · Stavenisse · Zeeland</div>
   <h1 data-i18n="o.title">Afhalen</h1>
   <p class="dek" data-i18n="o.dek">Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.</p>
