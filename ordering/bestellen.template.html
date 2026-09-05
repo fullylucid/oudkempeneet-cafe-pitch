@@ -134,11 +134,17 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .modal.on{display:flex}.modal .box{background:var(--paper);border-radius:6px;max-width:560px;width:100%;padding:22px 24px;max-height:86vh;overflow:auto}
 .modal h2{font-size:18px;margin-bottom:8px}.modal pre{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:10px;overflow:auto;border-radius:3px}
 .modal .cl{margin-top:12px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:3px;background:transparent;cursor:pointer}
-footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-dim)}footer a{text-decoration:none}
+footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-dim);position:relative;z-index:1}footer a{text-decoration:none}
+/* backdrop: a faint stylized tracing of the terrace photo (opening flyer) — decoration only */
+.scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.17}
+.scene svg{position:absolute;right:-6vw;bottom:6vh;width:min(1240px,118vw);height:auto;transform:translateZ(0)}
+@media(max-width:900px){.scene{opacity:.15}.scene svg{right:-40vw;bottom:calc(150px + env(safe-area-inset-bottom));width:190vw}}
+header.mhead,.shop{position:relative;z-index:1}
 </style>
 </head>
 <body>
 <a class="skip" href="#menu" data-i18n="a.skip">Naar de kaart</a>
+<div class="scene" aria-hidden="true">/*__SCENE__*/</div>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="https://www.oudkempeneetcafe.nl/" aria-label="Oud-Kempen Eetcafé — home"><span class="nb-name">Oud-Kempen</span><span class="nb-eet" aria-hidden="true"><i class="nb-fl"></i>Eetcafé<i class="nb-fl"></i></span></a>
   <div class="nav-right">
@@ -326,7 +332,7 @@ var REDUCED=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)')
 function stripAtBottom(){ return getComputedStyle(catwrap).position==='fixed'; }
 function stickyH(){ return document.querySelector('.nav').offsetHeight+(stripAtBottom()?0:catwrap.offsetHeight); }
 function chips(){ return Array.prototype.slice.call(rowEl.querySelectorAll('a')); }
-function tops(){ return secs.map(function(sec){ return sec.offsetTop-stickyH()-8; }); }
+function tops(){ var sy=window.scrollY, sh=stickyH(); return secs.map(function(sec){ return sec.getBoundingClientRect().top+sy-sh-8; }); }   /* page coordinates, whatever the offsetParent */
 function maxY(){ return Math.max(0,document.documentElement.scrollHeight-window.innerHeight); }
 function centres(){ var o=rowEl.offsetLeft; return chips().map(function(a){ return o+a.offsetLeft+a.offsetWidth/2; }); }   /* the row is an offsetParent (will-change) — add its own offset inside the strip */
 function rowLen(){ var c=centres(); return c.length>1?c[c.length-1]-c[0]:1; }        /* wheel travel: first bubble centre → last */
