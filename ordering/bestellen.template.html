@@ -309,35 +309,30 @@ function applyLang(l){ lang=l; document.documentElement.lang=l; try{localStorage
   document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed',String(b.dataset.lang===l)); });
   renderState(); renderMenu(); renderCart(); secs=Array.prototype.slice.call(document.querySelectorAll('.menu-cat')); pageToStrip(); }
 document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.dataset.lang); }); });
-/* category bar = a SCRUBBER (Schyler, 2026-09-05): sliding the strip sideways moves the page
-   vertically, and scrolling the page moves the strip. The mapping is continuous and piecewise
-   linear: the strip's reading point (its horizontal centre) between chip i and chip i+1 ↔ the page
-   between section i and section i+1. One direction drives at a time — whichever the user touched
-   last — so the two scroll handlers never echo each other. */
+/* category bar = a SCRUBBER (Schyler, 2026-09-05, refined the same day): sliding the strip sideways
+   moves the page vertically, scrolling the page moves the strip. The map is LINEAR in page pixels —
+   strip fraction = page fraction — so the vertical motion is steady and smooth regardless of how
+   long each category is (the chips pass under the strip's centre at varying horizontal speeds; that
+   is fine). The highlight always shows the section actually in view. One direction drives at a
+   time (whichever the user touched last, 220 ms hold), so the two handlers never echo each other. */
 var secs=[], catsEl=document.getElementById('cats'), catwrap=document.getElementById('catwrap');
 var SMOOTH=(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
 var driver=null, driverT=null;           // 'strip' | 'page' | null
 function drive(who){ driver=who; clearTimeout(driverT); driverT=setTimeout(function(){ driver=null; },220); }
 function stickyH(){ return document.querySelector('.nav').offsetHeight+catwrap.offsetHeight; }
 function chips(){ return Array.prototype.slice.call(catsEl.querySelectorAll('a')); }
-function centres(){ return chips().map(function(a){ return a.offsetLeft+a.offsetWidth/2; }); }
 function tops(){ return secs.map(function(sec){ return sec.offsetTop-stickyH()-8; }); }
 function maxY(){ return document.documentElement.scrollHeight-window.innerHeight; }
-/* piecewise-linear map of v through the breakpoints xs → ys (both ascending) */
-function pmap(v,xs,ys){ var n=xs.length; if(!n) return 0; if(v<=xs[0]) return ys[0]; if(v>=xs[n-1]) return ys[n-1];
-  for(var i=0;i<n-1;i++){ if(v>=xs[i]&&v<xs[i+1]){ var f=(xs[i+1]-xs[i])?(v-xs[i])/(xs[i+1]-xs[i]):0; return ys[i]+f*(ys[i+1]-ys[i]); } } return ys[n-1]; }
 function fades(){ var max=catsEl.scrollWidth-catsEl.clientWidth; catwrap.classList.toggle('more-l',catsEl.scrollLeft>4); catwrap.classList.toggle('more-r',catsEl.scrollLeft<max-4); }
 function activeIndexForY(y){ var t=tops(), cur=0; for(var i=0;i<t.length;i++){ if(t[i]<=y+12) cur=i; }
   if(secs.length&&window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2) cur=secs.length-1; return cur; }
 function highlight(i){ chips().forEach(function(a,k){ a.classList.toggle('on',k===i); }); }
-/* page → strip */
-function pageToStrip(){ var y=window.scrollY, t=tops(), c=centres(); if(!t.length||t.length!==c.length) return;
-  var ys=t.slice(); var my=maxY(); if(ys[ys.length-1]>my){ ys[ys.length-1]=my; }   /* the last section may never reach the sticky line; the page bottom stands in */
-  var r=pmap(y,ys,c); catsEl.scrollLeft=Math.max(0,r-catsEl.clientWidth/2); highlight(activeIndexForY(y)); fades(); }
-/* strip → page */
-function stripToPage(){ var t=tops(), c=centres(); if(!t.length||t.length!==c.length) return;
-  var ys=t.slice(); var my=maxY(); if(ys[ys.length-1]>my) ys[ys.length-1]=my;
-  var r=catsEl.scrollLeft+catsEl.clientWidth/2; var y=Math.max(0,Math.min(my,pmap(r,c,ys)));
+function maxSL(){ return Math.max(0,catsEl.scrollWidth-catsEl.clientWidth); }
+/* page → strip (linear) */
+function pageToStrip(){ var my=maxY(); var f=my>0?Math.max(0,Math.min(1,window.scrollY/my)):0;
+  catsEl.scrollLeft=f*maxSL(); highlight(activeIndexForY(window.scrollY)); fades(); }
+/* strip → page (linear) */
+function stripToPage(){ var ms=maxSL(); var f=ms>0?Math.max(0,Math.min(1,catsEl.scrollLeft/ms)):0; var y=f*maxY();
   window.scrollTo({top:y,behavior:'auto'}); highlight(activeIndexForY(y)); fades(); }
 var rafP=false; window.addEventListener('scroll',function(){ if(driver==='strip') return; drive('page'); if(!rafP){ rafP=true; requestAnimationFrame(function(){ pageToStrip(); rafP=false; }); } },{passive:true});
 var rafS=false; catsEl.addEventListener('scroll',function(){ if(driver==='page'){ fades(); return; } drive('strip'); if(!rafS){ rafS=true; requestAnimationFrame(function(){ stripToPage(); rafS=false; }); } },{passive:true});
