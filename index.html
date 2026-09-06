@@ -136,6 +136,18 @@ header.hero{position:relative;overflow:clip;padding:0;background:transparent}
 .hero-rule{width:130px;height:1px;margin:24px auto 6px;
   background:linear-gradient(90deg,transparent,var(--accent-2),transparent)}
 .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+/* takeaway button — the trailing span it shows is decided by body[data-takeaway] and nothing else */
+.ta{gap:9px}
+.ta-soon,.ta-flag{display:none}
+.ta-soon{font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:lowercase}
+.ta-flag{padding:3px 7px;border-radius:2px;font-size:10.5px;font-weight:700;letter-spacing:.14em;
+  color:#28190C;background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2))}
+body[data-takeaway="soon"] .ta-soon{display:inline}
+body[data-takeaway="new"] .ta-flag{display:inline-block}
+body[data-takeaway="new"] .ta{border-color:var(--accent-2);background:rgba(231,192,121,.16)}
+@media(prefers-reduced-motion:no-preference){
+  body[data-takeaway="new"] .ta-flag{animation:ta-pulse 2.4s ease-in-out 3}
+  @keyframes ta-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}}
 
 /* hero photo plate */
 .plate{position:relative;background:var(--paper);padding:12px;border-radius:3px;
@@ -697,7 +709,11 @@ footer .fine a{color:#D8C7AC;text-decoration:none}
 "isAccessibleForFree":true}
 </script>
 </head>
-<body>
+<!-- data-takeaway: "soon" = the button says binnenkort and lands on the Coming Soon page ·
+     "new" = the same button with a NIEUW!/NEW!/NEU! flag beside it · "live" = plain, no flag.
+     One word, three states, nothing else to hunt for. The href stays bestellen.html throughout:
+     that page becomes the redirect to bestellen.oudkempeneetcafe.nl when ordering opens (Q28). -->
+<body data-takeaway="soon">
 
 <!-- ============================== NAV ============================== -->
 <nav class="nav">
@@ -709,6 +725,7 @@ footer .fine a{color:#D8C7AC;text-decoration:none}
     <div class="nav-links">
       <a href="#restaurant" data-i18n="nav.restaurant">Restaurant</a>
       <a href="menu.html" data-i18n="nav.menu">Menu</a>
+      <a href="bestellen.html" data-i18n="nav.takeaway">Afhalen</a>
       <a href="#services" data-i18n="nav.services">Reserveren</a>
       <a href="#gallery" data-i18n="nav.gallery">Galerij</a>
       <a href="#visit" data-i18n="nav.visit">Bezoek</a>
@@ -770,6 +787,7 @@ footer .fine a{color:#D8C7AC;text-decoration:none}
     <div class="hero-rule"></div>
     <div class="hero-cta">
       <a class="btn btn-gold" href="#services" data-i18n="hero.cta1">Reserveer een tafel</a>
+      <a class="btn btn-line ta" href="bestellen.html"><span data-i18n="ta.btn">Afhalen</span><span class="ta-soon" data-i18n="ta.soon">binnenkort</span><span class="ta-flag" data-i18n="ta.new">Nieuw!</span></a>
       <a class="btn btn-line" href="#restaurant" data-i18n="hero.cta2">Bekijk het restaurant</a>
     </div>
 
@@ -1302,7 +1320,8 @@ footer .fine a{color:#D8C7AC;text-decoration:none}
    ============================================================ */
 const I18N = {
   nl:{
-    "nav.restaurant":"Restaurant","nav.menu":"Menu","nav.services":"Reserveren","nav.gallery":"Galerij","nav.visit":"Bezoek","nav.cta":"Reserveer",
+    "nav.restaurant":"Restaurant","nav.menu":"Menu","nav.takeaway":"Afhalen","nav.services":"Reserveren","nav.gallery":"Galerij","nav.visit":"Bezoek","nav.cta":"Reserveer",
+    "ta.btn":"Afhalen","ta.soon":"binnenkort","ta.new":"Nieuw!",
     "hero.kicker":"Eetcafé · Stavenisse · Zeeland","hero.sub":"Verse smaken, warme gastvrijheid en voor ieder wat wils",
     "hero.lede":"Geniet van verse gerechten, heerlijke kaasfondue, verse vis, hartige snacks en authentieke Indonesische specialiteiten in een warm en gastvrij restaurant. Of u nu komt voor de lunch, het diner of een borrel: u geniet van echte Zeeuwse gastvrijheid, vriendelijke service en een ontspannen sfeer. Ontspan in ons restaurant met volledige airconditioning of op ons ruime terras, omgeven door natuur.",
     "hero.cta1":"Reserveer een tafel","hero.cta2":"Bekijk het restaurant","hero.capk":"Aan de rand van het dorp","hero.capt":"Stavenisse, Zeeland",
@@ -1352,7 +1371,8 @@ const I18N = {
     "prov":"Website door Merritt Digital"
   },
   en:{
-    "nav.restaurant":"Restaurant","nav.menu":"Menu","nav.services":"Book","nav.gallery":"Gallery","nav.visit":"Visit","nav.cta":"Reserve",
+    "nav.restaurant":"Restaurant","nav.menu":"Menu","nav.takeaway":"Takeaway","nav.services":"Book","nav.gallery":"Gallery","nav.visit":"Visit","nav.cta":"Reserve",
+    "ta.btn":"Takeaway","ta.soon":"coming soon","ta.new":"New!",
     "hero.kicker":"Eetcafé · Stavenisse · Zeeland","hero.sub":"Fresh flavours, warm hospitality and something for everyone",
     "hero.lede":"Enjoy fresh dishes, delicious cheese fondue, fresh fish, tasty snacks and authentic Indonesian specialities in a warm and welcoming restaurant. Whether you join us for lunch, dinner or drinks, you'll enjoy genuine Zeeland hospitality, friendly service and a relaxed atmosphere. Relax in our fully air-conditioned restaurant or on our spacious terrace surrounded by nature.",
     "hero.cta1":"Reserve a table","hero.cta2":"See the restaurant","hero.capk":"On the edge of the village","hero.capt":"Stavenisse, Zeeland",
@@ -1402,7 +1422,8 @@ const I18N = {
     "prov":"Website by Merritt Digital"
   },
   de:{
-    "nav.restaurant":"Restaurant","nav.menu":"Menü","nav.services":"Reservieren","nav.gallery":"Galerie","nav.visit":"Besuch","nav.cta":"Reservieren",
+    "nav.restaurant":"Restaurant","nav.menu":"Menü","nav.takeaway":"Abholen","nav.services":"Reservieren","nav.gallery":"Galerie","nav.visit":"Besuch","nav.cta":"Reservieren",
+    "ta.btn":"Abholen","ta.soon":"demnächst","ta.new":"Neu!",
     "hero.kicker":"Eetcafé · Stavenisse · Zeeland","hero.sub":"Frische Aromen, herzliche Gastfreundschaft und für jeden Geschmack etwas",
     "hero.lede":"Genießen Sie frische Gerichte, köstliches Käsefondue, frischen Fisch, herzhafte Snacks und authentische indonesische Spezialitäten in einem warmen, gastfreundlichen Restaurant. Ob zum Mittagessen, zum Abendessen oder auf ein Getränk: Sie erleben echte zeeländische Gastfreundschaft, freundlichen Service und eine entspannte Atmosphäre. Entspannen Sie in unserem vollklimatisierten Restaurant oder auf unserer weitläufigen Terrasse mitten in der Natur.",
     "hero.cta1":"Tisch reservieren","hero.cta2":"Zum Restaurant","hero.capk":"Am Rande des Dorfes","hero.capt":"Stavenisse, Zeeland",
