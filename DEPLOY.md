@@ -37,10 +37,13 @@ internal process. Strip internal files from the staging copy before deploying:
 
 ```sh
 rm -f /tmp/cafe/site/DEPLOY.md
-printf 'DEPLOY.md\n*.md\n' > /tmp/cafe/site/.assetsignore
+# Leave .assetsignore alone. The file committed at the repo root IS the guard, and `git archive`
+# has just copied it here. This line used to be `printf 'DEPLOY.md\n*.md\n' > …/.assetsignore`,
+# which narrowed the guard back to the two patterns that had already failed once — ROOM.json
+# matched neither and shipped. Widen the committed file instead; never rewrite it at deploy time.
 ```
 
-The publish snippet above already does this. **After every deploy, check that it did:**
+The publish snippet below does the same `rm`. **After every deploy, check that it worked:**
 
 ```sh
 curl -s -o /dev/null -w '%{http_code}\n' https://www.oudkempeneetcafe.nl/DEPLOY.md   # must be 404
@@ -61,7 +64,10 @@ directory = "./site"
 not_found_handling = "404-page"
 TOML
 cd /tmp/cafe && rm -f /tmp/cafe/site/DEPLOY.md                      # never ship internal docs
-printf 'DEPLOY.md\n*.md\n' > /tmp/cafe/site/.assetsignore
+# Leave .assetsignore alone. The file committed at the repo root IS the guard, and `git archive`
+# has just copied it here. This line used to be `printf 'DEPLOY.md\n*.md\n' > …/.assetsignore`,
+# which narrowed the guard back to the two patterns that had already failed once — ROOM.json
+# matched neither and shipped. Widen the committed file instead; never rewrite it at deploy time.
 npx --yes wrangler@latest deploy
 ```
 
