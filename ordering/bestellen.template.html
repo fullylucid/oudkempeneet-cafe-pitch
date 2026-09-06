@@ -98,41 +98,57 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .qty button{min-width:40px;min-height:40px;border:0;background:transparent;cursor:pointer;font-size:19px;color:var(--accent-3)}
 .qty span{min-width:26px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
 /* cart */
-.cart{position:sticky;top:70px;display:flex;flex-direction:column;max-height:calc(100vh - 84px);overflow:auto;overscroll-behavior:contain;background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:0 30px 60px -36px rgba(36,24,19,.5)}
-.cart-h,.tally,.chk{flex:0 0 auto}
-.cart-h{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--field-2)}
+/* Three bands: a fixed title bar, ONE scroller holding the lines and the contact fields, and a
+   fixed foot with the total and the pay button. Before this the checkout form was a rigid band of
+   its own (flex:0 0 auto, 479px) and the list — the only band that could give — collapsed to its
+   72px minimum: one line of four visible at 1366x768 (Zach, 2026-09-06). Now the form scrolls
+   with the lines and the list keeps the room. */
+.cart{position:sticky;top:70px;display:flex;flex-direction:column;max-height:calc(100vh - 84px);overflow:hidden;overscroll-behavior:contain;background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:0 30px 60px -36px rgba(36,24,19,.5)}
+.cart .chk{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.cart-scroll{flex:1 1 auto;min-height:96px;overflow:auto;overscroll-behavior:contain}
+.cart-h,.cart-foot{flex:0 0 auto}
+.cart-h{display:flex;align-items:center;gap:6px;padding:13px 16px;background:var(--paper);border-bottom:1px solid var(--field-2)}
 .cart-h h2{font-size:15px;letter-spacing:.14em;text-transform:uppercase}
-.cart-h .n{font-size:12px;color:var(--ink-dim)}
-.lines{flex:1 1 auto;min-height:72px;overflow:auto;padding:6px 16px;overscroll-behavior:contain}
-.line{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px solid var(--field-2)}
+.cart-h .n{margin-left:auto;font-size:12px;color:var(--ink-dim);white-space:nowrap}
+.cart-h .exp{min-width:34px;min-height:34px;border:0;border-radius:4px;background:transparent;cursor:pointer;color:var(--ink-dim);font-size:16px;line-height:1}
+.cart-h .exp:hover{background:var(--field-2);color:var(--accent-3)}
+/* expanded: the whole order laid out down the page, no scroller of its own */
+.cart.tall{position:static;max-height:none;overflow:visible}
+.cart.tall .cart-scroll{overflow:visible}
+.cart.tall .cart-foot{box-shadow:none}
+.lines{padding:2px 16px}
+.line{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:8px 0;border-bottom:1px solid var(--field-2)}
+@media(hover:hover) and (pointer:fine){.line{padding:6px 0}.line .qty button{min-width:34px;min-height:34px;font-size:17px}}
 .line .nm{font-weight:600;font-size:14.5px}.line .sub{font-variant-numeric:tabular-nums;text-align:right;font-size:14.5px}
 .line .ctl{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .line input{flex:1;min-width:0;border:0;border-bottom:1px dashed var(--line);background:transparent;font-size:13px;padding:5px 0;outline:0}
 .line input:focus{border-bottom-color:var(--accent-2)}
 .empty{padding:26px 16px;color:var(--ink-dim);font-size:14px;text-align:center}
-.tally{padding:12px 16px;border-top:1px solid var(--field-2);font-size:14px}
-.tally div{display:flex;justify-content:space-between;padding:3px 0;font-variant-numeric:tabular-nums}
-.tally .tot{font-weight:700;font-size:17px;border-top:1px solid var(--line);margin-top:6px;padding-top:9px}
+.tally{padding:9px 16px 0;font-size:14px}
+.cart-foot{padding:0 16px calc(11px + env(safe-area-inset-bottom));background:var(--paper);border-top:1px solid var(--field-2);box-shadow:0 -16px 24px -20px rgba(36,24,19,.6)}
+.tally div{display:flex;justify-content:space-between;padding:2px 0;font-variant-numeric:tabular-nums}
+.tally .tot{font-weight:700;font-size:17px;border-top:1px solid var(--line);margin-top:5px;padding-top:7px}
 .tally .vat{color:var(--ink-dim);font-size:12.5px}
-.chk{padding:12px 16px 16px;border-top:1px solid var(--field-2)}
-.chk label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);margin:8px 0 3px}
-.chk input[type=text],.chk input[type=email],.chk input[type=tel],.chk textarea{width:100%;border:1px solid var(--line);border-radius:3px;padding:8px 11px;background:#fff;font-size:15px;outline:0}
-.chk input:focus,.chk textarea:focus,.line input:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:var(--accent-2)}
-.chk textarea{min-height:44px;resize:vertical}
+.chk-f{padding:10px 16px 14px;border-top:1px solid var(--field-2)}
+.chk-f label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);margin:8px 0 3px}
+.chk-f input[type=text],.chk-f input[type=email],.chk-f input[type=tel],.chk-f textarea{width:100%;border:1px solid var(--line);border-radius:3px;padding:8px 11px;background:#fff;font-size:15px;outline:0}
+.chk-f input:focus,.chk-f textarea:focus,.line input:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:var(--accent-2)}
+.chk-f textarea{min-height:44px;resize:vertical}
 .age{display:flex;gap:10px;align-items:flex-start;font-size:13px;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:3px;background:#FFF9EE}
 .age input{margin-top:3px;width:18px;height:18px}
 .age[hidden]{display:none}
-.pay{display:flex;width:100%;align-items:center;justify-content:center;margin-top:14px;min-height:50px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:650;color:#28190C;border:1px solid #b98a3f;border-radius:3px;cursor:pointer;
+.pay{display:flex;width:100%;align-items:center;justify-content:center;margin-top:11px;min-height:50px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:650;color:#28190C;border:1px solid #b98a3f;border-radius:3px;cursor:pointer;
   background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2) 55%,var(--accent-1));background-size:200% 100%;transition:background-position .35s}
 .pay:hover{background-position:100% 0}.pay[disabled]{opacity:.5;cursor:default;background-image:none;background:var(--field-2)}
-.msg{font-size:13px;color:var(--warn);margin-top:8px;min-height:1.2em}
-.wait{font-size:13px;color:var(--ink-dim);margin-top:8px}
+.msg{font-size:13px;color:var(--warn);margin-top:7px;min-height:1.2em}
+.wait{font-size:13px;color:var(--ink-dim);padding:10px 16px 0}
 /* mobile bar + drawer */
 .cart-h .x{display:none;min-width:40px;min-height:40px;border:0;background:transparent;font-size:22px;cursor:pointer;color:var(--ink-dim)}
 .bar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--field-deep);color:#F3EADB}
 .bar button{width:100%;min-height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border:0;border-radius:3px;background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2));color:#241300;font-weight:650;letter-spacing:.08em;text-transform:uppercase;font-size:13px;cursor:pointer}
 @media(max-width:900px){.bar{display:block}.cart{position:fixed;inset:auto 0 0 0;z-index:70;max-height:88vh;overflow:auto;border-radius:12px 12px 0 0;transform:translateY(105%);transition:transform .28s cubic-bezier(.22,.61,.36,1)}
-  .cart.open{transform:none}.cart-h .x{display:inline-flex}.cart{max-height:88vh;padding-bottom:env(safe-area-inset-bottom);overscroll-behavior:contain}.lines{flex:0 0 auto;max-height:none}}
+  .cart.open{transform:none}.cart-h .x{display:inline-flex}.cart{max-height:88vh;overscroll-behavior:contain}
+  .cart.tall{position:fixed;max-height:96vh;overflow:hidden}.cart.tall .cart-scroll{overflow:auto}}
 .dim{position:fixed;inset:0;background:rgba(36,24,19,.45);z-index:65;opacity:0;pointer-events:none;transition:opacity .25s}.dim.on{opacity:1;pointer-events:auto}
 /* modal (sandbox checkout) */
 .modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(36,24,19,.55)}
@@ -140,7 +156,9 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .modal h2{font-size:18px;margin-bottom:8px}.modal pre{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:10px;overflow:auto;border-radius:3px}
 .modal .cl{margin-top:12px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:3px;background:transparent;cursor:pointer}
 footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-dim);position:relative;z-index:1}footer a{text-decoration:none}
-header.mhead,.shop{position:relative;z-index:1}
+header.mhead{position:relative;z-index:1}   /* contains the art; .shop must NOT join it — a
+   stacking context here trapped the phone drawer (z-index:70) inside a z-index:1 box, so the dim
+   scrim (z-index:65, a body child) painted over the whole open cart and swallowed every tap */
 </style>
 </head>
 <body>
@@ -169,19 +187,25 @@ header.mhead,.shop{position:relative;z-index:1}
     <div id="menu"></div>
   </div>
   <aside class="cart" id="cart" aria-label="Bestelling" data-i18n-aria="a.cart">
-    <div class="cart-h"><h2 data-i18n="c.title">Uw bestelling</h2><span class="n" id="cart-n"></span><button class="x" id="cart-x" type="button" aria-label="Sluiten" data-i18n-aria="a.close">×</button></div>
-    <div class="lines" id="lines"></div>
-    <div class="tally" id="tally"></div>
+    <div class="cart-h"><h2 data-i18n="c.title">Uw bestelling</h2><span class="n" id="cart-n"></span><button class="exp" id="cart-exp" type="button" aria-expanded="false" aria-controls="cart" aria-label="Bestelling vergroten" data-i18n-aria="a.expand">⤡</button><button class="x" id="cart-x" type="button" aria-label="Sluiten" data-i18n-aria="a.close">×</button></div>
     <form class="chk" id="chk" novalidate>
+      <div class="cart-scroll" id="cart-scroll">
+      <div class="lines" id="lines"></div>
+      <div class="chk-f">
       <label for="f-note" data-i18n="c.note">Opmerking bij de bestelling (optioneel)</label>
       <textarea id="f-note" maxlength="500"></textarea>
       <label for="f-name" data-i18n="c.name">Naam</label><input id="f-name" type="text" autocomplete="name" required maxlength="80">
       <label for="f-email" data-i18n="c.email">E-mail</label><input id="f-email" type="email" autocomplete="email" required maxlength="120">
       <label for="f-phone" data-i18n="c.phone">Telefoon</label><input id="f-phone" type="tel" autocomplete="tel" required maxlength="30">
       <div class="age" id="age" hidden><input type="checkbox" id="f-age"><label for="f-age" style="margin:0;text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)" data-i18n="c.age">Ik ben 18 jaar of ouder. Bij het afhalen kan om legitimatie worden gevraagd.</label></div>
+      </div>
       <div class="wait" id="wait"></div>
-      <button class="pay" id="pay" type="submit" data-i18n="c.pay">Afrekenen</button>
-      <div class="msg" id="msg" aria-live="polite"></div>
+      </div>
+      <div class="cart-foot">
+        <div class="tally" id="tally"></div>
+        <button class="pay" id="pay" type="submit" data-i18n="c.pay">Afrekenen</button>
+        <div class="msg" id="msg" aria-live="polite"></div>
+      </div>
     </form>
   </aside>
 </div>
@@ -198,7 +222,7 @@ var MENU=/*__MENU__*/[];
 var CATS=/*__CATS__*/{};
 var SETTINGS={last_orders_offset_min:30,standard_wait_min:45,min_order_cents:0,cart_max_lines:50,cart_max_qty_per_line:20,cart_max_total_cents:50000};
 var UI={
- nl:{"title":"Afhalen bestellen — Oud-Kempen Eetcafé","a.skip":"Naar de kaart","a.lang":"Taal","a.cats":"Categorieën","a.prev":"Eerdere categorieën","a.next":"Volgende categorieën","a.cart":"Bestelling","a.close":"Sluiten","a.add":"Toevoegen: {n}","a.less":"Minder: {n}","a.more":"Meer: {n}","sb.banner":"Voorbeeld — geen echte bestellingen, geen betaling","back.menu":"← De kaart","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Afhalen","o.dek":"Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.",
+ nl:{"title":"Afhalen bestellen — Oud-Kempen Eetcafé","a.skip":"Naar de kaart","a.lang":"Taal","a.cats":"Categorieën","a.prev":"Eerdere categorieën","a.next":"Volgende categorieën","a.cart":"Bestelling","a.close":"Sluiten","a.expand":"Hele bestelling tonen","a.collapse":"Bestelling inklappen","a.add":"Toevoegen: {n}","a.less":"Minder: {n}","a.more":"Meer: {n}","sb.banner":"Voorbeeld — geen echte bestellingen, geen betaling","back.menu":"← De kaart","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Afhalen","o.dek":"Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.",
   "c.title":"Uw bestelling","c.note":"Opmerking bij de bestelling (optioneel)","c.name":"Naam","c.email":"E-mail","c.phone":"Telefoon","c.age":"Ik ben 18 jaar of ouder. Bij het afhalen kan om legitimatie worden gevraagd.","c.pay":"Afrekenen",
   "o.foot":"Afhalen bij Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Heeft u een allergie of dieetwens? Vermeld het bij de bestelling of bel ons.",
   "sb.m.title":"Hier komt de betaling","sb.m.body":"In de echte versie gaat u nu naar de beveiligde betaalpagina van MultiSafepay (iDEAL, kaart). Dit is wat de kassa zou ontvangen — prijzen worden aan de kassa opnieuw berekend, nooit uit de browser overgenomen:","sb.m.close":"Sluiten",
@@ -206,7 +230,7 @@ var UI={
   "empty":"Nog niets gekozen. Kies uit de kaart hiernaast.","items":"{n} artikel(en)","subtotal":"Subtotaal (incl. btw)","vat":"waarvan btw {r}%","total":"Totaal","line.note":"Opmerking bij dit gerecht (bijv. zonder ui)",
   "wait":"Klaar voor afhalen over ongeveer {w} minuten na betaling.","off.draught":"alleen aan de bar","off.reservation":"reserveren, 1 dag vooraf","bar":"Bekijk bestelling",
   "e.empty":"Uw bestelling is nog leeg.","e.unknown_item":"Een artikel is niet meer beschikbaar; verwijder het.","e.not_orderable":"Dit artikel is niet af te halen.","e.bad_qty":"Maximaal 20 per artikel.","e.too_many_lines":"Maximaal 50 regels per bestelling.","e.over_max_total":"Bestellingen tot € 500 — bel ons voor meer.","e.under_minimum":"Minimum bestelbedrag niet bereikt.","e.closed":"Online bestellen is nu gesloten.","e.fields":"Vul naam, e-mail en telefoon in.","e.email":"Controleer het e-mailadres.","e.age":"Bevestig dat u 18 jaar of ouder bent."},
- en:{"title":"Takeaway ordering — Oud-Kempen Eetcafé","a.skip":"Skip to menu","a.lang":"Language","a.cats":"Categories","a.prev":"Previous categories","a.next":"More categories","a.cart":"Your order","a.close":"Close","a.add":"Add: {n}","a.less":"Fewer: {n}","a.more":"More: {n}","sb.banner":"Preview — no real orders, no payment","back.menu":"← The menu","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Takeaway","o.dek":"Order online, pay securely, collect at the bar. We call if anything comes up.",
+ en:{"title":"Takeaway ordering — Oud-Kempen Eetcafé","a.skip":"Skip to menu","a.lang":"Language","a.cats":"Categories","a.prev":"Previous categories","a.next":"More categories","a.cart":"Your order","a.close":"Close","a.expand":"Show the whole order","a.collapse":"Collapse the order","a.add":"Add: {n}","a.less":"Fewer: {n}","a.more":"More: {n}","sb.banner":"Preview — no real orders, no payment","back.menu":"← The menu","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Takeaway","o.dek":"Order online, pay securely, collect at the bar. We call if anything comes up.",
   "c.title":"Your order","c.note":"Note for the order (optional)","c.name":"Name","c.email":"Email","c.phone":"Phone","c.age":"I am 18 or older. ID may be checked at pickup.","c.pay":"Pay",
   "o.foot":"Pickup at Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Allergy or dietary wish? Add it to the order note or call us.",
   "sb.m.title":"Payment goes here","sb.m.body":"In the real version you now go to MultiSafepay's secure payment page (iDEAL, card). This is what the till would receive — prices are recomputed at the till, never taken from the browser:","sb.m.close":"Close",
@@ -214,7 +238,7 @@ var UI={
   "empty":"Nothing chosen yet. Pick from the menu.","items":"{n} item(s)","subtotal":"Subtotal (incl. VAT)","vat":"of which VAT {r}%","total":"Total","line.note":"Note for this dish (e.g. no onion)",
   "wait":"Ready for pickup about {w} minutes after payment.","off.draught":"at the bar only","off.reservation":"reservation, 1 day ahead","bar":"View order",
   "e.empty":"Your order is empty.","e.unknown_item":"An item is no longer available; remove it.","e.not_orderable":"This item is not available for takeaway.","e.bad_qty":"At most 20 per item.","e.too_many_lines":"At most 50 lines per order.","e.over_max_total":"Orders up to € 500 — call us for more.","e.under_minimum":"Minimum order not reached.","e.closed":"Online ordering is closed right now.","e.fields":"Fill in name, email and phone.","e.email":"Check the email address.","e.age":"Please confirm you are 18 or older."},
- de:{"title":"Abholung bestellen — Oud-Kempen Eetcafé","a.skip":"Zur Karte","a.lang":"Sprache","a.cats":"Kategorien","a.prev":"Vorherige Kategorien","a.next":"Weitere Kategorien","a.cart":"Bestellung","a.close":"Schließen","a.add":"Hinzufügen: {n}","a.less":"Weniger: {n}","a.more":"Mehr: {n}","sb.banner":"Vorschau — keine echten Bestellungen, keine Zahlung","back.menu":"← Die Karte","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Abholen","o.dek":"Online bestellen, sicher bezahlen, an der Bar abholen. Wir rufen an, falls etwas ist.",
+ de:{"title":"Abholung bestellen — Oud-Kempen Eetcafé","a.skip":"Zur Karte","a.lang":"Sprache","a.cats":"Kategorien","a.prev":"Vorherige Kategorien","a.next":"Weitere Kategorien","a.cart":"Bestellung","a.close":"Schließen","a.expand":"Ganze Bestellung zeigen","a.collapse":"Bestellung einklappen","a.add":"Hinzufügen: {n}","a.less":"Weniger: {n}","a.more":"Mehr: {n}","sb.banner":"Vorschau — keine echten Bestellungen, keine Zahlung","back.menu":"← Die Karte","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Abholen","o.dek":"Online bestellen, sicher bezahlen, an der Bar abholen. Wir rufen an, falls etwas ist.",
   "c.title":"Ihre Bestellung","c.note":"Anmerkung zur Bestellung (optional)","c.name":"Name","c.email":"E-Mail","c.phone":"Telefon","c.age":"Ich bin 18 Jahre oder älter. Beim Abholen kann ein Ausweis verlangt werden.","c.pay":"Bezahlen",
   "o.foot":"Abholung bei Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Allergie oder Diätwunsch? Bitte in der Anmerkung angeben oder anrufen.",
   "sb.m.title":"Hier folgt die Zahlung","sb.m.body":"In der echten Version gelangen Sie jetzt zur sicheren Zahlungsseite von MultiSafepay (iDEAL, Karte). Das würde die Kasse erhalten — Preise werden an der Kasse neu berechnet, nie aus dem Browser übernommen:","sb.m.close":"Schließen",
@@ -289,7 +313,7 @@ function renderCart(){ var t=tally(cart,BY,LIMITS); var lines=document.getElemen
       '<div class="ctl"><input type="text" maxlength="200" placeholder="'+esc(T('line.note'))+'" value="'+esc(l.note||'')+'"><div class="qty"><button type="button" aria-label="−">−</button><span>'+l.qty+'</span><button type="button" aria-label="+">+</button></div></div></div>'; }).join('');
     lines.querySelectorAll('.line').forEach(function(row){ var id=row.dataset.id, b=row.querySelectorAll('.qty button'); b[0].addEventListener('click',function(){change(id,-1);}); b[1].addEventListener('click',function(){change(id,1);});
       row.querySelector('input').addEventListener('input',function(e){ var l=cart.find(function(x){return x.id===id;}); if(l){ l.note=e.target.value.slice(0,200); save(); } }); });
-    tl.innerHTML=t.ok||t.error==='over_max_total'||t.error==='under_minimum' ? '<div><span>'+esc(T('subtotal'))+'</span><span>'+eur(t.total)+'</span></div>'+
+    tl.innerHTML=t.ok||t.error==='over_max_total'||t.error==='under_minimum' ?
       (t.sub9?'<div class="vat"><span>'+esc(T('vat',{r:9}))+'</span><span>'+eur(t.vat9)+'</span></div>':'')+(t.sub21?'<div class="vat"><span>'+esc(T('vat',{r:21}))+'</span><span>'+eur(t.vat21)+'</span></div>':'')+
       '<div class="tot"><span>'+esc(T('total'))+'</span><span>'+eur(t.total)+'</span></div>' : ''; }
   document.getElementById('age').hidden=!t.alcohol;
@@ -300,7 +324,7 @@ function renderCart(){ var t=tally(cart,BY,LIMITS); var lines=document.getElemen
 document.getElementById('chk').addEventListener('submit',function(e){ e.preventDefault(); var t=tally(cart,BY,LIMITS);
   if(!ST.open){ say('e.closed'); return; } if(!t.ok){ say('e.'+t.error); return; }
   var name=document.getElementById('f-name').value.trim(), email=document.getElementById('f-email').value.trim(), phone=document.getElementById('f-phone').value.trim();
-  if(!name||!email||!phone){ say('e.fields'); return; } if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say('e.email'); return; }
+  if(!name||!email||!phone){ say('e.fields'); var f=document.getElementById(!name?'f-name':(!email?'f-email':'f-phone')); try{ f.scrollIntoView({block:'center'}); }catch(e2){} f.focus(); return; } if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say('e.email'); return; }
   if(t.alcohol&&!document.getElementById('f-age').checked){ say('e.age'); return; }
   say('');
   var payload={lang:lang,lines:cart.map(function(l){return {id:l.id,qty:l.qty,note:l.note||''};}),order_note:document.getElementById('f-note').value.trim().slice(0,500),customer:{name:name,email:email,phone:phone},age_confirmed:t.alcohol?true:undefined};
@@ -311,7 +335,15 @@ document.getElementById('modal-x').addEventListener('click',closeModal);
 document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeModal(); drawer(false); } });
 /* mobile drawer */
-function drawer(on){ var c=document.getElementById('cart'); if(on===c.classList.contains('open')) return; c.classList.toggle('open',on); document.getElementById('dim').classList.toggle('on',on); document.body.style.overflow=on?'hidden':''; if(on) document.getElementById('cart-x').focus(); else document.getElementById('bar-btn').focus(); }
+function drawer(on){ var c=document.getElementById('cart'); if(on===c.classList.contains('open')) return; c.classList.toggle('open',on); document.getElementById('dim').classList.toggle('on',on); document.body.style.overflow=on?'hidden':''; if(!on) expand(false); if(on) document.getElementById('cart-x').focus(); else document.getElementById('bar-btn').focus(); }
+/* expand: drop the panel's own scroller and lay the whole order out — the list is never truncated,
+   this only decides whether you read it inside the panel or down the page */
+function expand(on){ var c=document.getElementById('cart'), b=document.getElementById('cart-exp');
+  if(on===c.classList.contains('tall')) return;
+  c.classList.toggle('tall',on); b.setAttribute('aria-expanded',String(on));
+  b.setAttribute('data-i18n-aria',on?'a.collapse':'a.expand'); b.setAttribute('aria-label',T(on?'a.collapse':'a.expand'));
+  b.textContent=on?'⤢':'⤡'; if(!on) document.getElementById('cart-scroll').scrollTop=0; }
+document.getElementById('cart-exp').addEventListener('click',function(){ expand(!document.getElementById('cart').classList.contains('tall')); });
 document.getElementById('bar-btn').addEventListener('click',function(){ drawer(true); });
 document.getElementById('cart-x').addEventListener('click',function(){ drawer(false); });
 document.getElementById('dim').addEventListener('click',function(){ drawer(false); });
