@@ -116,6 +116,13 @@ The takeaway ordering backend reads the menu from **D1**, seeded from `data/menu
    number, never an edit of an applied one;
 4. `python3 tests/test_menu.py` (must pass) and apply the migration to D1.
 
+**The schema freezes the same way the seed does.** `migrations/0001_schema.sql` may still be
+edited today only because it has never been applied — there is no `d1_databases` binding, no
+`database_id` and no `d1 execute` anywhere in this tree (checked 2026-09-06). The moment it is
+applied to any D1, it is frozen and every change after it takes a new migration number. The
+failure mode if you edit an applied migration is not a merge conflict you would notice; it is an
+environment that quietly lacks a column, and finds out at the first write.
+
 Per-item VAT (`vat_rate`) and `orderable` are **client-signed values** (`tools/gen-vat-sheet.py`
 makes the sheet). Do not change them in code because a category rule says so; change them because
 the signed sheet says so. Gate: merritt-studio `oudkempeneet-ordering-PHASE1-GATE.md`, condition 8.
