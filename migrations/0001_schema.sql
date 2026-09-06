@@ -15,6 +15,9 @@ CREATE TABLE IF NOT EXISTS menu_items (
   vat_rate      INTEGER NOT NULL CHECK (vat_rate IN (9,21)),   -- per item, client-signed (Q17)
   orderable     INTEGER NOT NULL DEFAULT 1 CHECK (orderable IN (0,1)),
   orderable_note TEXT,
+  options_json  TEXT,                        -- per-dish choices, resolved from data/options.json:
+                                             -- [{id,source,required,label:{nl,en,de},options:[{id,label:{...}}]}]
+                                             -- source 'menu' = the café's own printed words; 'implied' = ours, needs their word
   updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );
 CREATE INDEX IF NOT EXISTS menu_items_cat ON menu_items (kind, cat, pos);
@@ -57,6 +60,8 @@ CREATE TABLE IF NOT EXISTS order_items (
   unit_price_cents INTEGER NOT NULL,
   vat_rate        INTEGER NOT NULL CHECK (vat_rate IN (9,21)),
   name_snapshot   TEXT NOT NULL,             -- in the order's language
+  options_snapshot TEXT,                     -- the choices the customer made, already in the order's language
+                                             -- and readable on the ticket, e.g. 'Bami of nasi: Nasi'
   line_note       TEXT,                      -- per-item request (Q23 = a, ruled 2026-09-05)
   PRIMARY KEY (order_id, line)
 );

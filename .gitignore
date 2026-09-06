@@ -12,3 +12,5 @@ ROOM.json
 .hq/
 
 .claude/
+__pycache__/
+*.pyc
