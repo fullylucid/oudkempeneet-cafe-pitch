@@ -11,6 +11,13 @@
 #   → every one must be 404.
 *.md
 *.json
+*.sql
+*.py
+*.toml
 .assetsignore
 .gitignore
 .github/
+data/
+migrations/
+tools/
+tests/
