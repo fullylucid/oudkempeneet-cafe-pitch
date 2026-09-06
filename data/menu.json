@@ -21,7 +21,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-start-1",
@@ -42,7 +43,8 @@
    "price_raw": "10,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-start-2",
@@ -63,7 +65,8 @@
    "price_raw": "9,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-start-3",
@@ -84,7 +87,8 @@
    "price_raw": "6,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-start-4",
@@ -105,7 +109,8 @@
    "price_raw": "8,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-main-0",
@@ -126,7 +131,8 @@
    "price_raw": "25,95",
    "vat_rate": 9,
    "orderable": false,
-   "orderable_note": "reservation-only, 1 day ahead"
+   "orderable_note": "reservation-only, 1 day ahead",
+   "options": []
   },
   {
    "id": "m-main-1",
@@ -147,7 +153,45 @@
    "price_raw": "23,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "bakwijze",
+     "source": "implied",
+     "required": true,
+     "label": {
+      "nl": "Hoe gebakken?",
+      "en": "How would you like it cooked?",
+      "de": "Wie gebraten?"
+     },
+     "options": [
+      {
+       "id": "rood",
+       "label": {
+        "nl": "Rood",
+        "en": "Rare",
+        "de": "Blutig"
+       }
+      },
+      {
+       "id": "medium",
+       "label": {
+        "nl": "Medium",
+        "en": "Medium",
+        "de": "Medium"
+       }
+      },
+      {
+       "id": "doorbakken",
+       "label": {
+        "nl": "Doorbakken",
+        "en": "Well done",
+        "de": "Durchgebraten"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-main-2",
@@ -168,7 +212,8 @@
    "price_raw": "27,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-main-3",
@@ -189,7 +234,37 @@
    "price_raw": "13,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "schnitzelsaus",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Champignon- of pepersaus?",
+      "en": "Mushroom or pepper sauce?",
+      "de": "Champignon- oder Pfeffersoße?"
+     },
+     "options": [
+      {
+       "id": "champignon",
+       "label": {
+        "nl": "Champignonsaus",
+        "en": "Mushroom sauce",
+        "de": "Champignonsoße"
+       }
+      },
+      {
+       "id": "peper",
+       "label": {
+        "nl": "Pepersaus",
+        "en": "Pepper sauce",
+        "de": "Pfeffersoße"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-main-4",
@@ -210,7 +285,8 @@
    "price_raw": "13,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-main-5",
@@ -231,7 +307,8 @@
    "price_raw": "15,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-main-6",
@@ -252,7 +329,8 @@
    "price_raw": "17,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-lunch-0",
@@ -273,7 +351,37 @@
    "price_raw": "9,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "patat-brood",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Patat of brood?",
+      "en": "Fries or bread?",
+      "de": "Pommes frites oder Brot?"
+     },
+     "options": [
+      {
+       "id": "patat",
+       "label": {
+        "nl": "Patat",
+        "en": "Fries",
+        "de": "Pommes frites"
+       }
+      },
+      {
+       "id": "brood",
+       "label": {
+        "nl": "Brood",
+        "en": "Bread",
+        "de": "Brot"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-lunch-1",
@@ -294,7 +402,37 @@
    "price_raw": "9,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "patat-brood",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Patat of brood?",
+      "en": "Fries or bread?",
+      "de": "Pommes frites oder Brot?"
+     },
+     "options": [
+      {
+       "id": "patat",
+       "label": {
+        "nl": "Patat",
+        "en": "Fries",
+        "de": "Pommes frites"
+       }
+      },
+      {
+       "id": "brood",
+       "label": {
+        "nl": "Brood",
+        "en": "Bread",
+        "de": "Brot"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-lunch-2",
@@ -315,7 +453,8 @@
    "price_raw": "11,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-lunch-3",
@@ -336,7 +475,8 @@
    "price_raw": "12,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-lunch-4",
@@ -357,7 +497,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-indo-0",
@@ -378,7 +519,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-indo-1",
@@ -399,7 +541,8 @@
    "price_raw": "20,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-indo-2",
@@ -420,7 +563,8 @@
    "price_raw": "19,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-indo-3",
@@ -441,7 +585,37 @@
    "price_raw": "16,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "bami-nasi",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Bami of nasi?",
+      "en": "Bami or nasi?",
+      "de": "Bami oder Nasi?"
+     },
+     "options": [
+      {
+       "id": "bami",
+       "label": {
+        "nl": "Bami",
+        "en": "Bami",
+        "de": "Bami"
+       }
+      },
+      {
+       "id": "nasi",
+       "label": {
+        "nl": "Nasi",
+        "en": "Nasi",
+        "de": "Nasi"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-indo-4",
@@ -462,7 +636,37 @@
    "price_raw": "16,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "bami-nasi",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Bami of nasi?",
+      "en": "Bami or nasi?",
+      "de": "Bami oder Nasi?"
+     },
+     "options": [
+      {
+       "id": "bami",
+       "label": {
+        "nl": "Bami",
+        "en": "Bami",
+        "de": "Bami"
+       }
+      },
+      {
+       "id": "nasi",
+       "label": {
+        "nl": "Nasi",
+        "en": "Nasi",
+        "de": "Nasi"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-indo-5",
@@ -483,7 +687,37 @@
    "price_raw": "19,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "bami-nasi",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Bami of nasi?",
+      "en": "Bami or nasi?",
+      "de": "Bami oder Nasi?"
+     },
+     "options": [
+      {
+       "id": "bami",
+       "label": {
+        "nl": "Bami",
+        "en": "Bami",
+        "de": "Bami"
+       }
+      },
+      {
+       "id": "nasi",
+       "label": {
+        "nl": "Nasi",
+        "en": "Nasi",
+        "de": "Nasi"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-indo-6",
@@ -504,7 +738,37 @@
    "price_raw": "19,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "boontjes-sajoer",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Boontjes of sajoer lodeh?",
+      "en": "Green beans or sajoer lodeh?",
+      "de": "Bohnen oder Sajoer Lodeh?"
+     },
+     "options": [
+      {
+       "id": "boontjes",
+       "label": {
+        "nl": "Sambal goreng boontjes",
+        "en": "Sambal goreng green beans",
+        "de": "Sambal-Goreng-Bohnen"
+       }
+      },
+      {
+       "id": "sajoer",
+       "label": {
+        "nl": "Sajoer lodeh (niet-pittige groenten)",
+        "en": "Sajoer lodeh (mild vegetables)",
+        "de": "Sajoer Lodeh (nicht scharfes Gemüse)"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-indo-7",
@@ -525,7 +789,37 @@
    "price_raw": "19,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "boontjes-sajoer",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Boontjes of sajoer lodeh?",
+      "en": "Green beans or sajoer lodeh?",
+      "de": "Bohnen oder Sajoer Lodeh?"
+     },
+     "options": [
+      {
+       "id": "boontjes",
+       "label": {
+        "nl": "Sambal goreng boontjes",
+        "en": "Sambal goreng green beans",
+        "de": "Sambal-Goreng-Bohnen"
+       }
+      },
+      {
+       "id": "sajoer",
+       "label": {
+        "nl": "Sajoer lodeh (niet-pittige groenten)",
+        "en": "Sajoer lodeh (mild vegetables)",
+        "de": "Sajoer Lodeh (nicht scharfes Gemüse)"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-veg-0",
@@ -546,7 +840,8 @@
    "price_raw": "17,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-pancake-0",
@@ -567,7 +862,8 @@
    "price_raw": "9,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-snack-0",
@@ -588,7 +884,8 @@
    "price_raw": "7,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-snack-1",
@@ -609,7 +906,8 @@
    "price_raw": "7,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-snack-2",
@@ -630,7 +928,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-snack-3",
@@ -651,7 +950,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-snack-4",
@@ -672,7 +972,8 @@
    "price_raw": "7,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-kids-0",
@@ -693,7 +994,53 @@
    "price_raw": "8,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": [
+    {
+     "id": "kindermenu",
+     "source": "menu",
+     "required": true,
+     "label": {
+      "nl": "Waarmee?",
+      "en": "With what?",
+      "de": "Womit?"
+     },
+     "options": [
+      {
+       "id": "frikandel",
+       "label": {
+        "nl": "Frites met frikandel",
+        "en": "Fries with frikandel",
+        "de": "Pommes mit Frikadelle"
+       }
+      },
+      {
+       "id": "kroket",
+       "label": {
+        "nl": "Frites met kroket",
+        "en": "Fries with croquette",
+        "de": "Pommes mit Krokette"
+       }
+      },
+      {
+       "id": "nuggets",
+       "label": {
+        "nl": "Frites met 4 chicken nuggets",
+        "en": "Fries with 4 chicken nuggets",
+        "de": "Pommes mit 4 Chicken Nuggets"
+       }
+      },
+      {
+       "id": "pannenkoek",
+       "label": {
+        "nl": "Pannenkoek",
+        "en": "Pancake",
+        "de": "Pfannkuchen"
+       }
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "m-dessert-0",
@@ -714,7 +1061,8 @@
    "price_raw": "12,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-dessert-1",
@@ -735,7 +1083,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-dessert-2",
@@ -756,7 +1105,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-dessert-3",
@@ -777,7 +1127,8 @@
    "price_raw": "8,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "m-extra-0",
@@ -798,7 +1149,8 @@
    "price_raw": "3,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-0",
@@ -819,7 +1171,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-1",
@@ -840,7 +1193,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-2",
@@ -861,7 +1215,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-3",
@@ -882,7 +1237,8 @@
    "price_raw": "4,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-4",
@@ -903,7 +1259,8 @@
    "price_raw": "3,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-5",
@@ -924,7 +1281,8 @@
    "price_raw": "3,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-6",
@@ -945,7 +1303,8 @@
    "price_raw": "3,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-7",
@@ -966,7 +1325,8 @@
    "price_raw": "3,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-hot-8",
@@ -987,7 +1347,8 @@
    "price_raw": "8,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-0",
@@ -1008,7 +1369,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-1",
@@ -1029,7 +1391,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-2",
@@ -1050,7 +1413,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-3",
@@ -1071,7 +1435,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-4",
@@ -1092,7 +1457,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-5",
@@ -1113,7 +1479,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-6",
@@ -1134,7 +1501,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-7",
@@ -1155,7 +1523,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-8",
@@ -1176,7 +1545,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-9",
@@ -1197,7 +1567,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-10",
@@ -1218,7 +1589,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-11",
@@ -1239,7 +1611,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-12",
@@ -1260,7 +1633,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-13",
@@ -1281,7 +1655,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-14",
@@ -1302,7 +1677,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-15",
@@ -1323,7 +1699,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-16",
@@ -1344,7 +1721,8 @@
    "price_raw": "3,20",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-17",
@@ -1365,7 +1743,8 @@
    "price_raw": "3,25",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-18",
@@ -1386,7 +1765,8 @@
    "price_raw": "3,25",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-19",
@@ -1407,7 +1787,8 @@
    "price_raw": "3,00",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-20",
@@ -1428,7 +1809,8 @@
    "price_raw": "6,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-soft-21",
@@ -1449,7 +1831,8 @@
    "price_raw": "6,95",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-cocktail-0",
@@ -1470,7 +1853,8 @@
    "price_raw": "8,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-cocktail-1",
@@ -1491,7 +1875,8 @@
    "price_raw": "8,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-cocktail-2",
@@ -1512,7 +1897,8 @@
    "price_raw": "8,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-cocktail-3",
@@ -1533,7 +1919,8 @@
    "price_raw": "8,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-cocktail-4",
@@ -1554,7 +1941,8 @@
    "price_raw": "8,20",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-0",
@@ -1575,7 +1963,8 @@
    "price_raw": "4,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-1",
@@ -1596,7 +1985,8 @@
    "price_raw": "4,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-2",
@@ -1617,7 +2007,8 @@
    "price_raw": "4,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-3",
@@ -1638,7 +2029,8 @@
    "price_raw": "4,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-4",
@@ -1659,7 +2051,8 @@
    "price_raw": "4,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-5",
@@ -1680,7 +2073,8 @@
    "price_raw": "5,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-6",
@@ -1701,7 +2095,8 @@
    "price_raw": "19,95",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-7",
@@ -1722,7 +2117,8 @@
    "price_raw": "19,95",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-wine-8",
@@ -1743,7 +2139,8 @@
    "price_raw": "19,95",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-0",
@@ -1764,7 +2161,8 @@
    "price_raw": "3,40",
    "vat_rate": 21,
    "orderable": false,
-   "orderable_note": "draught"
+   "orderable_note": "draught",
+   "options": []
   },
   {
    "id": "d-beer-1",
@@ -1785,7 +2183,8 @@
    "price_raw": "6,80",
    "vat_rate": 21,
    "orderable": false,
-   "orderable_note": "draught"
+   "orderable_note": "draught",
+   "options": []
   },
   {
    "id": "d-beer-2",
@@ -1806,7 +2205,8 @@
    "price_raw": "3,40",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-3",
@@ -1827,7 +2227,8 @@
    "price_raw": "3,40",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-4",
@@ -1848,7 +2249,8 @@
    "price_raw": "4,25",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-5",
@@ -1869,7 +2271,8 @@
    "price_raw": "4,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-6",
@@ -1890,7 +2293,8 @@
    "price_raw": "4,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-7",
@@ -1911,7 +2315,8 @@
    "price_raw": "5,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-8",
@@ -1932,7 +2337,8 @@
    "price_raw": "5,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-9",
@@ -1953,7 +2359,8 @@
    "price_raw": "6,25",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-10",
@@ -1974,7 +2381,8 @@
    "price_raw": "5,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-11",
@@ -1995,7 +2403,8 @@
    "price_raw": "5,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-12",
@@ -2016,7 +2425,8 @@
    "price_raw": "5,75",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-beer-13",
@@ -2037,7 +2447,8 @@
    "price_raw": "5,50",
    "vat_rate": 9,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-0",
@@ -2058,7 +2469,8 @@
    "price_raw": "4,80",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-1",
@@ -2079,7 +2491,8 @@
    "price_raw": "4,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-2",
@@ -2100,7 +2513,8 @@
    "price_raw": "3,95",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-3",
@@ -2121,7 +2535,8 @@
    "price_raw": "4,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-4",
@@ -2142,7 +2557,8 @@
    "price_raw": "4,50",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-5",
@@ -2163,7 +2579,8 @@
    "price_raw": "4,80",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-6",
@@ -2184,7 +2601,8 @@
    "price_raw": "4,80",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-7",
@@ -2205,7 +2623,8 @@
    "price_raw": "5,00",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-8",
@@ -2226,7 +2645,8 @@
    "price_raw": "4,95",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-9",
@@ -2247,7 +2667,8 @@
    "price_raw": "4,80",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-10",
@@ -2268,7 +2689,8 @@
    "price_raw": "4,90",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-11",
@@ -2289,7 +2711,8 @@
    "price_raw": "4,90",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   },
   {
    "id": "d-spirit-12",
@@ -2310,7 +2733,8 @@
    "price_raw": "4,80",
    "vat_rate": 21,
    "orderable": true,
-   "orderable_note": ""
+   "orderable_note": "",
+   "options": []
   }
  ]
 }

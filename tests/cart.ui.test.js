@@ -95,6 +95,59 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
     await page.close();
   }
 
+  // ---- per-dish choices: the dropdown under the cart line, and no checkout until it is answered ----
+  {
+    const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    page.on('pageerror', e => errors.push('choices: ' + e));
+    await page.goto(URL); await page.waitForTimeout(400);
+    for (const id of ['m-indo-3', 'm-main-1', 'm-start-0']) await page.locator(`.item[data-id="${id}"] .add`).click();
+    await page.waitForTimeout(250);
+    const before = await page.evaluate(() => ({
+      sajoer: [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select option')].map(o => o.value),
+      steak: [...document.querySelectorAll('.line[data-id="m-main-1"] .opt select option')].map(o => o.value),
+      soup: document.querySelectorAll('.line[data-id="m-start-0"] .opt').length,
+      flagged: document.querySelectorAll('.opt select.need').length,
+      msg: document.getElementById('msg').textContent,
+      pay: document.getElementById('pay').disabled,
+      total: !!document.querySelector('.tot') }));
+    ok(before.sajoer.join(',') === ',bami,nasi', 'Sajoer Lodeh offers bami or nasi under the cart line (got ' + before.sajoer + ')');
+    ok(before.steak.join(',') === ',rood,medium,doorbakken', 'Biefstuk asks how it should be cooked (got ' + before.steak + ')');
+    ok(before.soup === 0, 'a dish with no choices gets no dropdown');
+    ok(before.pay && before.flagged === 2, 'checkout is blocked and both open choices are flagged');
+    ok(/Sajoer Lodeh/.test(before.msg) && /Biefstuk/.test(before.msg), 'the message names the dishes still to choose (got "' + before.msg + '")');
+    ok(before.total, 'the total is shown while a choice is still open');
+    await page.selectOption('.line[data-id="m-indo-3"] .opt select', 'nasi');
+    await page.selectOption('.line[data-id="m-main-1"] .opt select', 'medium');
+    await page.waitForTimeout(200);
+    const after = await page.evaluate(() => ({ pay: document.getElementById('pay').disabled, msg: document.getElementById('msg').textContent,
+      flagged: document.querySelectorAll('.opt select.need').length }));
+    ok(!after.pay && after.flagged === 0 && after.msg === '', 'answering every choice releases the checkout');
+    // the choice reaches the payload and the ticket, in the order's language
+    await page.fill('#f-name', 'Test'); await page.fill('#f-email', 't@example.com'); await page.fill('#f-phone', '0612345678');
+    await page.locator('#pay').click(); await page.waitForTimeout(300);
+    const sent = await page.evaluate(() => document.getElementById('payload').textContent);
+    ok(/"bami-nasi": "nasi"/.test(sent) && /"bakwijze": "medium"/.test(sent), 'the payload carries the chosen options');
+    ok(/1 x Sajoer Lodeh \(Nasi\)/.test(sent) && /1 x Biefstuk \(Medium\)/.test(sent), 'the kitchen ticket spells the choice out');
+    await page.locator('#modal-x').click(); await page.waitForTimeout(150);
+    // switching language translates the question and keeps the answer
+    await page.locator('.lang button[data-lang="de"]').click(); await page.waitForTimeout(300);
+    const de = await page.evaluate(() => { const o = document.querySelector('.line[data-id="m-indo-3"] .opt');
+      return { q: o.querySelector('span').textContent, chosen: o.querySelector('select').value,
+        pay: document.getElementById('pay').disabled }; });
+    ok(de.q === 'Bami oder Nasi?' && de.chosen === 'nasi' && !de.pay, 'the question is translated and the answer survives (got ' + JSON.stringify(de) + ')');
+    // a reload keeps the choice; a tampered option id does not
+    await page.reload(); await page.waitForTimeout(500);
+    const kept = await page.evaluate(() => document.querySelector('.line[data-id="m-indo-3"] .opt select').value);
+    ok(kept === 'nasi', 'the choice survives a reload (got "' + kept + '")');
+    await page.evaluate(() => { const c = JSON.parse(localStorage.getItem('ok-cart'));
+      c.find(l => l.id === 'm-indo-3').opts['bami-nasi'] = 'friet'; localStorage.setItem('ok-cart', JSON.stringify(c)); });
+    await page.reload(); await page.waitForTimeout(500);
+    const tampered = await page.evaluate(() => ({ v: document.querySelector('.line[data-id="m-indo-3"] .opt select').value,
+      pay: document.getElementById('pay').disabled }));
+    ok(tampered.v === '' && tampered.pay, 'an option id that is not on the dish is dropped and blocks checkout again');
+    await page.close();
+  }
+
   // ---- no width may make the page scroll sideways ----
   for (const vp of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 900, height: 800 }, { width: 390, height: 844 }, { width: 360, height: 640 }]) {
     const page = await browser.newPage({ viewport: vp, hasTouch: vp.width < 901 });

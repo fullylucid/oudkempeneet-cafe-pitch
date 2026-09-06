@@ -4,7 +4,7 @@
 # D1 is the menu's truth from the seed onward (gate cond. 8); this script only produces the seed input.
 # VAT: food 9%, hot/soft drinks 9%, alcohol 21%; per-item overrides: Irish Coffee 21, any 0.0 beer 9.
 # Orderable default: everything except draught beer and the fondue (reservation-only).
-import json,re,sys,collections
+import json,re,sys,collections,os
 src=open('menu.html',encoding='utf-8').read()
 m=re.search(r'var I18N=(\{.*?\});\n',src,re.S); I18N=json.loads(m.group(1))
 langs=['nl','en','de']
@@ -42,6 +42,20 @@ for key in order:
     items.append({"id":key.replace('.','-'),"kind":"food" if kind=='m' else "drink","cat":cat,"pos":int(idx),
                   "name":name,"desc":{l:(desc[l] or None) for l in langs},"price_cents":cents[0] if cents else None,"price_raw":raw,
                   "vat_rate":vat,"orderable":orderable,"orderable_note":why})
+# per-dish choices (data/options.json) resolved onto the item, so menu.json stays the one artifact
+# the page and the D1 seed both read. A group marked source:"implied" is NOT written on the café's
+# menu — it needs the café's word before go-live.
+opt=json.load(open(os.path.join(os.path.dirname(__file__),'..','data','options.json'),encoding='utf-8'))
+G={g['id']:g for g in opt['groups']}
+unknown=[k for k in opt['items'] if k not in {i['id'] for i in items}]
+if unknown: raise SystemExit('options.json names items that are not on the menu: %s'%unknown)
+for i in items:
+    ids=opt['items'].get(i['id'],[])
+    for gid in ids:
+        if gid not in G: raise SystemExit('options.json: item %s wants unknown group %s'%(i['id'],gid))
+    i['options']=[G[gid] for gid in ids]
+print('choices:',[(i['id'],i['name']['nl'],[g['id'] for g in i['options']]) for i in items if i['options']])
+print('implied (café must confirm):',sorted({g['id'] for i in items for g in i['options'] if g['source']=='implied'}))
 print('items',len(items),'food',sum(i['kind']=='food' for i in items),'drink',sum(i['kind']=='drink' for i in items))
 print('cats',collections.Counter(i['cat'] for i in items))
 print('vat',collections.Counter((i['kind'],i['vat_rate']) for i in items))
