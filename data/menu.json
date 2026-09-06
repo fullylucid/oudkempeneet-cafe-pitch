@@ -1,0 +1,2316 @@
+{
+ "source": "menu.html client/main 3af8052",
+ "extracted": "2026-09-04",
+ "items": [
+  {
+   "id": "m-start-0",
+   "kind": "food",
+   "cat": "start",
+   "pos": 0,
+   "name": {
+    "nl": "Soep van de dag",
+    "en": "Soup of the Day",
+    "de": "Tagessuppe"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-start-1",
+   "kind": "food",
+   "cat": "start",
+   "pos": 1,
+   "name": {
+    "nl": "Caesar Salad",
+    "en": "Caesar Salad",
+    "de": "Caesar Salad"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1000,
+   "price_raw": "10,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-start-2",
+   "kind": "food",
+   "cat": "start",
+   "pos": 2,
+   "name": {
+    "nl": "Salade met geitenkaas",
+    "en": "Goat Cheese Salad",
+    "de": "Salat mit Ziegenkäse"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 950,
+   "price_raw": "9,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-start-3",
+   "kind": "food",
+   "cat": "start",
+   "pos": 3,
+   "name": {
+    "nl": "Kroepoek met huisgemaakte pindasaus",
+    "en": "Prawn crackers with homemade peanut sauce",
+    "de": "Krupuk mit hausgemachter Erdnusssauce"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 650,
+   "price_raw": "6,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-start-4",
+   "kind": "food",
+   "cat": "start",
+   "pos": 4,
+   "name": {
+    "nl": "Brood met smeersel",
+    "en": "Bread with spread",
+    "de": "Brot mit Aufstrich"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 895,
+   "price_raw": "8,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-main-0",
+   "kind": "food",
+   "cat": "main",
+   "pos": 0,
+   "name": {
+    "nl": "Kaasfondue",
+    "en": "Cheese Fondue",
+    "de": "Käsefondue"
+   },
+   "desc": {
+    "nl": "1 dag van tevoren reserveren - minimaal 2 personen.",
+    "en": "Reservation required 1 day in advance - minimum 2 persons.",
+    "de": "1 Tag im Voraus reservieren - mindestens 2 Personen."
+   },
+   "price_cents": 2595,
+   "price_raw": "25,95",
+   "vat_rate": 9,
+   "orderable": false,
+   "orderable_note": "reservation-only, 1 day ahead"
+  },
+  {
+   "id": "m-main-1",
+   "kind": "food",
+   "cat": "main",
+   "pos": 1,
+   "name": {
+    "nl": "Biefstuk",
+    "en": "Steak",
+    "de": "Rindersteak"
+   },
+   "desc": {
+    "nl": "Met friet en salade.",
+    "en": "Served with fries and salad.",
+    "de": "Mit Pommes frites und Salat."
+   },
+   "price_cents": 2395,
+   "price_raw": "23,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-main-2",
+   "kind": "food",
+   "cat": "main",
+   "pos": 2,
+   "name": {
+    "nl": "Sliptong - 2 stuks",
+    "en": "Slip Sole - 2 pieces",
+    "de": "Gebratene Seezunge - 2 Stück"
+   },
+   "desc": {
+    "nl": "Met friet en salade.",
+    "en": "Served with fries and salad.",
+    "de": "Mit Pommes frites und Salat."
+   },
+   "price_cents": 2795,
+   "price_raw": "27,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-main-3",
+   "kind": "food",
+   "cat": "main",
+   "pos": 3,
+   "name": {
+    "nl": "Varkens schnitzel",
+    "en": "Pork Schnitzel",
+    "de": "Schweineschnitzel"
+   },
+   "desc": {
+    "nl": "Met patat, salade, champignon- of pepersaus.",
+    "en": "With fries, salad, mushroom or pepper sauce.",
+    "de": "Mit Pommes frites, Salat und Champignon- oder Pfeffersoße."
+   },
+   "price_cents": 1395,
+   "price_raw": "13,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-main-4",
+   "kind": "food",
+   "cat": "main",
+   "pos": 4,
+   "name": {
+    "nl": "Spaghetti bolognese",
+    "en": "Spaghetti Bolognese",
+    "de": "Spaghetti Bolognese"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1395,
+   "price_raw": "13,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-main-5",
+   "kind": "food",
+   "cat": "main",
+   "pos": 5,
+   "name": {
+    "nl": "Duitse Braadworst",
+    "en": "German Bratwurst",
+    "de": "Deutsche Bratwurst"
+   },
+   "desc": {
+    "nl": "Met friet en salade.",
+    "en": "With fries and salad.",
+    "de": "Mit Pommes frites und Salat."
+   },
+   "price_cents": 1595,
+   "price_raw": "15,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-main-6",
+   "kind": "food",
+   "cat": "main",
+   "pos": 6,
+   "name": {
+    "nl": "Kibbeling",
+    "en": "Kibbeling",
+    "de": "Kibbeling"
+   },
+   "desc": {
+    "nl": "Met friet en salade.",
+    "en": "With fries and salad.",
+    "de": "Mit Pommes frites und Salat."
+   },
+   "price_cents": 1795,
+   "price_raw": "17,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-lunch-0",
+   "kind": "food",
+   "cat": "lunch",
+   "pos": 0,
+   "name": {
+    "nl": "Frikandel - 2 stuks",
+    "en": "Frikandel - 2 pieces",
+    "de": "Frikadelle - 2 Stück"
+   },
+   "desc": {
+    "nl": "Met patat of brood.",
+    "en": "With fries or bread.",
+    "de": "Mit Pommes frites oder Brot."
+   },
+   "price_cents": 995,
+   "price_raw": "9,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-lunch-1",
+   "kind": "food",
+   "cat": "lunch",
+   "pos": 1,
+   "name": {
+    "nl": "Kroket - 2 stuks",
+    "en": "Croquette - 2 pieces",
+    "de": "Kroketten - 2 Stück"
+   },
+   "desc": {
+    "nl": "Met patat of brood.",
+    "en": "With fries or bread.",
+    "de": "Mit Pommes frites oder Brot."
+   },
+   "price_cents": 995,
+   "price_raw": "9,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-lunch-2",
+   "kind": "food",
+   "cat": "lunch",
+   "pos": 2,
+   "name": {
+    "nl": "Uitsmijter ham kaas",
+    "en": "Fried eggs with ham & cheese",
+    "de": "Spiegeleier mit Schinken & Käse"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1100,
+   "price_raw": "11,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-lunch-3",
+   "kind": "food",
+   "cat": "lunch",
+   "pos": 3,
+   "name": {
+    "nl": "Boerenomelet",
+    "en": "Farmer's omelette",
+    "de": "Bauernomelett"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1250,
+   "price_raw": "12,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-lunch-4",
+   "kind": "food",
+   "cat": "lunch",
+   "pos": 4,
+   "name": {
+    "nl": "Tosti ham kaas",
+    "en": "Ham & cheese toastie",
+    "de": "Toast Schinken & Käse"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-0",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 0,
+   "name": {
+    "nl": "Soto Ajam",
+    "en": "Soto Ajam",
+    "de": "Soto Ajam"
+   },
+   "desc": {
+    "nl": "Traditionele Indonesische kippensoep met kip, ei, taugé, glasnoedels en verse kruiden.",
+    "en": "Traditional Indonesian chicken soup with chicken, egg, bean sprouts, glass noodles and fresh herbs.",
+    "de": "Traditionelle indonesische Hühnersuppe mit Hähnchen, Ei, Sojasprossen, Glasnudeln und frischen Kräutern."
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-1",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 1,
+   "name": {
+    "nl": "Beef Rendang",
+    "en": "Beef Rendang",
+    "de": "Beef Rendang"
+   },
+   "desc": {
+    "nl": "Langzaam gegaard rundvlees in een rijke Indonesische saus.",
+    "en": "Slow-cooked beef in a rich Indonesian sauce.",
+    "de": "Langsam geschmortes Rindfleisch in einer reichhaltigen indonesischen Soße."
+   },
+   "price_cents": 2095,
+   "price_raw": "20,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-2",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 2,
+   "name": {
+    "nl": "Ajam Pedis",
+    "en": "Ajam Pedis",
+    "de": "Ajam Pedis"
+   },
+   "desc": {
+    "nl": "Pittige kip in een kruidige Indonesische saus.",
+    "en": "Spicy chicken in a savoury Indonesian sauce.",
+    "de": "Scharfes Hähnchen in einer würzigen indonesischen Soße."
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-3",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 3,
+   "name": {
+    "nl": "Sajoer Lodeh",
+    "en": "Sajoer Lodeh",
+    "de": "Sajoer Lodeh"
+   },
+   "desc": {
+    "nl": "Vegetarische Indonesische groenten in een romige kokossaus, met atjar en bami of nasi.",
+    "en": "Vegetarian Indonesian vegetables in a creamy coconut sauce, served with atjar and bami or nasi.",
+    "de": "Vegetarisches indonesisches Gemüse in einer cremigen Kokossoße, mit Atjar und Bami oder Nasi."
+   },
+   "price_cents": 1695,
+   "price_raw": "16,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-4",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 4,
+   "name": {
+    "nl": "Vega Rendang",
+    "en": "Vega Rendang",
+    "de": "Vega Rendang"
+   },
+   "desc": {
+    "nl": "Vegetarische Indonesische groente met soyabrokken, atjar en bami of nasi.",
+    "en": "Vegetarian Indonesian vegetables with soy chunks, atjar and bami or nasi.",
+    "de": "Vegetarisches indonesisches Gemüse mit Sojastücken, Atjar und Bami oder Nasi."
+   },
+   "price_cents": 1695,
+   "price_raw": "16,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-5",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 5,
+   "name": {
+    "nl": "Kipsaté",
+    "en": "Chicken Satay",
+    "de": "Hühnchen-Saté"
+   },
+   "desc": {
+    "nl": "Met huisgemaakte satésaus, kroepoek, atjar en bami of nasi.",
+    "en": "Served with homemade satay sauce, prawn crackers, atjar and bami or nasi.",
+    "de": "Mit hausgemachter Saté-Sauce, Krupuk, Atjar und Bami oder Nasi."
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-6",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 6,
+   "name": {
+    "nl": "Nasi Goreng Schotel",
+    "en": "Nasi Goreng Platter",
+    "de": "Nasi-Goreng-Teller"
+   },
+   "desc": {
+    "nl": "Gebakken nasi met kipsaté, ei, kroepoek en atjar, geserveerd met sambal goreng boontjes óf sajoer lodeh (niet-pittige groenten).",
+    "en": "Fried rice with chicken satay, egg, prawn crackers and atjar, served with sambal goreng green beans or sajoer lodeh (mild vegetables).",
+    "de": "Gebratener Reis mit Hähnchen-Saté, Ei, Krupuk und Atjar, serviert mit Sambal-Goreng-Bohnen oder Sajoer Lodeh (nicht scharfes Gemüse)."
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-indo-7",
+   "kind": "food",
+   "cat": "indo",
+   "pos": 7,
+   "name": {
+    "nl": "Bami Goreng Schotel",
+    "en": "Bami Goreng Platter",
+    "de": "Bami-Goreng-Teller"
+   },
+   "desc": {
+    "nl": "Gebakken bami met kipsaté, ei, kroepoek en atjar, geserveerd met sambal goreng boontjes óf sajoer lodeh (niet-pittige groenten).",
+    "en": "Fried noodles with chicken satay, egg, prawn crackers and atjar, served with sambal goreng green beans or sajoer lodeh (mild vegetables).",
+    "de": "Gebratene Bami mit Hähnchen-Saté, Ei, Krupuk und Atjar, serviert mit Sambal-Goreng-Bohnen oder Sajoer Lodeh (nicht scharfes Gemüse)."
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-veg-0",
+   "kind": "food",
+   "cat": "veg",
+   "pos": 0,
+   "name": {
+    "nl": "Pasta met champignons",
+    "en": "Pasta with Mushrooms",
+    "de": "Pasta mit Champignons"
+   },
+   "desc": {
+    "nl": "Met salade.",
+    "en": "With salad.",
+    "de": "Mit Salat."
+   },
+   "price_cents": 1750,
+   "price_raw": "17,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-pancake-0",
+   "kind": "food",
+   "cat": "pancake",
+   "pos": 0,
+   "name": {
+    "nl": "Pannenkoek Naturel",
+    "en": "Traditional Pancake",
+    "de": "Natur-Pfannkuchen"
+   },
+   "desc": {
+    "nl": "Met stroop, suiker en boter.",
+    "en": "With syrup, sugar and butter.",
+    "de": "Mit Sirup, Zucker und Butter."
+   },
+   "price_cents": 995,
+   "price_raw": "9,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-snack-0",
+   "kind": "food",
+   "cat": "snack",
+   "pos": 0,
+   "name": {
+    "nl": "Bittergarnituur (8 stuks)",
+    "en": "Mixed Fried Snacks (8 pcs)",
+    "de": "Bittergarnitur (8 Stück)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 750,
+   "price_raw": "7,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-snack-1",
+   "kind": "food",
+   "cat": "snack",
+   "pos": 1,
+   "name": {
+    "nl": "Bitterballen (8 stuks)",
+    "en": "Bitterballs (8 pcs)",
+    "de": "Bitterbällchen (8 Stück)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 750,
+   "price_raw": "7,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-snack-2",
+   "kind": "food",
+   "cat": "snack",
+   "pos": 2,
+   "name": {
+    "nl": "Chicken Wings (8 stuks)",
+    "en": "Chicken Wings (8 pcs)",
+    "de": "Chicken Wings (8 Stück)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-snack-3",
+   "kind": "food",
+   "cat": "snack",
+   "pos": 3,
+   "name": {
+    "nl": "Kip Nuggets (8 stuks)",
+    "en": "Chicken Nuggets (8 pcs)",
+    "de": "Chicken Nuggets (8 Stück)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-snack-4",
+   "kind": "food",
+   "cat": "snack",
+   "pos": 4,
+   "name": {
+    "nl": "Kaassoufflés mini (8 stuks)",
+    "en": "Mini Cheese Soufflés (8 pcs)",
+    "de": "Mini-Käsesoufflés (8 Stück)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 750,
+   "price_raw": "7,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-kids-0",
+   "kind": "food",
+   "cat": "kids",
+   "pos": 0,
+   "name": {
+    "nl": "Kindermenu",
+    "en": "Children's menu",
+    "de": "Kindermenü"
+   },
+   "desc": {
+    "nl": "Frites met frikandel, kroket of 4 chicken nuggets, of pannenkoek. Inclusief appelmoes & mayonaise, kinderijsje en verrassing.",
+    "en": "Fries with frikandel, croquette or 4 chicken nuggets, or pancake. Includes applesauce & mayonnaise, ice cream and surprise.",
+    "de": "Pommes mit Frikadelle, Kroketten oder 4 Chicken Nuggets, oder Pfannkuchen. Inklusive Apfelmus & Mayonnaise, Kindereis und Überraschung."
+   },
+   "price_cents": 895,
+   "price_raw": "8,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-dessert-0",
+   "kind": "food",
+   "cat": "dessert",
+   "pos": 0,
+   "name": {
+    "nl": "Kaasplankje",
+    "en": "Cheese Platter",
+    "de": "Käseplatte"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1295,
+   "price_raw": "12,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-dessert-1",
+   "kind": "food",
+   "cat": "dessert",
+   "pos": 1,
+   "name": {
+    "nl": "IJs met aardbeien en slagroom",
+    "en": "Ice Cream with Strawberries & Whipped Cream",
+    "de": "Eis mit Erdbeeren und Sahne"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-dessert-2",
+   "kind": "food",
+   "cat": "dessert",
+   "pos": 2,
+   "name": {
+    "nl": "Vanille-ijs met advocaat",
+    "en": "Vanilla Ice Cream with Advocaat",
+    "de": "Vanilleeis mit Eierlikör"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-dessert-3",
+   "kind": "food",
+   "cat": "dessert",
+   "pos": 3,
+   "name": {
+    "nl": "Dame Blanche",
+    "en": "Dame Blanche",
+    "de": "Dame Blanche"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "m-extra-0",
+   "kind": "food",
+   "cat": "extra",
+   "pos": 0,
+   "name": {
+    "nl": "Portie friet",
+    "en": "Side of Fries",
+    "de": "Portion Pommes frites"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 350,
+   "price_raw": "3,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-0",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 0,
+   "name": {
+    "nl": "Koffie",
+    "en": "Coffee",
+    "de": "Kaffee"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-1",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 1,
+   "name": {
+    "nl": "Thee",
+    "en": "Tea",
+    "de": "Tee"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-2",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 2,
+   "name": {
+    "nl": "Espresso",
+    "en": "Espresso",
+    "de": "Espresso"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-3",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 3,
+   "name": {
+    "nl": "Dubbele Espresso",
+    "en": "Double Espresso",
+    "de": "Doppelter Espresso"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 450,
+   "price_raw": "4,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-4",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 4,
+   "name": {
+    "nl": "Cappuccino",
+    "en": "Cappuccino",
+    "de": "Cappuccino"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 350,
+   "price_raw": "3,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-5",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 5,
+   "name": {
+    "nl": "Latte Macchiato",
+    "en": "Latte Macchiato",
+    "de": "Latte Macchiato"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 395,
+   "price_raw": "3,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-6",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 6,
+   "name": {
+    "nl": "Warme Chocolademelk",
+    "en": "Hot Chocolate",
+    "de": "Heiße Schokolade"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 350,
+   "price_raw": "3,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-7",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 7,
+   "name": {
+    "nl": "IJskoffie",
+    "en": "Iced Coffee",
+    "de": "Eiskaffee"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 395,
+   "price_raw": "3,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-hot-8",
+   "kind": "drink",
+   "cat": "hot",
+   "pos": 8,
+   "name": {
+    "nl": "Irish Coffee",
+    "en": "Irish Coffee",
+    "de": "Irish Coffee"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-0",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 0,
+   "name": {
+    "nl": "Coca-Cola",
+    "en": "Coca-Cola",
+    "de": "Coca-Cola"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-1",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 1,
+   "name": {
+    "nl": "Coca-Cola Zero",
+    "en": "Coca-Cola Zero",
+    "de": "Coca-Cola Zero"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-2",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 2,
+   "name": {
+    "nl": "Fanta",
+    "en": "Fanta",
+    "de": "Fanta"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-3",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 3,
+   "name": {
+    "nl": "Fanta 0",
+    "en": "Fanta 0",
+    "de": "Fanta 0"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-4",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 4,
+   "name": {
+    "nl": "7UP",
+    "en": "7UP",
+    "de": "7UP"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-5",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 5,
+   "name": {
+    "nl": "7UP Zero",
+    "en": "7UP Zero",
+    "de": "7UP Zero"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-6",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 6,
+   "name": {
+    "nl": "Bitter Lemon",
+    "en": "Bitter Lemon",
+    "de": "Bitter Lemon"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-7",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 7,
+   "name": {
+    "nl": "Tonic",
+    "en": "Tonic",
+    "de": "Tonic"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-8",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 8,
+   "name": {
+    "nl": "Spa Blauw",
+    "en": "Still Water",
+    "de": "Mineralwasser still"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-9",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 9,
+   "name": {
+    "nl": "Spa Rood",
+    "en": "Sparkling Water",
+    "de": "Mineralwasser sprudel"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-10",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 10,
+   "name": {
+    "nl": "Lipton Ice Tea Lemon",
+    "en": "Lipton Ice Tea Lemon",
+    "de": "Lipton Ice Tea Lemon"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-11",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 11,
+   "name": {
+    "nl": "Lipton Ice Tea Peach",
+    "en": "Lipton Ice Tea Peach",
+    "de": "Lipton Ice Tea Peach"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-12",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 12,
+   "name": {
+    "nl": "Lipton Ice Tea Green",
+    "en": "Lipton Ice Tea Green",
+    "de": "Lipton Ice Tea Green"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-13",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 13,
+   "name": {
+    "nl": "Lipton Ice Tea Green Zero",
+    "en": "Lipton Ice Tea Green Zero",
+    "de": "Lipton Ice Tea Green Zero"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-14",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 14,
+   "name": {
+    "nl": "Appelsap",
+    "en": "Apple Juice",
+    "de": "Apfelsaft"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-15",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 15,
+   "name": {
+    "nl": "Multivitaminasap",
+    "en": "Multivitamin Juice",
+    "de": "Multivitaminsaft"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-16",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 16,
+   "name": {
+    "nl": "Sinaasappelsap",
+    "en": "Orange Juice",
+    "de": "Orangensaft"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 320,
+   "price_raw": "3,20",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-17",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 17,
+   "name": {
+    "nl": "Fristi",
+    "en": "Fristi",
+    "de": "Fristi"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 325,
+   "price_raw": "3,25",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-18",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 18,
+   "name": {
+    "nl": "Chocomel",
+    "en": "Chocolate Milk",
+    "de": "Schokomilch"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 325,
+   "price_raw": "3,25",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-19",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 19,
+   "name": {
+    "nl": "Spezi (Cola/Fanta)",
+    "en": "Spezi (Cola/Fanta)",
+    "de": "Spezi (Cola/Fanta)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 300,
+   "price_raw": "3,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-20",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 20,
+   "name": {
+    "nl": "Red Bull",
+    "en": "Red Bull",
+    "de": "Red Bull"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 695,
+   "price_raw": "6,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-soft-21",
+   "kind": "drink",
+   "cat": "soft",
+   "pos": 21,
+   "name": {
+    "nl": "Red Bull Sugar Free",
+    "en": "Red Bull Sugar Free",
+    "de": "Red Bull Sugar Free"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 695,
+   "price_raw": "6,95",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-cocktail-0",
+   "kind": "drink",
+   "cat": "cocktail",
+   "pos": 0,
+   "name": {
+    "nl": "Aperol Spritz",
+    "en": "Aperol Spritz",
+    "de": "Aperol Spritz"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-cocktail-1",
+   "kind": "drink",
+   "cat": "cocktail",
+   "pos": 1,
+   "name": {
+    "nl": "Gin Tonic",
+    "en": "Gin Tonic",
+    "de": "Gin Tonic"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-cocktail-2",
+   "kind": "drink",
+   "cat": "cocktail",
+   "pos": 2,
+   "name": {
+    "nl": "Bacardi Cola",
+    "en": "Bacardi Cola",
+    "de": "Bacardi Cola"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-cocktail-3",
+   "kind": "drink",
+   "cat": "cocktail",
+   "pos": 3,
+   "name": {
+    "nl": "Whisky Cola",
+    "en": "Whisky Cola",
+    "de": "Whisky Cola"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 850,
+   "price_raw": "8,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-cocktail-4",
+   "kind": "drink",
+   "cat": "cocktail",
+   "pos": 4,
+   "name": {
+    "nl": "Mojito",
+    "en": "Mojito",
+    "de": "Mojito"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 820,
+   "price_raw": "8,20",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-0",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 0,
+   "name": {
+    "nl": "Chardonnay (glas)",
+    "en": "Chardonnay (glass)",
+    "de": "Chardonnay (Glas)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 475,
+   "price_raw": "4,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-1",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 1,
+   "name": {
+    "nl": "Cabernet Sauvignon (glas)",
+    "en": "Cabernet Sauvignon (glass)",
+    "de": "Cabernet Sauvignon (Glas)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 475,
+   "price_raw": "4,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-2",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 2,
+   "name": {
+    "nl": "Merlot (glas)",
+    "en": "Merlot (glass)",
+    "de": "Merlot (Glas)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 475,
+   "price_raw": "4,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-3",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 3,
+   "name": {
+    "nl": "Rosé (glas)",
+    "en": "Rosé (glass)",
+    "de": "Rosé (Glas)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 475,
+   "price_raw": "4,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-4",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 4,
+   "name": {
+    "nl": "Zoete Witte Wijn (glas)",
+    "en": "Sweet White Wine (glass)",
+    "de": "Süßer Weißwein (Glas)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 475,
+   "price_raw": "4,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-5",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 5,
+   "name": {
+    "nl": "Prosecco (glas)",
+    "en": "Prosecco (glass)",
+    "de": "Prosecco (Glas)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 550,
+   "price_raw": "5,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-6",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 6,
+   "name": {
+    "nl": "Witte Wijn (fles)",
+    "en": "White Wine (bottle)",
+    "de": "Weißwein (Flasche)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-7",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 7,
+   "name": {
+    "nl": "Rode Wijn (fles)",
+    "en": "Red Wine (bottle)",
+    "de": "Rotwein (Flasche)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-wine-8",
+   "kind": "drink",
+   "cat": "wine",
+   "pos": 8,
+   "name": {
+    "nl": "Rosé Wijn (fles)",
+    "en": "Rosé Wine (bottle)",
+    "de": "Roséwein (Flasche)"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 1995,
+   "price_raw": "19,95",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-0",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 0,
+   "name": {
+    "nl": "Tap bier",
+    "en": "Draught beer",
+    "de": "Bier vom Fass"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 340,
+   "price_raw": "3,40",
+   "vat_rate": 21,
+   "orderable": false,
+   "orderable_note": "draught"
+  },
+  {
+   "id": "d-beer-1",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 1,
+   "name": {
+    "nl": "Groot tapbier",
+    "en": "Large draught beer",
+    "de": "Großes Fassbier"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 680,
+   "price_raw": "6,80",
+   "vat_rate": 21,
+   "orderable": false,
+   "orderable_note": "draught"
+  },
+  {
+   "id": "d-beer-2",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 2,
+   "name": {
+    "nl": "Heineken",
+    "en": "Heineken",
+    "de": "Heineken"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 340,
+   "price_raw": "3,40",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-3",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 3,
+   "name": {
+    "nl": "Hertog Jan Bier",
+    "en": "Hertog Jan Bier",
+    "de": "Hertog Jan Bier"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 340,
+   "price_raw": "3,40",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-4",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 4,
+   "name": {
+    "nl": "Radler 2.0%",
+    "en": "Radler 2.0%",
+    "de": "Radler 2.0%"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 425,
+   "price_raw": "4,25",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-5",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 5,
+   "name": {
+    "nl": "Radler citroen 0.0 Grolsch",
+    "en": "Radler Lemon 0.0 Grolsch",
+    "de": "Radler Zitrone 0.0 Grolsch"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 450,
+   "price_raw": "4,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-6",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 6,
+   "name": {
+    "nl": "Radler citroen 0.0 Amstel",
+    "en": "Radler Lemon 0.0 Amstel",
+    "de": "Radler Zitrone 0.0 Amstel"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 450,
+   "price_raw": "4,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-7",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 7,
+   "name": {
+    "nl": "Duvel 8,5%",
+    "en": "Duvel 8.5%",
+    "de": "Duvel 8,5%"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 575,
+   "price_raw": "5,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-8",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 8,
+   "name": {
+    "nl": "Duvel Blond 6,66%",
+    "en": "Duvel Blond 6.66%",
+    "de": "Duvel Blond 6,66%"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 550,
+   "price_raw": "5,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-9",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 9,
+   "name": {
+    "nl": "Duvel Tripel Hop 9,5%",
+    "en": "Duvel Tripel Hop 9.5%",
+    "de": "Duvel Tripel Hop 9,5%"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 625,
+   "price_raw": "6,25",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-10",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 10,
+   "name": {
+    "nl": "Desperados",
+    "en": "Desperados",
+    "de": "Desperados"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 550,
+   "price_raw": "5,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-11",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 11,
+   "name": {
+    "nl": "Affligem Blond",
+    "en": "Affligem Blond",
+    "de": "Affligem Blond"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 550,
+   "price_raw": "5,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-12",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 12,
+   "name": {
+    "nl": "La Chouffe Blond",
+    "en": "La Chouffe Blond",
+    "de": "La Chouffe Blond"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 575,
+   "price_raw": "5,75",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-beer-13",
+   "kind": "drink",
+   "cat": "beer",
+   "pos": 13,
+   "name": {
+    "nl": "Liefmans Bier 0.0",
+    "en": "Liefmans Beer 0.0",
+    "de": "Liefmans Bier 0.0"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 550,
+   "price_raw": "5,50",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-0",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 0,
+   "name": {
+    "nl": "Amaretto",
+    "en": "Amaretto",
+    "de": "Amaretto"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 480,
+   "price_raw": "4,80",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-1",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 1,
+   "name": {
+    "nl": "Limoncello",
+    "en": "Limoncello",
+    "de": "Limoncello"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 450,
+   "price_raw": "4,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-2",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 2,
+   "name": {
+    "nl": "Jonge Jenever",
+    "en": "Jonge Jenever",
+    "de": "Junger Genever"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 395,
+   "price_raw": "3,95",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-3",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 3,
+   "name": {
+    "nl": "Schrobbelèr",
+    "en": "Schrobbelèr",
+    "de": "Schrobbelèr"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 450,
+   "price_raw": "4,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-4",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 4,
+   "name": {
+    "nl": "Gordon Gin",
+    "en": "Gordon Gin",
+    "de": "Gordon Gin"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 450,
+   "price_raw": "4,50",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-5",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 5,
+   "name": {
+    "nl": "Cointreau",
+    "en": "Cointreau",
+    "de": "Cointreau"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 480,
+   "price_raw": "4,80",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-6",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 6,
+   "name": {
+    "nl": "Kahlua",
+    "en": "Kahlua",
+    "de": "Kahlua"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 480,
+   "price_raw": "4,80",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-7",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 7,
+   "name": {
+    "nl": "Licor 43",
+    "en": "Licor 43",
+    "de": "Licor 43"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 500,
+   "price_raw": "5,00",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-8",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 8,
+   "name": {
+    "nl": "Jack Daniel's",
+    "en": "Jack Daniel's",
+    "de": "Jack Daniel's"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 495,
+   "price_raw": "4,95",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-9",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 9,
+   "name": {
+    "nl": "Glen Talloch Whisky",
+    "en": "Glen Talloch Whisky",
+    "de": "Glen Talloch Whisky"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 480,
+   "price_raw": "4,80",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-10",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 10,
+   "name": {
+    "nl": "Bacardi Spiced",
+    "en": "Bacardi Spiced",
+    "de": "Bacardi Spiced"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 490,
+   "price_raw": "4,90",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-11",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 11,
+   "name": {
+    "nl": "Absolut Vodka",
+    "en": "Absolut Vodka",
+    "de": "Absolut Vodka"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 490,
+   "price_raw": "4,90",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  },
+  {
+   "id": "d-spirit-12",
+   "kind": "drink",
+   "cat": "spirit",
+   "pos": 12,
+   "name": {
+    "nl": "Port Reserve Ruby",
+    "en": "Port Reserve Ruby",
+    "de": "Port Reserve Ruby"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "price_cents": 480,
+   "price_raw": "4,80",
+   "vat_rate": 21,
+   "orderable": true,
+   "orderable_note": ""
+  }
+ ]
+}

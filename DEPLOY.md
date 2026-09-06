@@ -102,3 +102,20 @@ extracted text: `~/shmorganism/soma/state/merritt/assets/oudkempen-menus-2026-08
   front of a customer at a table.
 - All three languages live in the `I18N` object in `menu.html`; the inline markup is only the
   default rendering, so counting inline prices undercounts badly.
+
+## Ordering menu: D1 is the truth, `menu.html` is not (from the first seed onward)
+
+The takeaway ordering backend reads the menu from **D1**, seeded from `data/menu.json`, which
+`tools/extract-menu.py` produces from `menu.html`. From the moment the seed is applied, **editing
+`menu.html` does not change what customers can order or what they pay.** Until the menu manager
+(Part Two) exists, a menu change is:
+
+1. update `menu.html` per the rules above (still the printed-card truth for the website);
+2. `python3 tools/extract-menu.py data/menu.json`;
+3. `python3 tools/gen-seed.py data/menu.json migrations/000N_seed_menu.sql` — a NEW migration
+   number, never an edit of an applied one;
+4. `python3 tests/test_menu.py` (must pass) and apply the migration to D1.
+
+Per-item VAT (`vat_rate`) and `orderable` are **client-signed values** (`tools/gen-vat-sheet.py`
+makes the sheet). Do not change them in code because a category rule says so; change them because
+the signed sheet says so. Gate: merritt-studio `oudkempeneet-ordering-PHASE1-GATE.md`, condition 8.
