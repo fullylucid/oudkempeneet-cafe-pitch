@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Afhalen — Oud-Kempen Eetcafé · Stavenisse, Zeeland</title>
+<meta name="description" content="Online afhaalbestellingen bij Oud-Kempen Eetcafé komen binnenkort. Tot die tijd kunt u telefonisch bestellen.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23241813'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23E7C079' text-anchor='middle'%3EO%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --field:#F1EADC;--field-2:#EBE2D0;--field-deep:#241813;--field-deep-2:#1B120D;
+  --line:#C6B497;--line-dk:#7A6A57;--accent-1:#E7C079;--accent-2:#C08A3E;--accent-3:#8A5A22;
+  --paper:#FBF7EF;--ink:#2E2016;--ink-dim:#6B5A48;--muted:#75634E;--paper-on-dark:#F3EADB;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:clip;
+  background:linear-gradient(180deg,#FFFFFF 0,#FBF6EC 360px,var(--field) 1000px) no-repeat var(--field);-webkit-font-smoothing:antialiased;
+  min-height:100vh;display:flex;flex-direction:column}
+img{max-width:100%;display:block}a{color:inherit}
+/* chrome — identical rules to menu.html so the page is the same site, not a lookalike */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,248,242,.82);backdrop-filter:saturate(1.1) blur(10px);border-bottom:1px solid rgba(122,106,87,.18)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 22px;max-width:1120px;margin:0 auto}
+.brand{display:inline-flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--ink);line-height:1}
+.nb-name{font-family:var(--serif);font-weight:700;font-size:clamp(15px,3.4vw,19px);letter-spacing:.01em;text-transform:uppercase;color:#2A1B10;line-height:1}
+.nb-eet{display:flex;align-items:center;gap:6px;font-family:var(--serif);font-weight:600;font-size:8px;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;color:#3B2A1E;line-height:1}
+.nb-fl{display:inline-block;width:13px;height:1px;background:var(--accent-2)}
+.nav-right{display:flex;align-items:center;gap:13px}
+.nav-back{font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--ink-dim)}
+.nav-back:hover{color:var(--ink)}
+.lang{display:inline-flex;border:1px solid rgba(122,106,87,.4);border-radius:2px;overflow:hidden}
+.lang button{font-family:var(--sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:7px 8px;min-width:36px;min-height:34px;background:transparent;border:0;cursor:pointer;color:var(--ink-dim);border-right:1px solid rgba(122,106,87,.28)}
+.lang button:last-child{border-right:0}
+.lang button[aria-pressed="true"]{background:var(--accent-2);color:#241300;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:13px 24px;min-height:46px;border-radius:2px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:transform .18s,box-shadow .18s,background-position .4s;background-size:200% 100%}
+.btn-gold{color:#28190C;font-weight:650;border-color:#b98a3f;background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2) 55%,var(--accent-1));box-shadow:none}
+.btn-gold:hover,.btn-gold:focus-visible{background-position:100% 0;transform:translateY(-2px)}
+.btn-line{color:var(--ink);border-color:var(--accent-3);background:transparent}
+.btn-line:hover,.btn-line:focus-visible{transform:translateY(-2px);background:rgba(231,192,121,.14)}
+@media(max-width:600px){.nav-back{display:none}}
+@media(max-width:560px){.nav-in{padding:10px 16px}}
+/* the panel */
+main{flex:1 0 auto;display:flex;align-items:center;justify-content:center;padding:56px 22px 70px}
+.soon{max-width:640px;width:100%;text-align:center}
+.soon .kicker{font-size:12px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--accent-3)}
+.soon h1{font-family:var(--serif);font-size:clamp(34px,8vw,58px);letter-spacing:.05em;text-indent:.05em;
+  text-transform:uppercase;color:#2A1B10;margin:12px 0 0;line-height:1.04}
+.soon .rule{width:130px;height:1px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--accent-2),transparent)}
+.soon .lede{max-width:46ch;margin:20px auto 0;color:var(--ink-dim);font-size:clamp(15px,2.4vw,17px)}
+.card{margin:30px auto 0;max-width:460px;background:var(--paper);border:1px solid var(--line);border-radius:4px;
+  padding:22px 24px;box-shadow:0 30px 60px -40px rgba(36,24,19,.5)}
+.card .lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.card .tel{display:inline-flex;align-items:center;justify-content:center;margin-top:6px;font-family:var(--serif);
+  font-size:clamp(21px,5vw,27px);letter-spacing:.02em;color:#2A1B10;text-decoration:none;min-height:44px}
+.card .tel:hover,.card .tel:focus-visible{color:var(--accent-3)}
+.card .hrs{margin-top:12px;font-size:13.5px;color:var(--ink-dim)}
+.soon .acts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+/* footer — menu.html's */
+.mfoot{flex:0 0 auto;background:linear-gradient(180deg,var(--field-deep),var(--field-deep-2));color:var(--paper-on-dark);text-align:center;padding:40px 22px 28px;margin-top:40px}
+.mfoot .fine{font-size:12px;color:#B3A184}
+.mfoot .fine a{color:#D8C7AC;text-decoration:none;display:inline-block;min-height:24px}
+.mprov{margin-top:12px;font-size:12px;letter-spacing:.04em;color:#B3A184}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html" aria-label="Oud-Kempen Eetcafé — home">
+      <span class="nb-name">Oud-Kempen</span>
+      <span class="nb-eet" aria-hidden="true"><i class="nb-fl"></i>Eetcafé<i class="nb-fl"></i></span>
+    </a>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html" data-i18n="back.home">← Terug naar home</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="soon">
+    <p class="kicker" data-i18n="kicker">Afhalen bij Oud-Kempen</p>
+    <h1 data-i18n="title">Binnenkort</h1>
+    <div class="rule"></div>
+    <p class="lede" data-i18n="lede">Online bestellen en afhalen komt eraan: kies van de kaart, betaal veilig en haal uw bestelling op aan de bar. We laten het weten zodra het zover is.</p>
+
+    <div class="card">
+      <p class="lbl" data-i18n="call.lbl">Nu al afhalen? Bel ons gerust</p>
+      <a class="tel" href="tel:+31627894034">+31 6 27 89 40 34</a>
+      <p class="hrs" data-i18n="call.hrs">Maandag t/m donderdag 15:00 – 21:00 · vrijdag t/m zondag 12:30 – 21:00</p>
+    </div>
+
+    <div class="acts">
+      <a class="btn btn-gold" href="menu.html" data-i18n="act.menu">Bekijk de kaart</a>
+      <a class="btn btn-line" href="index.html" data-i18n="act.home">Terug naar home</a>
+    </div>
+  </div>
+</main>
+
+<footer class="mfoot">
+  <div class="fine">Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse · <a href="tel:+31627894034">+31 6 27 89 40 34</a> · <a href="mailto:reservationsoke@gmail.com">reservationsoke@gmail.com</a></div>
+  <div class="mprov" data-i18n="prov">Website door Merritt Digital</div>
+</footer>
+
+<script>
+var I18N={
+ nl:{"back.home":"← Terug naar home","kicker":"Afhalen bij Oud-Kempen","title":"Binnenkort",
+     "lede":"Online bestellen en afhalen komt eraan: kies van de kaart, betaal veilig en haal uw bestelling op aan de bar. We laten het weten zodra het zover is.",
+     "call.lbl":"Nu al afhalen? Bel ons gerust","call.hrs":"Maandag t/m donderdag 15:00 – 21:00 · vrijdag t/m zondag 12:30 – 21:00",
+     "act.menu":"Bekijk de kaart","act.home":"Terug naar home","prov":"Website door Merritt Digital",
+     "doc.title":"Afhalen — Oud-Kempen Eetcafé · Stavenisse, Zeeland"},
+ en:{"back.home":"← Back to home","kicker":"Takeaway at Oud-Kempen","title":"Coming soon",
+     "lede":"Ordering online for collection is on its way: choose from the menu, pay securely and pick your order up at the bar. We will let you know the moment it is ready.",
+     "call.lbl":"Want takeaway today? Just give us a call","call.hrs":"Monday to Thursday 15:00 – 21:00 · Friday to Sunday 12:30 – 21:00",
+     "act.menu":"See the menu","act.home":"Back to home","prov":"Website by Merritt Digital",
+     "doc.title":"Takeaway — Oud-Kempen Eetcafé · Stavenisse, Zeeland"},
+ de:{"back.home":"← Zurück zur Startseite","kicker":"Abholen bei Oud-Kempen","title":"Demnächst",
+     "lede":"Online bestellen und abholen kommt bald: wählen Sie von der Karte, bezahlen Sie sicher und holen Sie Ihre Bestellung an der Bar ab. Wir sagen Bescheid, sobald es so weit ist.",
+     "call.lbl":"Heute schon abholen? Rufen Sie uns an","call.hrs":"Montag bis Donnerstag 15:00 – 21:00 · Freitag bis Sonntag 12:30 – 21:00",
+     "act.menu":"Zur Karte","act.home":"Zurück zur Startseite","prov":"Website von Merritt Digital",
+     "doc.title":"Abholen — Oud-Kempen Eetcafé · Stavenisse, Zeeland"}};
+var HTML_LANG={nl:"nl",en:"en",de:"de"};
+function applyLang(l){ var d=I18N[l]||I18N.nl;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ var k=el.getAttribute('data-i18n'); if(d[k]!=null) el.textContent=d[k]; });
+  document.documentElement.lang=HTML_LANG[l]||'nl';
+  document.title=d['doc.title'];
+  document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed',String(b.dataset.lang===l)); });
+  try{ localStorage.setItem('ok-lang',l); }catch(e){} }
+document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.dataset.lang); }); });
+(function(){ var s='nl'; try{ s=localStorage.getItem('ok-lang')||'nl'; }catch(e){} if(!I18N[s]) s='nl'; applyLang(s); })();
+</script>
+</body>
+</html>
