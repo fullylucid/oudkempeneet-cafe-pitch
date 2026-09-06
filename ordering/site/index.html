@@ -97,6 +97,8 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
 .qty button{min-width:40px;min-height:40px;border:0;background:transparent;cursor:pointer;font-size:19px;color:var(--accent-3)}
 .qty span{min-width:26px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+.qty.one button:first-child{color:var(--ink-dim)}
+.qty.one button:first-child:hover{color:var(--warn)}
 /* cart */
 /* Three bands: a fixed title bar, ONE scroller holding the lines and the contact fields, and a
    fixed foot with the total and the pay button. Before this the checkout form was a rigid band of
@@ -277,7 +279,7 @@ var MENU=[{"id":"m-start-0","kind":"food","cat":"start","name":{"nl":"Soep van d
 var CATS={"nl":{"start":"Voorgerechten","main":"Hoofdgerechten","lunch":"Lunch & frituur","indo":"Authentieke Indonesische specialiteiten","veg":"Vegetarische gerechten","pancake":"Pannenkoeken","snack":"Borrelhapjes","kids":"Kindermenu","dessert":"Nagerechten","extra":"Extra's","hot":"Warme dranken","soft":"Frisdranken","cocktail":"Cocktails","wine":"Wijnen","beer":"Bieren","spirit":"Likeuren & gedistilleerd"},"en":{"start":"Starters","main":"Main Courses","lunch":"Lunch & Fried Snacks","indo":"Authentic Indonesian Specialities","veg":"Vegetarian Dishes","pancake":"Pancakes","snack":"Snacks","kids":"Children's Menu","dessert":"Desserts","extra":"Extras","hot":"Hot Drinks","soft":"Soft Drinks","cocktail":"Cocktails","wine":"Wines","beer":"Beers","spirit":"Liqueurs & Spirits"},"de":{"start":"Vorspeisen","main":"Hauptgerichte","lunch":"Lunch & Frittiertes","indo":"Authentische indonesische Spezialitäten","veg":"Vegetarische Gerichte","pancake":"Pfannkuchen","snack":"Snacks","kids":"Kindermenü","dessert":"Nachspeisen","extra":"Extras","hot":"Warme Getränke","soft":"Erfrischungsgetränke","cocktail":"Cocktails","wine":"Weine","beer":"Biere","spirit":"Liköre & Spirituosen"}};
 var SETTINGS={last_orders_offset_min:30,standard_wait_min:45,min_order_cents:0,cart_max_lines:50,cart_max_qty_per_line:20,cart_max_total_cents:50000};
 var UI={
- nl:{"title":"Afhalen bestellen — Oud-Kempen Eetcafé","a.skip":"Naar de kaart","a.lang":"Taal","a.cats":"Categorieën","a.prev":"Eerdere categorieën","a.next":"Volgende categorieën","a.cart":"Bestelling","a.close":"Sluiten","a.expand":"Hele bestelling tonen","a.collapse":"Bestelling inklappen","a.add":"Toevoegen: {n}","a.less":"Minder: {n}","a.more":"Meer: {n}","sb.banner":"Voorbeeld — geen echte bestellingen, geen betaling","back.menu":"← De kaart","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Afhalen","o.dek":"Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.",
+ nl:{"title":"Afhalen bestellen — Oud-Kempen Eetcafé","a.skip":"Naar de kaart","a.lang":"Taal","a.cats":"Categorieën","a.prev":"Eerdere categorieën","a.next":"Volgende categorieën","a.cart":"Bestelling","a.close":"Sluiten","a.expand":"Hele bestelling tonen","a.collapse":"Bestelling inklappen","a.add":"Toevoegen: {n}","a.less":"Minder: {n}","a.more":"Meer: {n}","a.remove":"Verwijderen: {n}","a.another":"Nog een {n}","sb.banner":"Voorbeeld — geen echte bestellingen, geen betaling","back.menu":"← De kaart","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Afhalen","o.dek":"Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.",
   "c.title":"Uw bestelling","c.note":"Opmerking bij de bestelling (optioneel)","c.name":"Naam","c.email":"E-mail","c.phone":"Telefoon","c.age":"Ik ben 18 jaar of ouder. Bij het afhalen kan om legitimatie worden gevraagd.","c.pay":"Afrekenen",
   "o.foot":"Afhalen bij Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Heeft u een allergie of dieetwens? Vermeld het bij de bestelling of bel ons.",
   "sb.m.title":"Hier komt de betaling","sb.m.body":"In de echte versie gaat u nu naar de beveiligde betaalpagina van MultiSafepay (iDEAL, kaart). Dit is wat de kassa zou ontvangen — prijzen worden aan de kassa opnieuw berekend, nooit uit de browser overgenomen:","sb.m.close":"Sluiten",
@@ -285,7 +287,7 @@ var UI={
   "empty":"Nog niets gekozen. Kies uit de kaart hiernaast.","choose":"— maak een keuze —","e.missing_choice":"Maak nog een keuze bij: {n}","items":"{n} artikel(en)","subtotal":"Subtotaal (incl. btw)","vat":"waarvan btw {r}%","total":"Totaal","line.note":"Opmerking bij dit gerecht (bijv. zonder ui)",
   "wait":"Klaar voor afhalen over ongeveer {w} minuten na betaling.","off.draught":"alleen aan de bar","off.reservation":"reserveren, 1 dag vooraf","bar":"Bekijk bestelling",
   "e.empty":"Uw bestelling is nog leeg.","e.unknown_item":"Een artikel is niet meer beschikbaar; verwijder het.","e.not_orderable":"Dit artikel is niet af te halen.","e.bad_qty":"Maximaal 20 per artikel.","e.too_many_lines":"Maximaal 50 regels per bestelling.","e.over_max_total":"Bestellingen tot € 500 — bel ons voor meer.","e.under_minimum":"Minimum bestelbedrag niet bereikt.","e.closed":"Online bestellen is nu gesloten.","e.fields":"Vul naam, e-mail en telefoon in.","e.email":"Controleer het e-mailadres.","e.age":"Bevestig dat u 18 jaar of ouder bent."},
- en:{"title":"Takeaway ordering — Oud-Kempen Eetcafé","a.skip":"Skip to menu","a.lang":"Language","a.cats":"Categories","a.prev":"Previous categories","a.next":"More categories","a.cart":"Your order","a.close":"Close","a.expand":"Show the whole order","a.collapse":"Collapse the order","a.add":"Add: {n}","a.less":"Fewer: {n}","a.more":"More: {n}","sb.banner":"Preview — no real orders, no payment","back.menu":"← The menu","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Takeaway","o.dek":"Order online, pay securely, collect at the bar. We call if anything comes up.",
+ en:{"title":"Takeaway ordering — Oud-Kempen Eetcafé","a.skip":"Skip to menu","a.lang":"Language","a.cats":"Categories","a.prev":"Previous categories","a.next":"More categories","a.cart":"Your order","a.close":"Close","a.expand":"Show the whole order","a.collapse":"Collapse the order","a.add":"Add: {n}","a.less":"Fewer: {n}","a.more":"More: {n}","a.remove":"Remove: {n}","a.another":"Another {n}","sb.banner":"Preview — no real orders, no payment","back.menu":"← The menu","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Takeaway","o.dek":"Order online, pay securely, collect at the bar. We call if anything comes up.",
   "c.title":"Your order","c.note":"Note for the order (optional)","c.name":"Name","c.email":"Email","c.phone":"Phone","c.age":"I am 18 or older. ID may be checked at pickup.","c.pay":"Pay",
   "o.foot":"Pickup at Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Allergy or dietary wish? Add it to the order note or call us.",
   "sb.m.title":"Payment goes here","sb.m.body":"In the real version you now go to MultiSafepay's secure payment page (iDEAL, card). This is what the till would receive — prices are recomputed at the till, never taken from the browser:","sb.m.close":"Close",
@@ -293,7 +295,7 @@ var UI={
   "empty":"Nothing chosen yet. Pick from the menu.","choose":"— please choose —","e.missing_choice":"Still to choose: {n}","items":"{n} item(s)","subtotal":"Subtotal (incl. VAT)","vat":"of which VAT {r}%","total":"Total","line.note":"Note for this dish (e.g. no onion)",
   "wait":"Ready for pickup about {w} minutes after payment.","off.draught":"at the bar only","off.reservation":"reservation, 1 day ahead","bar":"View order",
   "e.empty":"Your order is empty.","e.unknown_item":"An item is no longer available; remove it.","e.not_orderable":"This item is not available for takeaway.","e.bad_qty":"At most 20 per item.","e.too_many_lines":"At most 50 lines per order.","e.over_max_total":"Orders up to € 500 — call us for more.","e.under_minimum":"Minimum order not reached.","e.closed":"Online ordering is closed right now.","e.fields":"Fill in name, email and phone.","e.email":"Check the email address.","e.age":"Please confirm you are 18 or older."},
- de:{"title":"Abholung bestellen — Oud-Kempen Eetcafé","a.skip":"Zur Karte","a.lang":"Sprache","a.cats":"Kategorien","a.prev":"Vorherige Kategorien","a.next":"Weitere Kategorien","a.cart":"Bestellung","a.close":"Schließen","a.expand":"Ganze Bestellung zeigen","a.collapse":"Bestellung einklappen","a.add":"Hinzufügen: {n}","a.less":"Weniger: {n}","a.more":"Mehr: {n}","sb.banner":"Vorschau — keine echten Bestellungen, keine Zahlung","back.menu":"← Die Karte","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Abholen","o.dek":"Online bestellen, sicher bezahlen, an der Bar abholen. Wir rufen an, falls etwas ist.",
+ de:{"title":"Abholung bestellen — Oud-Kempen Eetcafé","a.skip":"Zur Karte","a.lang":"Sprache","a.cats":"Kategorien","a.prev":"Vorherige Kategorien","a.next":"Weitere Kategorien","a.cart":"Bestellung","a.close":"Schließen","a.expand":"Ganze Bestellung zeigen","a.collapse":"Bestellung einklappen","a.add":"Hinzufügen: {n}","a.less":"Weniger: {n}","a.more":"Mehr: {n}","a.remove":"Entfernen: {n}","a.another":"Noch ein {n}","sb.banner":"Vorschau — keine echten Bestellungen, keine Zahlung","back.menu":"← Die Karte","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Abholen","o.dek":"Online bestellen, sicher bezahlen, an der Bar abholen. Wir rufen an, falls etwas ist.",
   "c.title":"Ihre Bestellung","c.note":"Anmerkung zur Bestellung (optional)","c.name":"Name","c.email":"E-Mail","c.phone":"Telefon","c.age":"Ich bin 18 Jahre oder älter. Beim Abholen kann ein Ausweis verlangt werden.","c.pay":"Bezahlen",
   "o.foot":"Abholung bei Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Allergie oder Diätwunsch? Bitte in der Anmerkung angeben oder anrufen.",
   "sb.m.title":"Hier folgt die Zahlung","sb.m.body":"In der echten Version gelangen Sie jetzt zur sicheren Zahlungsseite von MultiSafepay (iDEAL, Karte). Das würde die Kasse erhalten — Preise werden an der Kasse neu berechnet, nie aus dem Browser übernommen:","sb.m.close":"Schließen",
@@ -307,11 +309,21 @@ var UI={
 var BY={}; MENU.forEach(function(m){BY[m.id]=m;});
 var LIMITS={maxLines:SETTINGS.cart_max_lines,maxQty:SETTINGS.cart_max_qty_per_line,maxTotalCents:SETTINGS.cart_max_total_cents,minOrderCents:SETTINGS.min_order_cents};
 var lang='nl'; try{ var s=localStorage.getItem('ok-lang'); if(s&&UI[s]) lang=s; }catch(e){}
-var cart=[]; try{ var c=JSON.parse(localStorage.getItem('ok-cart')||'[]');
-  if(Array.isArray(c)) cart=c.filter(function(l){return BY[l.id]&&BY[l.id].orderable;}).map(function(l){
+/* A dish that asks a question gets ONE LINE PER PORTION, because the answer belongs to the portion:
+   two Sajoer Lodeh may want bami and nasi. Dishes with nothing to ask keep one line with a quantity.
+   Lines are addressed by `key`, never by dish id — the same dish can now appear more than once. */
+var keySeq=0; function nextKey(){ return 'l'+(++keySeq); }
+function hasOpts(m){ return !!(m&&m.options&&m.options.length); }
+var cart=[]; try{ var c=JSON.parse(localStorage.getItem('ok-cart')||'[]'), fixed=[];
+  if(Array.isArray(c)) c.filter(function(l){return BY[l.id]&&BY[l.id].orderable;}).forEach(function(l){
     var m=BY[l.id], keep={}; (m.options||[]).forEach(function(g){ var pick=l.opts&&l.opts[g.id];
       g.options.forEach(function(o){ if(o.id===pick) keep[g.id]=pick; }); });
-    l.opts=keep; return l; }); }catch(e){}
+    var qty=Math.max(1,Math.min(LIMITS.maxQty,l.qty|0));
+    /* a cart saved before this change may hold 2 x a choice dish on one line — split it */
+    if(hasOpts(m)) for(var i=0;i<qty;i++) fixed.push({key:nextKey(),id:l.id,qty:1,note:l.note||'',opts:i?{}:keep});
+    else fixed.push({key:nextKey(),id:l.id,qty:qty,note:l.note||'',opts:{}});
+  });
+  cart=fixed; }catch(e){}
 function T(k,v){ var s=(UI[lang]&&UI[lang][k])||UI.nl[k]||k; Object.keys(v||{}).forEach(function(x){ s=s.split('{'+x+'}').join(v[x]); }); return s; }
 function eur(c){ var s=Math.floor(c/100)+(lang==='en'?'.':',')+String(c%100).padStart(2,'0'); return '€ '+s; }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
@@ -359,16 +371,32 @@ function optText(l,m){ if(!m.options||!m.options.length) return ''; var parts=[]
 function missNames(t){ var seen={},out=[];
   (t.missing||[]).forEach(function(x){ if(seen[x.id]) return; seen[x.id]=1; var m=BY[x.id]; if(m) out.push(m.name[lang]||m.name.nl); });
   return out.join(', '); }
-function qtyOf(id){ var l=cart.find(function(x){return x.id===id;}); return l?l.qty:0; }
+function qtyOf(id){ return cart.reduce(function(a,l){ return a+(l.id===id?l.qty:0); },0); }
 function syncItemControls(){ document.querySelectorAll('.item').forEach(function(d){ var m=BY[d.dataset.id], ctl=d.querySelector('.ctl'), q=qtyOf(m.id);
     if(!m.orderable){ ctl.innerHTML='<button class="add" type="button" disabled aria-hidden="true">+</button>'; return; }
     var nm=m.name[lang]||m.name.nl;
     if(!q){ ctl.innerHTML='<button class="add" type="button" aria-label="'+esc(T('a.add',{n:nm}))+'">+</button>'; ctl.querySelector('button').addEventListener('click',function(){ change(m.id,1); }); }
     else { ctl.innerHTML='<div class="qty"><button type="button" aria-label="'+esc(T('a.less',{n:nm}))+'">−</button><span>'+q+'</span><button type="button" aria-label="'+esc(T('a.more',{n:nm}))+'">+</button></div>';
       var b=ctl.querySelectorAll('button'); b[0].addEventListener('click',function(){ change(m.id,-1); }); b[1].addEventListener('click',function(){ change(m.id,1); }); } }); }
-function change(id,delta){ var l=cart.find(function(x){return x.id===id;}), limit=null;
-  if(!l){ if(delta<1) return; if(cart.length>=LIMITS.maxLines){ toast('e.too_many_lines'); return; } cart.push({id:id,qty:1,note:''}); }
-  else { l.qty+=delta; if(l.qty>LIMITS.maxQty){ l.qty=LIMITS.maxQty; limit='e.bad_qty'; } if(l.qty<1) cart=cart.filter(function(x){return x.id!==id;}); }
+/* from the MENU card: +1 means one more portion of this dish, -1 one fewer */
+function change(id,delta){ var m=BY[id], limit=null;
+  if(hasOpts(m)){
+    if(delta>0){ if(cart.length>=LIMITS.maxLines){ toast('e.too_many_lines'); return; }
+      cart.push({key:nextKey(),id:id,qty:1,note:'',opts:{}}); }                       /* its own question to answer */
+    else { for(var i=cart.length-1;i>=0;i--) if(cart[i].id===id){ cart.splice(i,1); break; } }
+  } else {
+    var l=cart.find(function(x){return x.id===id;});
+    if(!l){ if(delta<1) return; if(cart.length>=LIMITS.maxLines){ toast('e.too_many_lines'); return; } cart.push({key:nextKey(),id:id,qty:1,note:'',opts:{}}); }
+    else { l.qty+=delta; if(l.qty>LIMITS.maxQty){ l.qty=LIMITS.maxQty; limit='e.bad_qty'; } if(l.qty<1) cart=cart.filter(function(x){return x!==l;}); }
+  }
+  save(); syncItemControls(); renderCart(); if(limit){ say(limit); toast(limit); } }
+/* from a CART line: the buttons act on that line, so you remove the portion you meant */
+function lineChange(key,delta){ var i=cart.findIndex(function(x){return x.key===key;}); if(i<0) return; var l=cart[i], m=BY[l.id], limit=null;
+  if(hasOpts(m)){
+    if(delta>0){ if(cart.length>=LIMITS.maxLines){ toast('e.too_many_lines'); return; }
+      cart.splice(i+1,0,{key:nextKey(),id:l.id,qty:1,note:'',opts:{}}); }             /* beside it, unanswered */
+    else cart.splice(i,1);
+  } else { l.qty+=delta; if(l.qty>LIMITS.maxQty){ l.qty=LIMITS.maxQty; limit='e.bad_qty'; } if(l.qty<1) cart.splice(i,1); }
   save(); syncItemControls(); renderCart(); if(limit){ say(limit); toast(limit); } }
 function save(){ try{ localStorage.setItem('ok-cart',JSON.stringify(cart)); }catch(e){} }
 function say(k,v){ document.getElementById('msg').textContent=k?T(k,v):''; }
@@ -382,12 +410,17 @@ function renderCart(){ var t=tally(cart,BY,LIMITS); var lines=document.getElemen
   document.getElementById('cart-n').textContent=n?T('items',{n:n}):'';
   document.getElementById('bar-l').textContent=n?T('items',{n:n})+' · '+eur(t.total):T('bar'); document.getElementById('bar-r').textContent=n?T('bar'):'';
   if(!cart.length){ lines.innerHTML='<div class="empty">'+esc(T('empty'))+'</div>'; tl.innerHTML=''; }
-  else { lines.innerHTML=cart.map(function(l){ var m=BY[l.id]; return '<div class="line" data-id="'+esc(l.id)+'"><span class="nm">'+esc(m.name[lang]||m.name.nl)+'</span><span class="sub">'+eur(m.price_cents*l.qty)+'</span>'+
+  else { lines.innerHTML=cart.map(function(l){ var m=BY[l.id], nm=m.name[lang]||m.name.nl;
+      var ctl=hasOpts(m)
+        ? '<div class="qty one"><button type="button" aria-label="'+esc(T('a.remove',{n:nm}))+'">×</button><button type="button" aria-label="'+esc(T('a.another',{n:nm}))+'">+</button></div>'
+        : '<div class="qty"><button type="button" aria-label="'+esc(T('a.less',{n:nm}))+'">−</button><span>'+l.qty+'</span><button type="button" aria-label="'+esc(T('a.more',{n:nm}))+'">+</button></div>';
+      return '<div class="line" data-key="'+esc(l.key)+'" data-id="'+esc(l.id)+'"><span class="nm">'+esc(nm)+'</span><span class="sub">'+eur(m.price_cents*l.qty)+'</span>'+
       optRow(l,m)+
-      '<div class="ctl"><input type="text" maxlength="200" placeholder="'+esc(T('line.note'))+'" value="'+esc(l.note||'')+'"><div class="qty"><button type="button" aria-label="−">−</button><span>'+l.qty+'</span><button type="button" aria-label="+">+</button></div></div></div>'; }).join('');
-    lines.querySelectorAll('.line').forEach(function(row){ var id=row.dataset.id, b=row.querySelectorAll('.qty button'); b[0].addEventListener('click',function(){change(id,-1);}); b[1].addEventListener('click',function(){change(id,1);});
-      row.querySelector('.ctl input').addEventListener('input',function(e){ var l=cart.find(function(x){return x.id===id;}); if(l){ l.note=e.target.value.slice(0,200); save(); } });
-      row.querySelectorAll('.opt select').forEach(function(sel){ sel.addEventListener('change',function(){ var l=cart.find(function(x){return x.id===id;});
+      '<div class="ctl"><input type="text" maxlength="200" placeholder="'+esc(T('line.note'))+'" value="'+esc(l.note||'')+'">'+ctl+'</div></div>'; }).join('');
+    lines.querySelectorAll('.line').forEach(function(row){ var key=row.dataset.key, b=row.querySelectorAll('.qty button');
+      b[0].addEventListener('click',function(){lineChange(key,-1);}); b[1].addEventListener('click',function(){lineChange(key,1);});
+      row.querySelector('.ctl input').addEventListener('input',function(e){ var l=cart.find(function(x){return x.key===key;}); if(l){ l.note=e.target.value.slice(0,200); save(); } });
+      row.querySelectorAll('.opt select').forEach(function(sel){ sel.addEventListener('change',function(){ var l=cart.find(function(x){return x.key===key;});
         if(!l) return; if(!l.opts) l.opts={}; if(sel.value) l.opts[sel.dataset.g]=sel.value; else delete l.opts[sel.dataset.g]; save(); renderCart(); }); }); });
     tl.innerHTML=t.ok||t.error==='over_max_total'||t.error==='under_minimum'||t.error==='missing_choice' ?
       (t.sub9?'<div class="vat"><span>'+esc(T('vat',{r:9}))+'</span><span>'+eur(t.vat9)+'</span></div>':'')+(t.sub21?'<div class="vat"><span>'+esc(T('vat',{r:21}))+'</span><span>'+eur(t.vat21)+'</span></div>':'')+

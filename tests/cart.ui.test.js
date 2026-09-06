@@ -148,6 +148,66 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
     await page.close();
   }
 
+  // ---- two portions of the same dish answer their questions separately (Zach, msg 64) ----
+  {
+    const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    page.on('pageerror', e => errors.push('portions: ' + e));
+    await page.goto(URL); await page.waitForTimeout(400);
+    const add = '.item[data-id="m-indo-3"] .ctl';                    // Sajoer Lodeh — bami or nasi
+    await page.locator(add + ' button').click(); await page.waitForTimeout(150);
+    await page.locator(add + ' .qty button:last-child').click(); await page.waitForTimeout(250);
+    const two = await page.evaluate(() => ({
+      lines: document.querySelectorAll('.line[data-id="m-indo-3"]').length,
+      selects: document.querySelectorAll('.line[data-id="m-indo-3"] .opt select').length,
+      keys: [...document.querySelectorAll('.line[data-id="m-indo-3"]')].map(l => l.dataset.key),
+      menuCount: document.querySelector('.item[data-id="m-indo-3"] .qty span').textContent,
+      pay: document.getElementById('pay').disabled }));
+    ok(two.lines === 2 && two.selects === 2, 'two portions of a dish with a choice become two lines, each with its own dropdown');
+    ok(two.keys[0] !== two.keys[1], 'the two lines are addressed by distinct keys');
+    ok(two.menuCount === '2', 'the menu card still counts both portions (got ' + two.menuCount + ')');
+    ok(two.pay, 'both unanswered choices block checkout');
+    if (two.selects < 2) { ok(false, 'only ' + two.selects + ' dropdown(s) for two portions — the rest of this block cannot run'); await page.close(); }
+    else {
+    // answer them differently — the whole point
+    const sel = page.locator('.line[data-id="m-indo-3"] .opt select');
+    await sel.nth(0).selectOption('bami'); await sel.nth(1).selectOption('nasi');
+    await page.waitForTimeout(200);
+    const answered = await page.evaluate(() => ({
+      values: [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select')].map(s => s.value),
+      pay: document.getElementById('pay').disabled }));
+    ok(answered.values.join(',') === 'bami,nasi', 'each portion keeps its own answer (got ' + answered.values + ')');
+    ok(!answered.pay, 'two portions, two answers, checkout released');
+    await page.fill('#f-name', 'Test'); await page.fill('#f-email', 't@example.com'); await page.fill('#f-phone', '0612345678');
+    await page.locator('#pay').click(); await page.waitForTimeout(300);
+    const sent = await page.evaluate(() => document.getElementById('payload').textContent);
+    ok(/1 x Sajoer Lodeh \(Bami\)/.test(sent) && /1 x Sajoer Lodeh \(Nasi\)/.test(sent),
+      'the kitchen ticket lists one Bami and one Nasi, not two of either');
+    await page.locator('#modal-x').click(); await page.waitForTimeout(150);
+    // the + on a line adds another portion beside it; the x removes THAT line, not the last
+    await page.locator('.line[data-id="m-indo-3"] .qty button:last-child').first().click(); await page.waitForTimeout(200);
+    ok(await page.evaluate(() => document.querySelectorAll('.line[data-id="m-indo-3"]').length) === 3, '+ on a line adds another portion');
+    await page.locator('.line[data-id="m-indo-3"] .qty button:first-child').first().click(); await page.waitForTimeout(200);
+    const left = await page.evaluate(() => [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select')].map(s => s.value));
+    ok(left.length === 2 && left[0] === '' && left[1] === 'nasi',
+      'x removes the line it sits on, leaving the others untouched (got ' + JSON.stringify(left) + ')');
+    // a dish with nothing to ask still uses one line with a quantity
+    await page.locator('.item[data-id="m-start-0"] .ctl button').click(); await page.waitForTimeout(150);
+    await page.locator('.item[data-id="m-start-0"] .qty button:last-child').click(); await page.waitForTimeout(200);
+    const plain = await page.evaluate(() => ({ lines: document.querySelectorAll('.line[data-id="m-start-0"]').length,
+      qty: document.querySelector('.line[data-id="m-start-0"] .qty span').textContent }));
+    ok(plain.lines === 1 && plain.qty === '2', 'a dish with no choice stays one line with a quantity (got ' + JSON.stringify(plain) + ')');
+    // a cart saved before this change holds 2 on one line — it must split on load
+    await page.evaluate(() => localStorage.setItem('ok-cart', JSON.stringify([{ id: 'm-indo-3', qty: 2, note: '', opts: { 'bami-nasi': 'bami' } }])));
+    await page.reload(); await page.waitForTimeout(500);
+    const migrated = await page.evaluate(() => ({ lines: document.querySelectorAll('.line[data-id="m-indo-3"]').length,
+      values: [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select')].map(s => s.value),
+      pay: document.getElementById('pay').disabled }));
+    ok(migrated.lines === 2 && migrated.values.join(',') === 'bami,' && migrated.pay,
+      'an old two-on-one-line cart splits, keeps the answer once, and asks for the second (got ' + JSON.stringify(migrated) + ')');
+    await page.close();
+    }
+  }
+
   // ---- no width may make the page scroll sideways ----
   for (const vp of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 900, height: 800 }, { width: 390, height: 844 }, { width: 360, height: 640 }]) {
     const page = await browser.newPage({ viewport: vp, hasTouch: vp.width < 901 });
