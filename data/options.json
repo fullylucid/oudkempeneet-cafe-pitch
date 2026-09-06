@@ -1,0 +1,80 @@
+{
+  "_": "Per-dish choices. The café's printed menu (menu.html) states most of these in its own words — those groups are source:\"menu\" and their wording is taken verbatim from the description. source:\"implied\" means the menu does NOT write the choice down and the café must confirm it before go-live. tools/extract-menu.py resolves this file into data/menu.json so the page and the D1 seed both read one artifact.",
+  "groups": [
+    {
+      "id": "bami-nasi",
+      "source": "menu",
+      "required": true,
+      "label": { "nl": "Bami of nasi?", "en": "Bami or nasi?", "de": "Bami oder Nasi?" },
+      "options": [
+        { "id": "bami", "label": { "nl": "Bami", "en": "Bami", "de": "Bami" } },
+        { "id": "nasi", "label": { "nl": "Nasi", "en": "Nasi", "de": "Nasi" } }
+      ]
+    },
+    {
+      "id": "boontjes-sajoer",
+      "source": "menu",
+      "required": true,
+      "label": { "nl": "Boontjes of sajoer lodeh?", "en": "Green beans or sajoer lodeh?", "de": "Bohnen oder Sajoer Lodeh?" },
+      "options": [
+        { "id": "boontjes", "label": { "nl": "Sambal goreng boontjes", "en": "Sambal goreng green beans", "de": "Sambal-Goreng-Bohnen" } },
+        { "id": "sajoer", "label": { "nl": "Sajoer lodeh (niet-pittige groenten)", "en": "Sajoer lodeh (mild vegetables)", "de": "Sajoer Lodeh (nicht scharfes Gemüse)" } }
+      ]
+    },
+    {
+      "id": "schnitzelsaus",
+      "source": "menu",
+      "required": true,
+      "label": { "nl": "Champignon- of pepersaus?", "en": "Mushroom or pepper sauce?", "de": "Champignon- oder Pfeffersoße?" },
+      "options": [
+        { "id": "champignon", "label": { "nl": "Champignonsaus", "en": "Mushroom sauce", "de": "Champignonsoße" } },
+        { "id": "peper", "label": { "nl": "Pepersaus", "en": "Pepper sauce", "de": "Pfeffersoße" } }
+      ]
+    },
+    {
+      "id": "patat-brood",
+      "source": "menu",
+      "required": true,
+      "label": { "nl": "Patat of brood?", "en": "Fries or bread?", "de": "Pommes frites oder Brot?" },
+      "options": [
+        { "id": "patat", "label": { "nl": "Patat", "en": "Fries", "de": "Pommes frites" } },
+        { "id": "brood", "label": { "nl": "Brood", "en": "Bread", "de": "Brot" } }
+      ]
+    },
+    {
+      "id": "kindermenu",
+      "source": "menu",
+      "required": true,
+      "label": { "nl": "Waarmee?", "en": "With what?", "de": "Womit?" },
+      "options": [
+        { "id": "frikandel", "label": { "nl": "Frites met frikandel", "en": "Fries with frikandel", "de": "Pommes mit Frikadelle" } },
+        { "id": "kroket", "label": { "nl": "Frites met kroket", "en": "Fries with croquette", "de": "Pommes mit Krokette" } },
+        { "id": "nuggets", "label": { "nl": "Frites met 4 chicken nuggets", "en": "Fries with 4 chicken nuggets", "de": "Pommes mit 4 Chicken Nuggets" } },
+        { "id": "pannenkoek", "label": { "nl": "Pannenkoek", "en": "Pancake", "de": "Pfannkuchen" } }
+      ]
+    },
+    {
+      "id": "bakwijze",
+      "source": "implied",
+      "required": true,
+      "label": { "nl": "Hoe gebakken?", "en": "How would you like it cooked?", "de": "Wie gebraten?" },
+      "options": [
+        { "id": "rood", "label": { "nl": "Rood", "en": "Rare", "de": "Blutig" } },
+        { "id": "medium", "label": { "nl": "Medium", "en": "Medium", "de": "Medium" } },
+        { "id": "doorbakken", "label": { "nl": "Doorbakken", "en": "Well done", "de": "Durchgebraten" } }
+      ]
+    }
+  ],
+  "items": {
+    "m-main-1": ["bakwijze"],
+    "m-main-3": ["schnitzelsaus"],
+    "m-lunch-0": ["patat-brood"],
+    "m-lunch-1": ["patat-brood"],
+    "m-indo-3": ["bami-nasi"],
+    "m-indo-4": ["bami-nasi"],
+    "m-indo-5": ["bami-nasi"],
+    "m-indo-6": ["boontjes-sajoer"],
+    "m-indo-7": ["boontjes-sajoer"],
+    "m-kids-0": ["kindermenu"]
+  }
+}

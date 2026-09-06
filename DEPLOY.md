@@ -119,3 +119,14 @@ The takeaway ordering backend reads the menu from **D1**, seeded from `data/menu
 Per-item VAT (`vat_rate`) and `orderable` are **client-signed values** (`tools/gen-vat-sheet.py`
 makes the sheet). Do not change them in code because a category rule says so; change them because
 the signed sheet says so. Gate: merritt-studio `oudkempeneet-ordering-PHASE1-GATE.md`, condition 8.
+
+## Ordering app (bestellen.) — build and test before any PR
+
+```
+python3 tools/build-bestellen.py          # ordering/site/index.html from the template + data/menu.json + src/tally.js
+python3 tests/test_menu.py && node tests/tally.test.js
+```
+`src/tally.js` is THE totals function (cart, Worker, emails, bookkeeper sheet all use it — gate
+condition 6). The page inlines it at build time; the Worker requires it. Change it in one place.
+The built page is a sandbox until step 4: it shows the payload the till would receive and never
+calls an API. Previews go to the STUDIO's Cloudflare account, never the client's.

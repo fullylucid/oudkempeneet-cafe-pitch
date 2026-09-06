@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<script>document.documentElement.classList.add('js');</script>
+<title>Afhalen bestellen — Oud-Kempen Eetcafé · Stavenisse</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23241813'/%3E%3C/svg%3E">
+<style>
+:root{--field:#F1EADC;--field-2:#EBE2D0;--field-deep:#241813;--line:#C6B497;--line-dk:#7A6A57;--accent-1:#E7C079;--accent-2:#C08A3E;--accent-3:#8A5A22;
+  --paper:#FBF7EF;--ink:#2E2016;--ink-dim:#6B5A48;--muted:#75634E;--ok:#3E6B3A;--warn:#A6603A;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box}html{scroll-behavior:auto}
+body{margin:0;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;overflow-x:clip;
+  background:linear-gradient(180deg,#FFFFFF 0,#FBF6EC 360px,var(--field) 1250px) no-repeat var(--field);-webkit-font-smoothing:antialiased}
+a{color:inherit}h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0}
+button,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+/* nav — same grammar as menu.html */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,248,242,.86);backdrop-filter:saturate(1.1) blur(10px);border-bottom:1px solid rgba(122,106,87,.18)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 22px;max-width:1180px;margin:0 auto}
+.brand{display:inline-flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--ink);line-height:1}
+.nb-name{font-family:var(--serif);font-weight:700;font-size:clamp(15px,3.4vw,19px);letter-spacing:.01em;text-transform:uppercase;color:#2A1B10}
+.nb-eet{display:flex;align-items:center;gap:6px;font-family:var(--serif);font-weight:600;font-size:8px;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;color:var(--accent-3)}
+.nb-fl{display:inline-block;width:13px;height:1px;background:var(--accent-2)}
+.nav-right{display:flex;align-items:center;gap:13px}
+.nav-back{font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--ink-dim)}
+.lang{display:inline-flex;border:1px solid rgba(122,106,87,.4);border-radius:2px;overflow:hidden}
+.lang button{font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:7px 8px;min-width:36px;min-height:34px;background:transparent;border:0;cursor:pointer;color:var(--ink-dim);border-right:1px solid rgba(122,106,87,.28)}
+.lang button:last-child{border-right:0}.lang button[aria-pressed="true"]{background:var(--accent-2);color:#241300;font-weight:600}
+@media(max-width:600px){.nav-back{display:none}}
+/* sandbox banner */
+.sandbox{background:#2E2016;color:#F3EADB;font-size:12px;letter-spacing:.06em;text-align:center;padding:5px 12px}
+.sandbox b{color:var(--accent-1)}
+/* header */
+/* the terrace photo as a soft pastel cartoon (tools/photo-to-pastel.py), edges dissolving into the page, behind the header only */
+.mhead{text-align:center;padding:44px 22px 26px;overflow:hidden;min-height:clamp(320px,42vw,540px);display:flex;flex-direction:column;justify-content:center;align-items:center}
+.mhead-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.95;pointer-events:none;z-index:0;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0,#000 16%,#000 56%,rgba(0,0,0,0) 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0,#000 16%,#000 56%,rgba(0,0,0,0) 100%)}   /* the crop would cut the baked fade: fade the crop itself to transparent, top and bottom — no colour to match */
+.mhead>*:not(.mhead-art){position:relative;z-index:1}
+@media(max-width:900px){.mhead{min-height:300px}.mhead-art{object-position:center 45%;opacity:.9}}
+.mhead .kicker{font-size:12px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--accent-3)}
+.mhead h1{font-size:clamp(34px,7vw,58px);letter-spacing:.06em;text-indent:.06em;color:#2A1B10;text-transform:uppercase;margin:10px 0 0}
+.mhead .dek{max-width:58ch;margin:14px auto 0;color:var(--ink-dim)}
+.hrule{width:130px;height:1px;margin:20px auto 0;background:linear-gradient(90deg,transparent,var(--accent-2),transparent)}
+.state{display:inline-flex;align-items:center;gap:10px;margin:16px auto 0;padding:9px 16px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:14px}
+.state .dot{width:9px;height:9px;border-radius:50%;background:var(--ok)}.state.shut .dot{background:var(--warn)}
+.state b{font-weight:600}.state .seg{white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translate(-50%,8px);z-index:90;background:#2E2016;color:#F3EADB;padding:10px 16px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:92vw;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:901px){.toast{bottom:28px}}
+.skip{position:absolute;left:-999px;top:8px;background:var(--paper);padding:8px 12px;border:1px solid var(--line);z-index:100}.skip:focus{left:8px}
+/* layout */
+.shop{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:34px;align-items:start;padding:22px 0 60px}
+.shop>.col{min-width:0}
+@media(max-width:900px){.shop{grid-template-columns:minmax(0,1fr);padding-bottom:170px}}
+/* category strip — a TRANSPARENT CONTROL SURFACE for the vertical scroll (Schyler, 2026-09-05).
+   Dragging it sideways drives one eased, inertial vertical scroll; the category bubbles are an
+   overlay translated from the page position after the fact. The strip never scrolls itself, so
+   there is no scroll-event feedback loop; the overlay is transform-only (compositor, no layout). */
+.catwrap{position:sticky;top:57px;z-index:40;margin:0;background:rgba(251,248,242,.92);backdrop-filter:blur(8px)}
+.cats{position:relative;overflow:hidden;padding:24px 2px 14px;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.cats.drag{cursor:grabbing}
+.cats .row{display:flex;gap:6px;padding:0 50%;will-change:transform;transform:translate3d(0,0,0)}   /* half-width empty ends: the first and last bubble can sit under the needle */
+.needle{position:absolute;left:50%;top:0;bottom:0;width:0;pointer-events:none;z-index:3}
+.needle .top{position:absolute;left:-11px;top:0;width:22px;height:24px}
+.needle .bot{position:absolute;left:-5px;bottom:0;width:10px;height:12px}
+.needle .halo{position:absolute;left:-30px;top:0;bottom:0;width:60px;background:radial-gradient(ellipse at center,rgba(231,192,121,.28),rgba(231,192,121,0) 70%)}
+#menu{touch-action:pan-y}                                                   /* vertical pans stay native; horizontal ones are ours */
+body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:none!important;cursor:grabbing!important}
+.cats a{flex:0 0 auto;font-size:12px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink-dim);padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--paper);white-space:nowrap;min-height:34px;display:inline-flex;align-items:center;-webkit-tap-highlight-color:transparent}
+.cats a.on{background:var(--accent-2);border-color:var(--accent-2);color:#241300;font-weight:600}
+.cats a:focus-visible{outline:2px solid var(--accent-3);outline-offset:2px}
+.catwrap::before,.catwrap::after{content:"";position:absolute;top:0;bottom:0;width:34px;pointer-events:none;z-index:1;opacity:0;transition:opacity .2s}
+.catwrap::before{left:0;background:linear-gradient(90deg,rgba(251,248,242,1),rgba(251,248,242,0))}
+.catwrap::after{right:0;background:linear-gradient(270deg,rgba(251,248,242,1),rgba(251,248,242,0))}
+.catwrap.more-l::before,.catwrap.more-r::after{opacity:1}
+.catarr{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--accent-3);font-size:16px;line-height:1;cursor:pointer;box-shadow:0 6px 16px -8px rgba(36,24,19,.5)}
+.catarr.l{left:6px}.catarr.r{right:6px}
+@media(hover:hover) and (pointer:fine){.catwrap.more-l .catarr.l,.catwrap.more-r .catarr.r{display:inline-flex;align-items:center;justify-content:center}}
+@media(max-width:900px){.catwrap{position:fixed;top:auto;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));z-index:60;margin:0;border-top:1px solid rgba(122,106,87,.18);background:rgba(251,248,242,.96)}.cats{padding:22px 12px 12px}}
+/* items */
+.menu-cat{margin-top:34px}
+.cat-head{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.cat-head h2{font-size:clamp(17px,3.6vw,24px);letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;color:#2A1B10}
+.cat-rule{height:1px;flex:1;background:linear-gradient(90deg,var(--accent-2),transparent)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.item{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border-radius:4px;padding:14px 14px 12px;box-shadow:0 18px 40px -30px rgba(36,24,19,.45)}
+.item .body{flex:1;min-width:0}
+.item h3{font-size:16.5px;line-height:1.25}
+.item .d{font-size:13px;color:var(--ink-dim);margin:4px 0 0}
+.item .p{font-variant-numeric:tabular-nums;color:var(--accent-3);font-weight:600;margin-top:6px;font-size:14.5px}
+.item.off{background:var(--field-2);box-shadow:none}.item.off h3,.item.off .p{color:var(--ink-dim)}.item.off .why{font-size:12px;color:var(--warn);margin-top:6px}
+.add{flex:0 0 auto;min-width:44px;min-height:44px;border:1px solid var(--accent-2);border-radius:999px;background:transparent;cursor:pointer;font-size:22px;line-height:1;color:var(--accent-3);display:flex;align-items:center;justify-content:center}
+.add:hover{background:var(--accent-1)}.add[disabled]{opacity:.35;cursor:default}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.qty button{min-width:40px;min-height:40px;border:0;background:transparent;cursor:pointer;font-size:19px;color:var(--accent-3)}
+.qty span{min-width:26px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+/* cart */
+/* Three bands: a fixed title bar, ONE scroller holding the lines and the contact fields, and a
+   fixed foot with the total and the pay button. Before this the checkout form was a rigid band of
+   its own (flex:0 0 auto, 479px) and the list — the only band that could give — collapsed to its
+   72px minimum: one line of four visible at 1366x768 (Zach, 2026-09-06). Now the form scrolls
+   with the lines and the list keeps the room. */
+.cart{position:sticky;top:70px;display:flex;flex-direction:column;max-height:calc(100vh - 84px);overflow:hidden;overscroll-behavior:contain;background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:0 30px 60px -36px rgba(36,24,19,.5)}
+.cart .chk{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.cart-scroll{flex:1 1 auto;min-height:96px;overflow:auto;overscroll-behavior:contain}
+.cart-h,.cart-foot{flex:0 0 auto}
+.cart-h{display:flex;align-items:center;gap:6px;padding:13px 16px;background:var(--paper);border-bottom:1px solid var(--field-2)}
+.cart-h h2{font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+.cart-h .n{margin-left:auto;font-size:12px;color:var(--ink-dim);white-space:nowrap}
+.cart-h .exp{min-width:34px;min-height:34px;border:0;border-radius:4px;background:transparent;cursor:pointer;color:var(--ink-dim);font-size:16px;line-height:1}
+.cart-h .exp:hover{background:var(--field-2);color:var(--accent-3)}
+/* expanded: the whole order laid out down the page, no scroller of its own */
+.cart.tall{position:static;max-height:none;overflow:visible}
+.cart.tall .cart-scroll{overflow:visible}
+.cart.tall .cart-foot{box-shadow:none}
+.lines{padding:2px 16px}
+.line{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:8px 0;border-bottom:1px solid var(--field-2)}
+@media(hover:hover) and (pointer:fine){.line{padding:6px 0}.line .qty button{min-width:34px;min-height:34px;font-size:17px}}
+.line .nm{font-weight:600;font-size:14.5px}.line .sub{font-variant-numeric:tabular-nums;text-align:right;font-size:14.5px}
+.line .ctl{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.line .opt{grid-column:1/-1;display:flex;align-items:center;gap:7px;margin-top:1px}
+.line .opt>span{font-size:11.5px;letter-spacing:.02em;color:var(--ink-dim);white-space:nowrap}
+.line .opt select{flex:1;min-width:0;min-height:30px;font:inherit;font-size:13px;padding:4px 6px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:3px}
+@media(pointer:coarse){.line .opt select{min-height:40px;font-size:14px}}   /* a required control needs a thumb-sized target */
+.line .opt select.need{border-color:var(--accent-3);background:#FFF7EC}
+.line .opt select:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:var(--accent-2)}
+.line input{flex:1;min-width:0;border:0;border-bottom:1px dashed var(--line);background:transparent;font-size:13px;padding:5px 0;outline:0}
+.line input:focus{border-bottom-color:var(--accent-2)}
+.empty{padding:26px 16px;color:var(--ink-dim);font-size:14px;text-align:center}
+.tally{padding:9px 16px 0;font-size:14px}
+.cart-foot{padding:0 16px calc(11px + env(safe-area-inset-bottom));background:var(--paper);border-top:1px solid var(--field-2);box-shadow:0 -16px 24px -20px rgba(36,24,19,.6)}
+.tally div{display:flex;justify-content:space-between;padding:2px 0;font-variant-numeric:tabular-nums}
+.tally .tot{font-weight:700;font-size:17px;border-top:1px solid var(--line);margin-top:5px;padding-top:7px}
+.tally .vat{color:var(--ink-dim);font-size:12.5px}
+.chk-f{padding:10px 16px 14px;border-top:1px solid var(--field-2)}
+.chk-f label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);margin:8px 0 3px}
+.chk-f input[type=text],.chk-f input[type=email],.chk-f input[type=tel],.chk-f textarea{width:100%;border:1px solid var(--line);border-radius:3px;padding:8px 11px;background:#fff;font-size:15px;outline:0}
+.chk-f input:focus,.chk-f textarea:focus,.line input:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:var(--accent-2)}
+.chk-f textarea{min-height:44px;resize:vertical}
+.age{display:flex;gap:10px;align-items:flex-start;font-size:13px;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:3px;background:#FFF9EE}
+.age input{margin-top:3px;width:18px;height:18px}
+.age[hidden]{display:none}
+.pay{display:flex;width:100%;align-items:center;justify-content:center;margin-top:11px;min-height:50px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:650;color:#28190C;border:1px solid #b98a3f;border-radius:3px;cursor:pointer;
+  background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2) 55%,var(--accent-1));background-size:200% 100%;transition:background-position .35s}
+.pay:hover{background-position:100% 0}.pay[disabled]{opacity:.5;cursor:default;background-image:none;background:var(--field-2)}
+.msg{font-size:13px;color:var(--warn);margin-top:7px;min-height:1.2em}
+.wait{font-size:13px;color:var(--ink-dim);padding:10px 16px 0}
+/* mobile bar + drawer */
+.cart-h .x{display:none;min-width:40px;min-height:40px;border:0;background:transparent;font-size:22px;cursor:pointer;color:var(--ink-dim)}
+.bar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--field-deep);color:#F3EADB}
+.bar button{width:100%;min-height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border:0;border-radius:3px;background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2));color:#241300;font-weight:650;letter-spacing:.08em;text-transform:uppercase;font-size:13px;cursor:pointer}
+@media(max-width:900px){.bar{display:block}.cart{position:fixed;inset:auto 0 0 0;z-index:70;max-height:88vh;overflow:auto;border-radius:12px 12px 0 0;transform:translateY(105%);transition:transform .28s cubic-bezier(.22,.61,.36,1)}
+  .cart.open{transform:none}.cart-h .x{display:inline-flex}.cart{max-height:88vh;overscroll-behavior:contain}
+  .cart.tall{position:fixed;max-height:96vh;overflow:hidden}.cart.tall .cart-scroll{overflow:auto}}
+.dim{position:fixed;inset:0;background:rgba(36,24,19,.45);z-index:65;opacity:0;pointer-events:none;transition:opacity .25s}.dim.on{opacity:1;pointer-events:auto}
+/* modal (sandbox checkout) */
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(36,24,19,.55)}
+.modal.on{display:flex}.modal .box{background:var(--paper);border-radius:6px;max-width:560px;width:100%;padding:22px 24px;max-height:86vh;overflow:auto}
+.modal h2{font-size:18px;margin-bottom:8px}.modal pre{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:10px;overflow:auto;border-radius:3px}
+.modal .cl{margin-top:12px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:3px;background:transparent;cursor:pointer}
+footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-dim);position:relative;z-index:1}footer a{text-decoration:none}
+header.mhead{position:relative;z-index:1}   /* contains the art; .shop must NOT join it — a
+   stacking context here trapped the phone drawer (z-index:70) inside a z-index:1 box, so the dim
+   scrim (z-index:65, a body child) painted over the whole open cart and swallowed every tap */
+</style>
+</head>
+<body>
+<a class="skip" href="#menu" data-i18n="a.skip">Naar de kaart</a>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="https://www.oudkempeneetcafe.nl/" aria-label="Oud-Kempen Eetcafé — home"><span class="nb-name">Oud-Kempen</span><span class="nb-eet" aria-hidden="true"><i class="nb-fl"></i>Eetcafé<i class="nb-fl"></i></span></a>
+  <div class="nav-right">
+    <a class="nav-back" href="https://www.oudkempeneetcafe.nl/menu.html" data-i18n="back.menu">← De kaart</a>
+    <div class="lang" role="group" aria-label="Taal" data-i18n-aria="a.lang"><button type="button" data-lang="nl" aria-pressed="true">NL</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="de" aria-pressed="false">DE</button></div>
+  </div>
+</div></nav>
+<div class="sandbox" data-i18n="sb.banner">Voorbeeld — geen echte bestellingen, geen betaling</div>
+
+<header class="mhead">
+  <img class="mhead-art" src="terrace-pastel.webp" alt="" aria-hidden="true" width="1200" height="653" decoding="async">
+  <div class="kicker" data-i18n="hdr.kicker">Eetcafé · Stavenisse · Zeeland</div>
+  <h1 data-i18n="o.title">Afhalen</h1>
+  <p class="dek" data-i18n="o.dek">Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.</p>
+  <div class="hrule"></div>
+  <div class="state" id="state"><span class="dot"></span><span id="state-t"></span></div>
+</header>
+
+<div class="wrap shop">
+  <div class="col">
+    <div class="catwrap" id="catwrap"><button class="catarr l" type="button" aria-label="Eerdere categorieën" data-i18n-aria="a.prev">‹</button><nav class="cats" id="cats" aria-label="Categorieën" data-i18n-aria="a.cats"><div class="row" id="catrow"></div><div class="needle" aria-hidden="true"><div class="halo"></div><svg class="top" viewBox="0 0 18 20" preserveAspectRatio="none"><defs><linearGradient id="ng" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7C079"/><stop offset=".6" stop-color="#C08A3E"/><stop offset="1" stop-color="#8A5A22"/></linearGradient></defs><circle cx="9" cy="4" r="3" fill="#FBF7EF" stroke="#8A5A22" stroke-width="1"/><circle cx="9" cy="4" r="1.1" fill="#8A5A22"/><path d="M9 7 L13 12 L9 19.5 L5 12 Z" fill="url(#ng)" stroke="#5A3A12" stroke-width=".7"/></svg><svg class="bot" viewBox="0 0 10 12" preserveAspectRatio="none"><path d="M5 0.5 L8.5 6 L5 11.5 L1.5 6 Z" fill="#FBF7EF" stroke="#8A5A22" stroke-width=".8"/></svg></div></nav><button class="catarr r" type="button" aria-label="Volgende categorieën" data-i18n-aria="a.next">›</button></div>
+    <div id="menu"></div>
+  </div>
+  <aside class="cart" id="cart" aria-label="Bestelling" data-i18n-aria="a.cart">
+    <div class="cart-h"><h2 data-i18n="c.title">Uw bestelling</h2><span class="n" id="cart-n"></span><button class="exp" id="cart-exp" type="button" aria-expanded="false" aria-controls="cart" aria-label="Bestelling vergroten" data-i18n-aria="a.expand">⤡</button><button class="x" id="cart-x" type="button" aria-label="Sluiten" data-i18n-aria="a.close">×</button></div>
+    <form class="chk" id="chk" novalidate>
+      <div class="cart-scroll" id="cart-scroll">
+      <div class="lines" id="lines"></div>
+      <div class="chk-f">
+      <label for="f-note" data-i18n="c.note">Opmerking bij de bestelling (optioneel)</label>
+      <textarea id="f-note" maxlength="500"></textarea>
+      <label for="f-name" data-i18n="c.name">Naam</label><input id="f-name" type="text" autocomplete="name" required maxlength="80">
+      <label for="f-email" data-i18n="c.email">E-mail</label><input id="f-email" type="email" autocomplete="email" required maxlength="120">
+      <label for="f-phone" data-i18n="c.phone">Telefoon</label><input id="f-phone" type="tel" autocomplete="tel" required maxlength="30">
+      <div class="age" id="age" hidden><input type="checkbox" id="f-age"><label for="f-age" style="margin:0;text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)" data-i18n="c.age">Ik ben 18 jaar of ouder. Bij het afhalen kan om legitimatie worden gevraagd.</label></div>
+      </div>
+      <div class="wait" id="wait"></div>
+      </div>
+      <div class="cart-foot">
+        <div class="tally" id="tally"></div>
+        <button class="pay" id="pay" type="submit" data-i18n="c.pay">Afrekenen</button>
+        <div class="msg" id="msg" aria-live="polite"></div>
+      </div>
+    </form>
+  </aside>
+</div>
+<div class="bar"><button type="button" id="bar-btn"><span id="bar-l"></span><span id="bar-r"></span></button></div>
+<div class="dim" id="dim"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-t"><div class="box"><h2 id="modal-t" data-i18n="sb.m.title">Hier komt de betaling</h2><p data-i18n="sb.m.body">In de echte versie gaat u nu naar de beveiligde betaalpagina van MultiSafepay (iDEAL, kaart). Dit is wat de kassa zou ontvangen — prijzen worden aan de kassa opnieuw berekend, nooit uit de browser overgenomen:</p><pre id="payload"></pre><button class="cl" id="modal-x" type="button" data-i18n="sb.m.close">Sluiten</button></div></div>
+
+<footer><span data-i18n="o.foot">Afhalen bij Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse</span> · <a href="tel:+31627894034">+31 6 27 89 40 34</a><br><span data-i18n="menu.allergy"></span></footer>
+
+<script>
+/*__TALLY__*/
+var MENU=/*__MENU__*/[];
+var CATS=/*__CATS__*/{};
+var SETTINGS={last_orders_offset_min:30,standard_wait_min:45,min_order_cents:0,cart_max_lines:50,cart_max_qty_per_line:20,cart_max_total_cents:50000};
+var UI={
+ nl:{"title":"Afhalen bestellen — Oud-Kempen Eetcafé","a.skip":"Naar de kaart","a.lang":"Taal","a.cats":"Categorieën","a.prev":"Eerdere categorieën","a.next":"Volgende categorieën","a.cart":"Bestelling","a.close":"Sluiten","a.expand":"Hele bestelling tonen","a.collapse":"Bestelling inklappen","a.add":"Toevoegen: {n}","a.less":"Minder: {n}","a.more":"Meer: {n}","sb.banner":"Voorbeeld — geen echte bestellingen, geen betaling","back.menu":"← De kaart","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Afhalen","o.dek":"Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.",
+  "c.title":"Uw bestelling","c.note":"Opmerking bij de bestelling (optioneel)","c.name":"Naam","c.email":"E-mail","c.phone":"Telefoon","c.age":"Ik ben 18 jaar of ouder. Bij het afhalen kan om legitimatie worden gevraagd.","c.pay":"Afrekenen",
+  "o.foot":"Afhalen bij Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Heeft u een allergie of dieetwens? Vermeld het bij de bestelling of bel ons.",
+  "sb.m.title":"Hier komt de betaling","sb.m.body":"In de echte versie gaat u nu naar de beveiligde betaalpagina van MultiSafepay (iDEAL, kaart). Dit is wat de kassa zou ontvangen — prijzen worden aan de kassa opnieuw berekend, nooit uit de browser overgenomen:","sb.m.close":"Sluiten",
+  "st.open":"Nu te bestellen · afhalen over ca. {w} min · laatste bestelling {lo}","st.shut":"Bestellen kan weer {when} vanaf {t}","st.today":"vandaag","st.tomorrow":"morgen",
+  "empty":"Nog niets gekozen. Kies uit de kaart hiernaast.","choose":"— maak een keuze —","e.missing_choice":"Maak nog een keuze bij: {n}","items":"{n} artikel(en)","subtotal":"Subtotaal (incl. btw)","vat":"waarvan btw {r}%","total":"Totaal","line.note":"Opmerking bij dit gerecht (bijv. zonder ui)",
+  "wait":"Klaar voor afhalen over ongeveer {w} minuten na betaling.","off.draught":"alleen aan de bar","off.reservation":"reserveren, 1 dag vooraf","bar":"Bekijk bestelling",
+  "e.empty":"Uw bestelling is nog leeg.","e.unknown_item":"Een artikel is niet meer beschikbaar; verwijder het.","e.not_orderable":"Dit artikel is niet af te halen.","e.bad_qty":"Maximaal 20 per artikel.","e.too_many_lines":"Maximaal 50 regels per bestelling.","e.over_max_total":"Bestellingen tot € 500 — bel ons voor meer.","e.under_minimum":"Minimum bestelbedrag niet bereikt.","e.closed":"Online bestellen is nu gesloten.","e.fields":"Vul naam, e-mail en telefoon in.","e.email":"Controleer het e-mailadres.","e.age":"Bevestig dat u 18 jaar of ouder bent."},
+ en:{"title":"Takeaway ordering — Oud-Kempen Eetcafé","a.skip":"Skip to menu","a.lang":"Language","a.cats":"Categories","a.prev":"Previous categories","a.next":"More categories","a.cart":"Your order","a.close":"Close","a.expand":"Show the whole order","a.collapse":"Collapse the order","a.add":"Add: {n}","a.less":"Fewer: {n}","a.more":"More: {n}","sb.banner":"Preview — no real orders, no payment","back.menu":"← The menu","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Takeaway","o.dek":"Order online, pay securely, collect at the bar. We call if anything comes up.",
+  "c.title":"Your order","c.note":"Note for the order (optional)","c.name":"Name","c.email":"Email","c.phone":"Phone","c.age":"I am 18 or older. ID may be checked at pickup.","c.pay":"Pay",
+  "o.foot":"Pickup at Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Allergy or dietary wish? Add it to the order note or call us.",
+  "sb.m.title":"Payment goes here","sb.m.body":"In the real version you now go to MultiSafepay's secure payment page (iDEAL, card). This is what the till would receive — prices are recomputed at the till, never taken from the browser:","sb.m.close":"Close",
+  "st.open":"Ordering open · ready in about {w} min · last orders {lo}","st.shut":"Ordering reopens {when} from {t}","st.today":"today","st.tomorrow":"tomorrow",
+  "empty":"Nothing chosen yet. Pick from the menu.","choose":"— please choose —","e.missing_choice":"Still to choose: {n}","items":"{n} item(s)","subtotal":"Subtotal (incl. VAT)","vat":"of which VAT {r}%","total":"Total","line.note":"Note for this dish (e.g. no onion)",
+  "wait":"Ready for pickup about {w} minutes after payment.","off.draught":"at the bar only","off.reservation":"reservation, 1 day ahead","bar":"View order",
+  "e.empty":"Your order is empty.","e.unknown_item":"An item is no longer available; remove it.","e.not_orderable":"This item is not available for takeaway.","e.bad_qty":"At most 20 per item.","e.too_many_lines":"At most 50 lines per order.","e.over_max_total":"Orders up to € 500 — call us for more.","e.under_minimum":"Minimum order not reached.","e.closed":"Online ordering is closed right now.","e.fields":"Fill in name, email and phone.","e.email":"Check the email address.","e.age":"Please confirm you are 18 or older."},
+ de:{"title":"Abholung bestellen — Oud-Kempen Eetcafé","a.skip":"Zur Karte","a.lang":"Sprache","a.cats":"Kategorien","a.prev":"Vorherige Kategorien","a.next":"Weitere Kategorien","a.cart":"Bestellung","a.close":"Schließen","a.expand":"Ganze Bestellung zeigen","a.collapse":"Bestellung einklappen","a.add":"Hinzufügen: {n}","a.less":"Weniger: {n}","a.more":"Mehr: {n}","sb.banner":"Vorschau — keine echten Bestellungen, keine Zahlung","back.menu":"← Die Karte","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Abholen","o.dek":"Online bestellen, sicher bezahlen, an der Bar abholen. Wir rufen an, falls etwas ist.",
+  "c.title":"Ihre Bestellung","c.note":"Anmerkung zur Bestellung (optional)","c.name":"Name","c.email":"E-Mail","c.phone":"Telefon","c.age":"Ich bin 18 Jahre oder älter. Beim Abholen kann ein Ausweis verlangt werden.","c.pay":"Bezahlen",
+  "o.foot":"Abholung bei Oud-Kempen Eetcafé · Buurtweg 5, 4696 RT Stavenisse","menu.allergy":"Allergie oder Diätwunsch? Bitte in der Anmerkung angeben oder anrufen.",
+  "sb.m.title":"Hier folgt die Zahlung","sb.m.body":"In der echten Version gelangen Sie jetzt zur sicheren Zahlungsseite von MultiSafepay (iDEAL, Karte). Das würde die Kasse erhalten — Preise werden an der Kasse neu berechnet, nie aus dem Browser übernommen:","sb.m.close":"Schließen",
+  "st.open":"Jetzt bestellbar · abholbereit in ca. {w} Min. · letzte Bestellung {lo}","st.shut":"Bestellen wieder möglich {when} ab {t}","st.today":"heute","st.tomorrow":"morgen",
+  "empty":"Noch nichts gewählt. Wählen Sie aus der Karte.","choose":"— bitte wählen —","e.missing_choice":"Bitte noch wählen bei: {n}","items":"{n} Artikel","subtotal":"Zwischensumme (inkl. MwSt.)","vat":"davon MwSt. {r}%","total":"Gesamt","line.note":"Anmerkung zu diesem Gericht (z. B. ohne Zwiebeln)",
+  "wait":"Abholbereit etwa {w} Minuten nach der Zahlung.","off.draught":"nur an der Bar","off.reservation":"Reservierung, 1 Tag vorher","bar":"Bestellung ansehen",
+  "e.empty":"Ihre Bestellung ist leer.","e.unknown_item":"Ein Artikel ist nicht mehr verfügbar; bitte entfernen.","e.not_orderable":"Dieser Artikel ist nicht zum Abholen.","e.bad_qty":"Höchstens 20 pro Artikel.","e.too_many_lines":"Höchstens 50 Positionen pro Bestellung.","e.over_max_total":"Bestellungen bis € 500 — für mehr bitte anrufen.","e.under_minimum":"Mindestbestellwert nicht erreicht.","e.closed":"Online-Bestellung ist derzeit geschlossen.","e.fields":"Bitte Name, E-Mail und Telefon ausfüllen.","e.email":"Bitte die E-Mail-Adresse prüfen.","e.age":"Bitte bestätigen Sie, dass Sie 18 Jahre oder älter sind."}
+};
+(function(){
+"use strict";
+var BY={}; MENU.forEach(function(m){BY[m.id]=m;});
+var LIMITS={maxLines:SETTINGS.cart_max_lines,maxQty:SETTINGS.cart_max_qty_per_line,maxTotalCents:SETTINGS.cart_max_total_cents,minOrderCents:SETTINGS.min_order_cents};
+var lang='nl'; try{ var s=localStorage.getItem('ok-lang'); if(s&&UI[s]) lang=s; }catch(e){}
+var cart=[]; try{ var c=JSON.parse(localStorage.getItem('ok-cart')||'[]');
+  if(Array.isArray(c)) cart=c.filter(function(l){return BY[l.id]&&BY[l.id].orderable;}).map(function(l){
+    var m=BY[l.id], keep={}; (m.options||[]).forEach(function(g){ var pick=l.opts&&l.opts[g.id];
+      g.options.forEach(function(o){ if(o.id===pick) keep[g.id]=pick; }); });
+    l.opts=keep; return l; }); }catch(e){}
+function T(k,v){ var s=(UI[lang]&&UI[lang][k])||UI.nl[k]||k; Object.keys(v||{}).forEach(function(x){ s=s.split('{'+x+'}').join(v[x]); }); return s; }
+function eur(c){ var s=Math.floor(c/100)+(lang==='en'?'.':',')+String(c%100).padStart(2,'0'); return '€ '+s; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+/* hours — the site's engine: Mon–Thu 15:00, Fri–Sun 12:30, close 21:00, Europe/Amsterdam */
+var CLOSE_M=21*60; function openMinsFor(wd){ return (wd>=1&&wd<=4)?15*60:12*60+30; }
+function nowAms(){ var p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Amsterdam',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+  var wd={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[p.find(function(x){return x.type==='weekday';}).value];
+  return {wd:wd,m:parseInt(p.find(function(x){return x.type==='hour';}).value,10)*60+parseInt(p.find(function(x){return x.type==='minute';}).value,10)}; }
+function fmt(m){ var h=Math.floor(m/60),mm=m%60; if(lang==='en'){ var ap=h>=12?'pm':'am',h12=h%12||12; return h12+':'+String(mm).padStart(2,'0')+' '+ap; } return h+':'+String(mm).padStart(2,'0'); }
+function orderingState(){ var n=nowAms(), open=openMinsFor(n.wd), last=CLOSE_M-SETTINGS.last_orders_offset_min;
+  if(n.m>=open&&n.m<last) return {open:true,last:last};
+  if(n.m<open) return {open:false,when:'today',at:open};
+  return {open:false,when:'tomorrow',at:openMinsFor((n.wd+1)%7)}; }
+var ST=orderingState();
+function renderState(){ ST=orderingState(); var el=document.getElementById('state'), t=document.getElementById('state-t');
+  el.className='state'+(ST.open?'':' shut');
+  var txt=ST.open?T('st.open',{w:SETTINGS.standard_wait_min,lo:fmt(ST.last)}):T('st.shut',{when:T(ST.when==='today'?'st.today':'st.tomorrow'),t:fmt(ST.at)});
+  t.innerHTML=txt.split(' · ').map(function(x){ return '<span class="seg">'+esc(x)+'</span>'; }).join(' · '); }
+/* menu */
+var ORDER=['start','main','lunch','indo','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
+function renderMenu(){ var root=document.getElementById('menu'), cats=document.getElementById('catrow'); root.innerHTML=''; cats.innerHTML='';
+  ORDER.forEach(function(cat){ var items=MENU.filter(function(m){return m.cat===cat;}); if(!items.length) return;
+    var label=(CATS[lang]&&CATS[lang][cat])||CATS.nl[cat]||cat;
+    var a=document.createElement('a'); a.href='#cat-'+cat; a.textContent=label; a.draggable=false; cats.appendChild(a);
+    var sec=document.createElement('section'); sec.className='menu-cat'; sec.id='cat-'+cat;
+    sec.innerHTML='<div class="cat-head"><h2>'+esc(label)+'</h2><span class="cat-rule"></span></div>';
+    var grid=document.createElement('div'); grid.className='items';
+    items.forEach(function(m){ var d=document.createElement('div'); d.className='item'+(m.orderable?'':' off'); d.dataset.id=m.id;
+      var why=m.orderable?'':'<div class="why">'+esc(T(m.orderable_note==='draught'?'off.draught':'off.reservation'))+'</div>';
+      d.innerHTML='<div class="body"><h3>'+esc(m.name[lang]||m.name.nl)+'</h3>'+(m.desc[lang]?'<p class="d">'+esc(m.desc[lang])+'</p>':'')+'<div class="p">'+eur(m.price_cents)+'</div>'+why+'</div><div class="ctl"></div>';
+      grid.appendChild(d); });
+    sec.appendChild(grid); root.appendChild(sec); });
+  syncItemControls(); }
+/* the dish's choices (data/options.json, resolved into the menu at build) */
+function optRow(l,m){ if(!m.options||!m.options.length) return '';
+  return m.options.map(function(g){ var sel=(l.opts||{})[g.id]||'';
+    return '<label class="opt"><span>'+esc(g.label[lang]||g.label.nl)+'</span><select data-g="'+esc(g.id)+'"'+(sel?'':' class="need"')+'>'+
+      '<option value=""'+(sel?'':' selected')+'>'+esc(T('choose'))+'</option>'+
+      g.options.map(function(o){ return '<option value="'+esc(o.id)+'"'+(sel===o.id?' selected':'')+'>'+esc(o.label[lang]||o.label.nl)+'</option>'; }).join('')+
+      '</select></label>'; }).join(''); }
+function optText(l,m){ if(!m.options||!m.options.length) return ''; var parts=[];
+  m.options.forEach(function(g){ var pick=(l.opts||{})[g.id];
+    g.options.forEach(function(o){ if(o.id===pick) parts.push(o.label[lang]||o.label.nl); }); });
+  return parts.length?' ('+parts.join(', ')+')':''; }
+function missNames(t){ var seen={},out=[];
+  (t.missing||[]).forEach(function(x){ if(seen[x.id]) return; seen[x.id]=1; var m=BY[x.id]; if(m) out.push(m.name[lang]||m.name.nl); });
+  return out.join(', '); }
+function qtyOf(id){ var l=cart.find(function(x){return x.id===id;}); return l?l.qty:0; }
+function syncItemControls(){ document.querySelectorAll('.item').forEach(function(d){ var m=BY[d.dataset.id], ctl=d.querySelector('.ctl'), q=qtyOf(m.id);
+    if(!m.orderable){ ctl.innerHTML='<button class="add" type="button" disabled aria-hidden="true">+</button>'; return; }
+    var nm=m.name[lang]||m.name.nl;
+    if(!q){ ctl.innerHTML='<button class="add" type="button" aria-label="'+esc(T('a.add',{n:nm}))+'">+</button>'; ctl.querySelector('button').addEventListener('click',function(){ change(m.id,1); }); }
+    else { ctl.innerHTML='<div class="qty"><button type="button" aria-label="'+esc(T('a.less',{n:nm}))+'">−</button><span>'+q+'</span><button type="button" aria-label="'+esc(T('a.more',{n:nm}))+'">+</button></div>';
+      var b=ctl.querySelectorAll('button'); b[0].addEventListener('click',function(){ change(m.id,-1); }); b[1].addEventListener('click',function(){ change(m.id,1); }); } }); }
+function change(id,delta){ var l=cart.find(function(x){return x.id===id;}), limit=null;
+  if(!l){ if(delta<1) return; if(cart.length>=LIMITS.maxLines){ toast('e.too_many_lines'); return; } cart.push({id:id,qty:1,note:''}); }
+  else { l.qty+=delta; if(l.qty>LIMITS.maxQty){ l.qty=LIMITS.maxQty; limit='e.bad_qty'; } if(l.qty<1) cart=cart.filter(function(x){return x.id!==id;}); }
+  save(); syncItemControls(); renderCart(); if(limit){ say(limit); toast(limit); } }
+function save(){ try{ localStorage.setItem('ok-cart',JSON.stringify(cart)); }catch(e){} }
+function say(k,v){ document.getElementById('msg').textContent=k?T(k,v):''; }
+var toastT=null; function toast(k){ var el=document.getElementById('toast'); el.textContent=T(k); el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove('on'); },2600); }
+/* the customer's own details survive a reload within the tab (sessionStorage), like the cart does */
+var FIELDS=['f-note','f-name','f-email','f-phone'];
+FIELDS.forEach(function(id){ var el=document.getElementById(id); try{ var v=sessionStorage.getItem('ok-'+id); if(v) el.value=v; }catch(e){} el.addEventListener('input',function(){ try{ sessionStorage.setItem('ok-'+id,el.value); }catch(e){} }); });
+/* cart */
+function renderCart(){ var t=tally(cart,BY,LIMITS); var lines=document.getElementById('lines'), tl=document.getElementById('tally');
+  var n=cart.reduce(function(a,l){return a+l.qty;},0);
+  document.getElementById('cart-n').textContent=n?T('items',{n:n}):'';
+  document.getElementById('bar-l').textContent=n?T('items',{n:n})+' · '+eur(t.total):T('bar'); document.getElementById('bar-r').textContent=n?T('bar'):'';
+  if(!cart.length){ lines.innerHTML='<div class="empty">'+esc(T('empty'))+'</div>'; tl.innerHTML=''; }
+  else { lines.innerHTML=cart.map(function(l){ var m=BY[l.id]; return '<div class="line" data-id="'+esc(l.id)+'"><span class="nm">'+esc(m.name[lang]||m.name.nl)+'</span><span class="sub">'+eur(m.price_cents*l.qty)+'</span>'+
+      optRow(l,m)+
+      '<div class="ctl"><input type="text" maxlength="200" placeholder="'+esc(T('line.note'))+'" value="'+esc(l.note||'')+'"><div class="qty"><button type="button" aria-label="−">−</button><span>'+l.qty+'</span><button type="button" aria-label="+">+</button></div></div></div>'; }).join('');
+    lines.querySelectorAll('.line').forEach(function(row){ var id=row.dataset.id, b=row.querySelectorAll('.qty button'); b[0].addEventListener('click',function(){change(id,-1);}); b[1].addEventListener('click',function(){change(id,1);});
+      row.querySelector('.ctl input').addEventListener('input',function(e){ var l=cart.find(function(x){return x.id===id;}); if(l){ l.note=e.target.value.slice(0,200); save(); } });
+      row.querySelectorAll('.opt select').forEach(function(sel){ sel.addEventListener('change',function(){ var l=cart.find(function(x){return x.id===id;});
+        if(!l) return; if(!l.opts) l.opts={}; if(sel.value) l.opts[sel.dataset.g]=sel.value; else delete l.opts[sel.dataset.g]; save(); renderCart(); }); }); });
+    tl.innerHTML=t.ok||t.error==='over_max_total'||t.error==='under_minimum'||t.error==='missing_choice' ?
+      (t.sub9?'<div class="vat"><span>'+esc(T('vat',{r:9}))+'</span><span>'+eur(t.vat9)+'</span></div>':'')+(t.sub21?'<div class="vat"><span>'+esc(T('vat',{r:21}))+'</span><span>'+eur(t.vat21)+'</span></div>':'')+
+      '<div class="tot"><span>'+esc(T('total'))+'</span><span>'+eur(t.total)+'</span></div>' : ''; }
+  document.getElementById('age').hidden=!t.alcohol;
+  document.getElementById('wait').textContent=cart.length?T('wait',{w:SETTINGS.standard_wait_min}):'';
+  var pay=document.getElementById('pay'); pay.disabled=!ST.open||!cart.length||!t.ok;
+  var ek=cart.length&&!t.ok?'e.'+t.error:(!ST.open&&cart.length?'e.closed':'');
+  say(ek, ek==='e.missing_choice'?{n:missNames(t)}:null); }
+/* checkout (sandbox: shows the payload the till would get) */
+document.getElementById('chk').addEventListener('submit',function(e){ e.preventDefault(); var t=tally(cart,BY,LIMITS);
+  if(!ST.open){ say('e.closed'); return; } if(!t.ok){ say('e.'+t.error); return; }
+  var name=document.getElementById('f-name').value.trim(), email=document.getElementById('f-email').value.trim(), phone=document.getElementById('f-phone').value.trim();
+  if(!name||!email||!phone){ say('e.fields'); var f=document.getElementById(!name?'f-name':(!email?'f-email':'f-phone')); try{ f.scrollIntoView({block:'center'}); }catch(e2){} f.focus(); return; } if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say('e.email'); return; }
+  if(t.alcohol&&!document.getElementById('f-age').checked){ say('e.age'); return; }
+  say('');
+  var payload={lang:lang,lines:cart.map(function(l){return {id:l.id,qty:l.qty,note:l.note||'',opts:l.opts||{}};}),order_note:document.getElementById('f-note').value.trim().slice(0,500),customer:{name:name,email:email,phone:phone},age_confirmed:t.alcohol?true:undefined};
+  document.getElementById('payload').textContent=JSON.stringify(payload,null,2)+
+    '\n\n// the ticket the kitchen would print:\n'+cart.map(function(l){ var m=BY[l.id];
+      return '//   '+l.qty+' x '+(m.name[lang]||m.name.nl)+optText(l,m)+(l.note?'  — '+l.note:''); }).join('\n')+
+    '\n\n// server tally (never trusted from here): total '+eur(t.total)+' · btw 9% '+eur(t.vat9)+' · btw 21% '+eur(t.vat21);
+  document.getElementById('modal').classList.add('on'); document.getElementById('modal-x').focus(); });
+function closeModal(){ var m=document.getElementById('modal'); if(!m.classList.contains('on')) return; m.classList.remove('on'); document.getElementById('pay').focus(); }
+document.getElementById('modal-x').addEventListener('click',closeModal);
+document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeModal(); drawer(false); } });
+/* mobile drawer */
+function drawer(on){ var c=document.getElementById('cart'); if(on===c.classList.contains('open')) return; c.classList.toggle('open',on); document.getElementById('dim').classList.toggle('on',on); document.body.style.overflow=on?'hidden':''; if(!on) expand(false); if(on) document.getElementById('cart-x').focus(); else document.getElementById('bar-btn').focus(); }
+/* expand: drop the panel's own scroller and lay the whole order out — the list is never truncated,
+   this only decides whether you read it inside the panel or down the page */
+function expand(on){ var c=document.getElementById('cart'), b=document.getElementById('cart-exp');
+  if(on===c.classList.contains('tall')) return;
+  c.classList.toggle('tall',on); b.setAttribute('aria-expanded',String(on));
+  b.setAttribute('data-i18n-aria',on?'a.collapse':'a.expand'); b.setAttribute('aria-label',T(on?'a.collapse':'a.expand'));
+  b.textContent=on?'⤢':'⤡'; if(!on) document.getElementById('cart-scroll').scrollTop=0; }
+document.getElementById('cart-exp').addEventListener('click',function(){ expand(!document.getElementById('cart').classList.contains('tall')); });
+document.getElementById('bar-btn').addEventListener('click',function(){ drawer(true); });
+document.getElementById('cart-x').addEventListener('click',function(){ drawer(false); });
+document.getElementById('dim').addEventListener('click',function(){ drawer(false); });
+/* language */
+function applyLang(l){ lang=l; document.documentElement.lang=l; try{localStorage.setItem('ok-lang',l);}catch(e){}
+  document.title=T('title');
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ var k=el.getAttribute('data-i18n'); if(UI[l][k]!=null) el.textContent=UI[l][k]; });
+  document.querySelectorAll('[data-i18n-aria]').forEach(function(el){ el.setAttribute('aria-label',T(el.getAttribute('data-i18n-aria'))); });
+  document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed',String(b.dataset.lang===l)); });
+  renderState(); renderMenu(); renderCart(); secs=Array.prototype.slice.call(document.querySelectorAll('.menu-cat')); pageToStrip(); }
+document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.dataset.lang); }); });
+/* ---- the strip as a transparent control for the vertical scroll ----
+   Gesture (touch or mouse) on the strip → a TARGET page position; one rAF loop eases the real
+   scroll toward it (snappy, ~0.28/frame) and, on release, coasts with the finger's velocity.
+   The page's own scroll (finger on the page, wheel, keyboard) stays native; it just repaints the
+   overlay. Our loop yields the moment a scroll we did not cause arrives. */
+var secs=[], catsEl=document.getElementById('cats'), rowEl=document.getElementById('catrow'), catwrap=document.getElementById('catwrap');
+var REDUCED=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+function stripAtBottom(){ return getComputedStyle(catwrap).position==='fixed'; }
+function stickyH(){ return document.querySelector('.nav').offsetHeight+(stripAtBottom()?0:catwrap.offsetHeight); }
+function chips(){ return Array.prototype.slice.call(rowEl.querySelectorAll('a')); }
+function tops(){ var sy=window.scrollY, sh=stickyH(); return secs.map(function(sec){ return sec.getBoundingClientRect().top+sy-sh-8; }); }   /* page coordinates, whatever the offsetParent */
+function maxY(){ return Math.max(0,document.documentElement.scrollHeight-window.innerHeight); }
+function centres(){ var o=rowEl.offsetLeft; return chips().map(function(a){ return o+a.offsetLeft+a.offsetWidth/2; }); }   /* the row is an offsetParent (will-change) — add its own offset inside the strip */
+function rowLen(){ var c=centres(); return c.length>1?c[c.length-1]-c[0]:1; }        /* wheel travel: first bubble centre → last */
+var SLOW=2.6;                                                                    /* Schyler 2026-09-05: 'still too fast' */
+function gain(){ var L=rowLen(); return L>0?maxY()/(L*SLOW):0; }                 /* page px per strip px — linear, steady */
+function clamp(v){ return Math.max(0,Math.min(maxY(),v)); }
+function activeIndexForY(y){ var t=tops(), cur=0; for(var i=0;i<t.length;i++){ if(t[i]<=y+12) cur=i; } if(secs.length&&y>=maxY()-2) cur=secs.length-1; return cur; }
+function highlight(i){ chips().forEach(function(a,k){ a.classList.toggle('on',k===i); }); }
+/* the compass: which point of the wheel sits under the needle for page position y. Section i's
+   bubble centre is under the needle exactly when the page is at section i; in between, the wheel
+   slides proportionally. The page bottom stands in for the last section when that section can never
+   reach the sticky line. */
+function wheelX(y){ var t=tops(), c=centres(), n=t.length; if(!n||c.length!==n) return 0; var my=maxY();
+  var ys=t.slice(); if(ys[n-1]>my) ys[n-1]=my; for(var i=1;i<n;i++){ if(ys[i]<ys[i-1]) ys[i]=ys[i-1]; }
+  if(y<=ys[0]) return c[0]; if(y>=ys[n-1]) return c[n-1];
+  for(var k=0;k<n-1;k++){ if(y>=ys[k]&&y<ys[k+1]){ var f=(ys[k+1]-ys[k])?(y-ys[k])/(ys[k+1]-ys[k]):0; return c[k]+f*(c[k+1]-c[k]); } } return c[n-1]; }
+var lastOverlayY=-1;
+function paintOverlay(y){ if(y===lastOverlayY) return; lastOverlayY=y; var cx=wheelX(y), x=catsEl.clientWidth/2-cx, c=centres();
+  rowEl.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'; highlight(activeIndexForY(y));
+  catwrap.classList.toggle('more-l',c.length>0&&cx-c[0]>4); catwrap.classList.toggle('more-r',c.length>0&&c[c.length-1]-cx>4); }
+/* the one animation loop */
+var target=null, running=false, lastT=0;
+var TAU=70;                                                   /* ms — time constant of the ease; frame-rate independent */
+function setY(v){ v=clamp(v); window.scrollTo({top:v,behavior:'instant'}); paintOverlay(window.scrollY); }
+function tick(now){ if(!running) return; var y=window.scrollY, d=target-y;
+  if(Math.abs(d)<0.6){ setY(target); running=false; document.documentElement.style.scrollBehavior=''; return; }
+  var dt=Math.min(64,Math.max(1,now-lastT)); lastT=now; var k=REDUCED?1:(1-Math.exp(-dt/TAU));
+  setY(y+d*k); requestAnimationFrame(tick); }
+function goTo(y){ target=clamp(y); if(!running){ running=true; lastT=performance.now(); document.documentElement.style.scrollBehavior='auto'; requestAnimationFrame(tick); } }
+function stopAnim(){ running=false; document.documentElement.style.scrollBehavior=''; }
+window.addEventListener('scroll',function(){ if(!running) requestAnimationFrame(function(){ paintOverlay(window.scrollY); }); },{passive:true});
+/* the user taking the page back (finger on the page, wheel off the strip, scroll keys) ends our animation at once.
+   Scroll events themselves are NOT used for this: they arrive a frame late and would read as a takeover. */
+function userTakeover(e){ if(!running) return; if(e.target&&e.target.nodeType===1&&catsEl.contains(e.target)) return; stopAnim(); }
+window.addEventListener('wheel',userTakeover,{passive:true}); window.addEventListener('touchstart',userTakeover,{passive:true});
+window.addEventListener('keydown',function(e){ if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].indexOf(e.key)>=0) userTakeover(e); });
+window.addEventListener('resize',function(){ lastOverlayY=-1; paintOverlay(window.scrollY); });
+/* gesture surfaces: the strip (any pointer movement is horizontal control) and the whole menu
+   (Schyler: "horizontal drag anywhere in the menu moves it the same way; vertical drag still works").
+   On the menu the axis is decided after 6 px: sideways → ours (pointer captured, clicks suppressed);
+   up/down → native scroll (touch-action:pan-y lets the browser take it and cancel our pointer). */
+var g=null, dragEndAt=0;
+function attachSurface(el, isStrip){
+  el.addEventListener('dragstart',function(e){ e.preventDefault(); });
+  el.addEventListener('pointerdown',function(e){ if(e.button&&e.button!==0) return; if(!isStrip&&e.target.closest('button,input,textarea,a,select')) return;
+    if(isStrip&&e.pointerType==='mouse') e.preventDefault();
+    g={el:el,strip:isStrip,id:e.pointerId,x0:e.clientX,y0c:e.clientY,y0:window.scrollY,x:e.clientX,t:performance.now(),v:0,axis:isStrip?'h':null,a:isStrip?e.target.closest('a'):null};
+    if(isStrip){ el.setPointerCapture(e.pointerId); el.classList.add('drag'); stopAnim(); } });
+  el.addEventListener('pointermove',function(e){ if(!g||g.el!==el||e.pointerId!==g.id) return;
+    var dx=e.clientX-g.x0, dy=e.clientY-g.y0c;
+    if(!g.axis){ if(Math.abs(dx)<6&&Math.abs(dy)<6) return; if(Math.abs(dy)>Math.abs(dx)){ g=null; return; }   /* vertical: native */
+      g.axis='h'; try{ el.setPointerCapture(e.pointerId); }catch(x){} document.body.classList.add('dragging'); stopAnim(); }
+    var now=performance.now(), dt=now-g.t; if(dt>0){ g.v=0.7*g.v+0.3*((e.clientX-g.x)/dt); } g.x=e.clientX; g.t=now;
+    if(!g.moved&&Math.abs(dx)>4) g.moved=true; if(g.moved) goTo(g.y0-dx*gain()); });
+  function end(e){ if(!g||g.el!==el||e.pointerId!==g.id) return; var gg=g; g=null; el.classList.remove('drag'); document.body.classList.remove('dragging');
+    if(!gg.moved){ if(gg.strip&&gg.a){ var i=chips().indexOf(gg.a); if(i>=0){ e.preventDefault(); goTo(tops()[i]); history.replaceState(null,'',gg.a.getAttribute('href')); } } return; }
+    dragEndAt=performance.now();
+    var fling=-gg.v*gain()*(REDUCED?0:220); if(Math.abs(fling)>2&&e.type==='pointerup') goTo((target==null?window.scrollY:target)+fling); }
+  el.addEventListener('pointerup',end); el.addEventListener('pointercancel',end);
+  if(!isStrip) el.addEventListener('click',function(e){ if(performance.now()-dragEndAt<400){ e.preventDefault(); e.stopPropagation(); } },true);   /* a drag is not a tap on + */
+}
+attachSurface(catsEl,true); attachSurface(document.getElementById('menu'),false);
+catsEl.addEventListener('click',function(e){ if(e.target.closest('a')) e.preventDefault(); });      /* the tap is handled on pointerup */
+rowEl.addEventListener('keydown',function(e){ var a=e.target.closest('a'); if(!a||(e.key!=='Enter'&&e.key!==' ')) return; e.preventDefault(); goTo(tops()[chips().indexOf(a)]); });
+/* trackpad/wheel over the strip: sideways delta drives the page; a vertical wheel stays native */
+catsEl.addEventListener('wheel',function(e){ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&e.deltaX){ e.preventDefault(); goTo((running?target:window.scrollY)+e.deltaX*gain()); } },{passive:false});
+catwrap.querySelector('.catarr.l').addEventListener('click',function(){ goTo((running?target:window.scrollY)-catsEl.clientWidth*0.6*gain()); });
+catwrap.querySelector('.catarr.r').addEventListener('click',function(){ goTo((running?target:window.scrollY)+catsEl.clientWidth*0.6*gain()); });
+function pageToStrip(){ lastOverlayY=-1; paintOverlay(window.scrollY); }
+applyLang(lang); secs=Array.prototype.slice.call(document.querySelectorAll('.menu-cat')); pageToStrip();
+setInterval(function(){ renderState(); renderCart(); },60000);
+})();
+</script>
+</body></html>

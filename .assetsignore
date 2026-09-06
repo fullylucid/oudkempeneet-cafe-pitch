@@ -1,14 +1,7 @@
-# Wrangler reads this from the assets directory (= repo root, per the registry deploy entry).
-# Everything NOT excluded here is published on the client's live business domain.
-#
-# This list is deny-by-pattern and has already failed once by being too narrow: it was written
-# after DEPLOY.md leaked, so it covered *.md and nothing else — and ROOM.json, which matched no
-# pattern, was merged straight past it. Add the file type, not just the filename that bit you.
-#
-# After EVERY deploy, confirm nothing internal is reachable:
-#   for f in DEPLOY.md ROOM.json BRIEF.md; do
-#     curl -s -o /dev/null -w "$f %{http_code}\n" "https://www.oudkempeneetcafe.nl/$f"; done
-#   → every one must be 404.
+# Wrangler reads this from the assets directory (= repo root). Everything NOT excluded here is
+# published on the client's live business domain. Deny by TYPE, not just by the filename that bit you.
+# After EVERY deploy: for f in DEPLOY.md ROOM.json BRIEF.md wrangler.toml data/menu.json migrations/0001_schema.sql; do
+#   curl -s -o /dev/null -w "$f %{http_code}\n" "https://www.oudkempeneetcafe.nl/$f"; done  → every one must be 404.
 *.md
 *.json
 *.sql
@@ -17,7 +10,13 @@
 .assetsignore
 .gitignore
 .github/
-data/
+.git/
+# The ordering backend: source, migrations, tools, tests, seed data — never www assets.
+src/
 migrations/
 tools/
 tests/
+data/
+# The ordering app itself (own hostname, own Worker). Q28 makes /bestellen on www a REDIRECT to
+# the subdomain, so publishing these here would contradict a ruling, not merely be untidy.
+ordering/
