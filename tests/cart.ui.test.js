@@ -20,6 +20,14 @@ const MIN_LINES = 5;                                   // Zach: "about 5 items a
 let n = 0; const fails = [];
 const ok = (c, m) => { n++; if (!c) fails.push(m); };
 
+// The café is shut outside 15:00–20:30 (Mon–Thu) / 12:30–20:30 (Fri–Sun) Amsterdam, and a shut café
+// disables Afrekenen no matter what is in the cart. Without this the suite passes in the afternoon
+// and fails at breakfast — which is exactly what it did on 2026-09-13 at 06:20 Amsterdam. Fixed
+// time only: setFixedTime moves Date.now() and leaves the timers real, unlike clock.install, which
+// throttles rAF and has hidden real motion from us before.
+const OPEN = new Date('2026-09-16T18:00:00+02:00');          // a Wednesday, mid-service
+async function openPage(browser, opts) { const page = await browser.newPage(opts); await page.clock.setFixedTime(OPEN); return page; }
+
 async function fill(page, count) {                     // put `count` different dishes in the cart
   const adds = await page.locator('.add:not([disabled])').all();
   for (let i = 0; i < count; i++) await adds[i].click();
@@ -33,7 +41,7 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
 
   // ---- desktop: the list keeps the room, the totals and the pay button never leave ----
   for (const vp of [{ width: 1440, height: 900 }, { width: 1366, height: 768 }, { width: 1280, height: 720 }]) {
-    const page = await browser.newPage({ viewport: vp });
+    const page = await openPage(browser, { viewport: vp });
     page.on('pageerror', e => errors.push(vp.width + ': ' + e));
     await page.goto(URL); await page.waitForTimeout(400);
     await fill(page, 9);
@@ -70,7 +78,7 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
 
   // ---- phone: the drawer's controls must actually receive the tap ----
   for (const vp of [{ width: 390, height: 844 }, { width: 360, height: 640 }]) {
-    const page = await browser.newPage({ viewport: vp, hasTouch: true });
+    const page = await openPage(browser, { viewport: vp, hasTouch: true });
     page.on('pageerror', e => errors.push(vp.width + ': ' + e));
     await page.goto(URL); await page.waitForTimeout(400);
     await fill(page, 9);
@@ -97,7 +105,7 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
 
   // ---- per-dish choices: the dropdown under the cart line, and no checkout until it is answered ----
   {
-    const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    const page = await openPage(browser, { viewport: { width: 1366, height: 768 } });
     page.on('pageerror', e => errors.push('choices: ' + e));
     await page.goto(URL); await page.waitForTimeout(400);
     for (const id of ['m-indo-3', 'm-main-1', 'm-start-0']) await page.locator(`.item[data-id="${id}"] .add`).click();
@@ -150,7 +158,7 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
 
   // ---- two portions of the same dish answer their questions separately (Zach, msg 64) ----
   {
-    const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    const page = await openPage(browser, { viewport: { width: 1366, height: 768 } });
     page.on('pageerror', e => errors.push('portions: ' + e));
     await page.goto(URL); await page.waitForTimeout(400);
     const add = '.item[data-id="m-indo-3"] .ctl';                    // Sajoer Lodeh — bami or nasi
@@ -210,7 +218,7 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
 
   // ---- no width may make the page scroll sideways ----
   for (const vp of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }, { width: 900, height: 800 }, { width: 390, height: 844 }, { width: 360, height: 640 }]) {
-    const page = await browser.newPage({ viewport: vp, hasTouch: vp.width < 901 });
+    const page = await openPage(browser, { viewport: vp, hasTouch: vp.width < 901 });
     page.on('pageerror', e => errors.push(vp.width + ': ' + e));
     await page.goto(URL); await page.waitForTimeout(350);
     await fill(page, 4);

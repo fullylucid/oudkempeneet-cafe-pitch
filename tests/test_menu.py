@@ -64,10 +64,34 @@ check(db.execute("select value from settings where key='strip_contact_after_days
 db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o1','ABCD','nl',850,70,0,850,45)")
 db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot,line_note) values('o1',1,'m-start-0',1,850,9,'Soep van de dag','zonder brood')")
 check(db.execute("select line_note from order_items where order_id='o1'").fetchone()[0]=='zonder brood','line_note column (Q23 = a)')
-r=db.execute("select options_json from menu_items where id='m-indo-3'").fetchone()[0]
-check(r and json.loads(r)[0]['id']=='bami-nasi','D1 carries the dish choices (options_json)')
-check(db.execute("select options_json from menu_items where id='m-start-0'").fetchone()[0] is None,'a dish without choices stores NULL')
-check(db.execute("select count(*) from menu_items where options_json is not null").fetchone()[0]==10,'10 rows with choices in D1')
+# choices are ROWS now, not a blob on the item — Part Two's manager edits one option at a time
+n_opt=db.execute("select count(*) from item_options").fetchone()[0]
+want=sum(len(g['options']) for i in menu for g in (i.get('options') or []))
+check(n_opt==want,'every option is a row in D1 (%d, want %d)'%(n_opt,want))
+check(db.execute("select count(distinct item_id) from item_options").fetchone()[0]==10,'10 dishes carry choices in D1')
+r=db.execute("select group_nl,label_nl,required,source,price_cents from item_options where item_id='m-indo-3' and option_id='nasi'").fetchone()
+check(r==('Bami of nasi?','Nasi',1,'menu',0),'a choice row carries its question, its answer, its source and a zero surcharge (got %r)'%(r,))
+check(db.execute("select count(*) from item_options where item_id='m-start-0'").fetchone()[0]==0,'a dish with no choice has no rows')
+check(db.execute("select count(*) from item_options where price_cents<>0").fetchone()[0]==0,'no option costs money today — Q14 decides whether any ever does')
+check(db.execute("select count(*) from item_options where source='implied'").fetchone()[0]==3,'only the steak doneness is ours to invent (3 rows)')
+# ordering is preserved so the manager can drag without inventing it
+check([x[0] for x in db.execute("select option_id from item_options where item_id='m-main-1' order by option_pos")]==['rood','medium','doorbakken'],'option order survives the seed')
+# --- Part Two columns are present BEFORE the schema freezes (PR #76, P2) ---
+cols={r[1] for r in db.execute("pragma table_info(menu_items)")}
+for c in ('prep_minutes','photo_key','archived_at'): check(c in cols,'menu_items.%s folded into 0001'%c)
+check('options_json' not in cols,'options_json is gone — one place holds the choices, not two')
+ocols={r[1] for r in db.execute("pragma table_info(orders)")}
+for c in ('kitchen_state','accepted_at','accepted_by','kitchen_prep_min','refused_at','refused_reason'):
+    check(c in ocols,'orders.%s folded into 0001'%c)
+icols={r[1] for r in db.execute("pragma table_info(order_items)")}
+check('options_cents' in icols,'order_items.options_cents folded into 0001')
+check(db.execute("select value from settings where key='ready_round_to_min'").fetchone()[0]=='5','ready-time numbers are settings, not code')
+# the kitchen's state is its own field, and it must NOT be constrained like the payment status
+db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o2','EFGH','nl',850,70,0,850,45)")
+check(db.execute("select kitchen_state from orders where id='o2'").fetchone()[0]=='new','a new order starts unseen by the kitchen')
+db.execute("update orders set kitchen_state='ready' where id='o2'")
+check(db.execute("select kitchen_state from orders where id='o2'").fetchone()[0]=='ready','kitchen_state takes a state we did not foresee — widening a CHECK in SQLite is a table rebuild')
+check(db.execute("select status from orders where id='o2'").fetchone()[0]=='pending','the payment status is untouched by a kitchen move')
 db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot,options_snapshot) values('o1',2,'m-indo-3',1,1695,9,'Sajoer Lodeh','Bami of nasi: Nasi')")
 check(db.execute("select options_snapshot from order_items where order_id='o1' and line=2").fetchone()[0]=='Bami of nasi: Nasi','the choice is snapshotted on the order line')
 try: db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('x','ABCD','xx',1,0,0,1,45)"); check(False,'lang CHECK enforced')
