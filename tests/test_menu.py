@@ -78,7 +78,13 @@ check(db.execute("select count(*) from item_options where source='implied'").fet
 check([x[0] for x in db.execute("select option_id from item_options where item_id='m-main-1' order by option_pos")]==['rood','medium','doorbakken'],'option order survives the seed')
 # --- Part Two columns are present BEFORE the schema freezes (PR #76, P2) ---
 cols={r[1] for r in db.execute("pragma table_info(menu_items)")}
-for c in ('prep_minutes','photo_key','archived_at'): check(c in cols,'menu_items.%s folded into 0001'%c)
+for c in ('prep_minutes','photo_key','archived_at','sold_out_at'): check(c in cols,'menu_items.%s folded into 0001'%c)
+# sold-out is a DIFFERENT fact from orderable, and a timestamp rather than a boolean so that Q19
+# (clears at opening vs stays until cleared) is answered by the reader, not by a second column
+check([r[2] for r in db.execute("pragma table_info(menu_items)") if r[1]=='sold_out_at']==['TEXT'],'sold_out_at is a timestamp, not a boolean')
+check(db.execute("select count(*) from menu_items where sold_out_at is not null").fetchone()[0]==0,'nothing ships sold out')
+check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==3,'orderable still means never-orderable-online: fondue + 2 draught, unchanged')
+check([r[0] for r in db.execute("select orderable_note from menu_items where orderable=0 order by id")]==['draught','draught','reservation-only, 1 day ahead'],'and each one still says why')
 check('options_json' not in cols,'options_json is gone — one place holds the choices, not two')
 ocols={r[1] for r in db.execute("pragma table_info(orders)")}
 for c in ('kitchen_state','accepted_at','accepted_by','kitchen_prep_min','refused_at','refused_reason'):

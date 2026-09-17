@@ -12,7 +12,7 @@ for k,v in I['nl'].items():
     elif k.startswith('dc.'): cats[k[3:]]=v
 slim=[{"id":m['id'],"kind":m['kind'],"cat":m['cat'],"pos":m['pos'],"name":m['name'],"desc":m['desc'],
        "price_cents":m['price_cents'],"vat_rate":m['vat_rate'],"orderable":m['orderable'],"orderable_note":m.get('orderable_note') or '',
-       "prep_minutes":m.get('prep_minutes'),"options":m.get('options') or []} for m in menu]
+       "prep_minutes":m.get('prep_minutes'),"sold_out_at":m.get('sold_out_at'),"options":m.get('options') or []} for m in menu]
 t=open('beheer/beheer.template.html',encoding='utf-8').read()
 t=t.replace('/*__MENU__*/[]',json.dumps(slim,ensure_ascii=False,separators=(',',':')))
 t=t.replace('/*__CATS__*/{}',json.dumps({"nl":cats},ensure_ascii=False,separators=(',',':')))

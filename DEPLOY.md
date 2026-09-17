@@ -28,6 +28,26 @@ that wasted a lot of time and will waste yours:
 - `dig` shows `AAAA -> 100::`, Cloudflare's placeholder address. **That record is the tell**: it
   means a Worker or Pages custom domain serves the hostname, never a proxied origin.
 
+## ⚠ The client's repo has the NARROW guard — carry `.assetsignore` in every patch
+
+`cafe-home` (the client's own repo, which is what actually deploys) still carries the short
+`.assetsignore`: `*.md`, `*.json`, `.assetsignore`, `.gitignore`, `.github/`. This mirror's guard
+is much wider and has grown twice since.
+
+**So when ordering work propagates to `cafe-home` as a patch, `.assetsignore` must travel IN THAT
+PATCH.** If it does not, the gap is transplanted rather than fixed, and the next deploy publishes
+whatever the narrow list misses. Today that would include `beheer/` — the menu manager — which is
+not a page with a private URL: it is an open edit screen for the café's prices, sitting on the
+café's live business domain. It is the worst thing in this repo to leak and the repo is one
+careless propagation away from doing it.
+
+Check after any propagation, against the live domain:
+
+```sh
+for f in beheer/site/index.html ordering/site/index.html src/tally.js migrations/0001_schema.sql; do
+  curl -s -o /dev/null -w "$f %{http_code}\n" "https://www.oudkempeneetcafe.nl/$f"; done   # all 404
+```
+
 ## ⚠ Internal docs must never ship as public assets
 
 `wrangler deploy` uploads **everything** in the assets directory. On 2026-08-24 this file itself
