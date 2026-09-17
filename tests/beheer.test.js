@@ -42,7 +42,15 @@ const ops = page => page.evaluate(() => { document.getElementById('save').click(
     const cls = await p.evaluate(() => document.querySelector('.row[data-id="m-indo-3"]').className);
     ok(/soldout/.test(cls), 'marking sold out is one tap and shows on the row');
     const o = await ops(p);
-    ok(o.length === 1 && o[0].op === 'update' && o[0].fields.orderable === false, `sold out becomes one update op (got ${JSON.stringify(o)})`);
+    // Sold-out writes sold_out_at and MUST NOT touch `orderable` — that column already means
+    // "never orderable online" and is correct for the fondue and the two draught beers. Writing
+    // one field while displaying two would have been a fix in appearance only (gate, PR #11).
+    ok(o.length === 1 && o[0].op === 'update' && typeof o[0].fields.sold_out_at === 'string',
+      `sold out is a timestamp on its own field (got ${JSON.stringify(o)})`);
+    ok(!('orderable' in o[0].fields), 'the daily toggle never writes `orderable`');
+    await p.locator('.row[data-id="m-indo-3"] .so input').uncheck(); await p.waitForTimeout(200);
+    const o2 = await ops(p);
+    ok(o2.length === 1 && o2[0].fields.sold_out_at === null, `un-marking nulls the timestamp rather than deleting the fact (got ${JSON.stringify(o2)})`);
     await p.close();
   }
 

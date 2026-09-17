@@ -170,6 +170,7 @@ function toast(m){ var el=document.getElementById('toast'); el.textContent=m; el
    fondue would quietly put a reservation-only dish on the takeaway menu. Here the second kind is
    shown as a locked state with its reason. Whether the database should separate them is a
    question for the gate, raised from this sandbox rather than guessed at. */
+function soldOut(m){ return !!m.sold_out_at; }
 function lockShort(m){ return m.orderable_note==='draught' ? 'alleen aan de bar' : 'reserveren'; }
 function lockWhy(m){ return m.orderable_note==='draught'
   ? 'Tapbier kan niet mee naar huis — staat niet op de afhaalkaart.'
@@ -194,7 +195,7 @@ function patchRow(id){ var el=document.querySelector('.row[data-id="'+CSS.escape
   el.querySelector('.nm').textContent=(m.name.nl||'(zonder naam)')+(isNew?' NIEUW':'');
   el.querySelector('.pr').textContent=eur(m.price_cents||0);
   el.querySelector('.vat').textContent='btw '+m.vat_rate+'%';
-  el.classList.toggle('soldout',m.orderable===false); }
+  el.classList.toggle('soldout',soldOut(m)); }
 
 function allIds(){ var ids=MENU.map(function(m){return m.id;}).concat(DRAFT.added.map(function(a){return a.id;}));
   return ids.filter(function(i){ return !DRAFT.removed[i]; }); }
@@ -209,7 +210,7 @@ function inCat(cat){ var ids=allIds().filter(function(i){ return view(i).cat===c
 var filterCat='', query='', onlySold=false;
 function visible(id){ var m=view(id);
   if(filterCat && m.cat!==filterCat) return false;
-  if(onlySold && m.orderable!==false) return false;
+  if(onlySold && !soldOut(m)) return false;
   if(query){ var q=query.toLowerCase();
     var hay=[m.name.nl,m.name.en,m.name.de,(m.desc||{}).nl||''].join(' ').toLowerCase();
     if(hay.indexOf(q)<0) return false; }
@@ -236,7 +237,7 @@ function renderList(){ var root=document.getElementById('list'); root.innerHTML=
   wireDrag(); }
 
 function rowEl(id,cat,openIt){ var m=view(id), el=document.createElement('div');
-  el.className='row'+(m.orderable===false?' soldout':''); el.dataset.id=id;
+  el.className='row'+(soldOut(m)?' soldout':''); el.dataset.id=id;
   var isNew=DRAFT.added.some(function(a){return a.id===id;});
   el.innerHTML='<div class="rhead">'+
     '<button class="grip" type="button" aria-label="Versleep om te ordenen" title="Versleep om te ordenen">⠿</button>'+
@@ -245,11 +246,17 @@ function rowEl(id,cat,openIt){ var m=view(id), el=document.createElement('div');
     '<span class="pr">'+eur(m.price_cents||0)+'</span>'+
     '<span class="vat">btw '+m.vat_rate+'%</span>'+
     (m.orderable_note ? '<span class="locked" title="'+esc(lockWhy(m))+'">'+esc(lockShort(m))+'</span>'
-                      : '<label class="so"><input type="checkbox" '+(m.orderable===false?'checked':'')+'> Uitverkocht</label>')+
+                      : '<label class="so"><input type="checkbox" '+(soldOut(m)?'checked':'')+'> Uitverkocht</label>')+
     '<button class="btn btn-quiet" type="button" data-act="edit">'+(openIt?'Sluiten':'Bewerken')+'</button>'+
   '</div><div class="edit" '+(openIt?'':'hidden')+'></div>';
   var so=el.querySelector('.so input');
-  if(so) so.addEventListener('change',function(e){ edit(id,'orderable',!e.target.checked); toast(e.target.checked?'Uitverkocht — direct zichtbaar voor klanten':'Weer te bestellen'); });
+  if(so) so.addEventListener('change',function(e){
+    /* writes sold_out_at, NEVER orderable: that column already means "never orderable online" and
+       is correct as it stands. The sandbox caught the display conflation and this is the other
+       half of it — showing them apart while still writing them into one field would have been a
+       fix in appearance only. */
+    edit(id,'sold_out_at', e.target.checked ? new Date().toISOString() : null);
+    toast(e.target.checked?'Uitverkocht — direct zichtbaar voor klanten':'Weer te bestellen'); });
   el.querySelectorAll('[data-mv]').forEach(function(b){ b.addEventListener('click',function(){ move(cat,id,parseInt(b.dataset.mv,10)); }); });
   el.querySelector('[data-act=edit]').addEventListener('click',function(){
     var root=document.getElementById('list'); root.dataset.open=(root.dataset.open===id?'':id); renderList(); });

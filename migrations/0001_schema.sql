@@ -27,6 +27,14 @@ CREATE TABLE IF NOT EXISTS menu_items (
   orderable_note TEXT,
   -- Part Two (folded in before first apply — see the note at the top of this file)
   prep_minutes  INTEGER,                     -- per-item prep time; NULL falls back to settings.standard_wait_min
+  -- "Sold out today" is a DIFFERENT fact from `orderable`, which already means "never orderable
+  -- online" and is correct for all three rows that carry it (the fondue needs a day's notice; the
+  -- two draught beers cannot be carried home). Sharing one column made the fondue display as sold
+  -- out in the manager, and one careless click would have put a reservation-only dish on the
+  -- takeaway menu. A TIMESTAMP rather than a boolean, deliberately: it expresses both answers to
+  -- Q19 without a second column or a clearing job — auto-clear reads it as stale once it predates
+  -- today's opening; manual-clear reads it as set until nulled. Q19 stops being a schema question.
+  sold_out_at   TEXT,
   photo_key     TEXT,                        -- R2 object key; NULL = no photo, which is the whole menu today
   archived_at   TEXT,                        -- soft delete: order lines snapshot names, so history must stay readable
   updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
