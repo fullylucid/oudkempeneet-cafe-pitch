@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menukaart beheren — Oud-Kempen Eetcafé</title>
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --field:#F1EADC;--field-2:#EBE2D0;--field-deep:#241813;--field-deep-2:#1B120D;
+  --line:#C6B497;--line-dk:#7A6A57;--accent-1:#E7C079;--accent-2:#C08A3E;--accent-3:#8A5A22;
+  --paper:#FBF7EF;--ink:#2E2016;--ink-dim:#6B5A48;--muted:#75634E;--paper-on-dark:#F3EADB;
+  --warn:#A6603A;--ok:#4A7A46;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;background:var(--field);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}a{color:inherit}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+
+/* the sandbox banner is first and loud: this page changes nothing */
+.sandbox{background:var(--field-deep);color:var(--paper-on-dark);font-size:13px;padding:9px 16px;text-align:center;position:sticky;top:0;z-index:60}
+.sandbox b{color:var(--accent-1)}
+
+.nav{position:sticky;top:37px;z-index:55;background:rgba(251,248,242,.94);backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid rgba(122,106,87,.22)}
+.nav-in{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:11px 16px;max-width:1080px;margin:0 auto}
+.nav h1{font-family:var(--serif);font-size:19px;letter-spacing:.04em;text-transform:uppercase;margin:0;color:#2A1B10}
+.nav .grow{flex:1 1 auto}
+.wrap{max-width:1080px;margin:0 auto;padding:16px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;letter-spacing:.06em;
+  padding:9px 14px;min-height:40px;border-radius:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer}
+.btn:hover{border-color:var(--accent-2)}
+.btn-gold{border-color:#b98a3f;font-weight:650;background-image:linear-gradient(120deg,var(--accent-1),var(--accent-2) 55%,var(--accent-1));color:#28190C}
+.btn-quiet{background:transparent;border-color:transparent;color:var(--ink-dim)}
+.btn-quiet:hover{color:var(--ink);border-color:var(--line)}
+.btn[disabled]{opacity:.45;cursor:default}
+
+/* search + category filter */
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.tools input[type=search]{flex:1 1 220px;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:3px;background:#fff}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cats button{font-size:12.5px;padding:6px 11px;min-height:34px;border-radius:999px;border:1px solid var(--line);background:var(--paper);cursor:pointer;color:var(--ink-dim)}
+.cats button[aria-pressed=true]{background:var(--accent-2);border-color:var(--accent-2);color:#241300;font-weight:600}
+
+/* the list */
+.cat-h{display:flex;align-items:baseline;gap:10px;margin:22px 0 8px}
+.cat-h h2{font-family:var(--serif);font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin:0;color:var(--accent-3)}
+.cat-h .n{font-size:12px;color:var(--muted)}
+.rows{display:flex;flex-direction:column;gap:6px}
+.row{background:var(--paper);border:1px solid var(--line);border-radius:4px}
+.row.drag{opacity:.5}
+.row.over{border-color:var(--accent-2);box-shadow:0 0 0 2px rgba(192,138,62,.25)}
+.row.soldout .nm{text-decoration:line-through;color:var(--muted)}
+.rhead{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 6px}
+.grip{flex:0 0 auto;width:30px;min-height:40px;display:flex;align-items:center;justify-content:center;cursor:grab;color:var(--line-dk);touch-action:none;background:transparent;border:0}
+.grip:active{cursor:grabbing}
+.rhead .nm{flex:1 1 auto;min-width:0;font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rhead .pr{flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--ink-dim);font-size:14.5px}
+.rhead .vat{flex:0 0 auto;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 7px}
+.rhead .locked{flex:0 0 auto;font-size:11px;color:var(--accent-3);border:1px solid var(--accent-2);border-radius:999px;padding:2px 9px;background:rgba(231,192,121,.16)}
+.moves{display:inline-flex;flex-direction:column}
+.moves button{width:26px;height:20px;padding:0;border:0;background:transparent;cursor:pointer;color:var(--line-dk);line-height:1}
+.moves button:hover{color:var(--accent-3)}
+.so{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-dim);cursor:pointer;user-select:none;min-height:40px;padding:0 4px}
+.so input{width:18px;height:18px;margin:0}
+
+/* the editor */
+.edit{border-top:1px solid var(--field-2);padding:12px;display:grid;gap:12px}
+/* A grid item defaults to min-width:auto and refuses to shrink below its content, so the
+   three-language row pushed the page 11px wider than a 390px phone. Same family as the trap that
+   widened the ordering page. Every grid child here may shrink. */
+.edit>*,.cols>*{min-width:0}
+.edit[hidden]{display:none}
+.fld{display:grid;gap:4px}
+.fld label{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fld input,.fld textarea,.fld select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:3px;background:#fff}
+.fld textarea{min-height:52px;resize:vertical}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:2px solid var(--accent-2);outline-offset:1px;border-color:var(--accent-2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:10px}
+.lang-tag{font-size:10px;letter-spacing:.14em;color:var(--accent-3)}
+.note{font-size:12.5px;color:var(--muted);line-height:1.45}
+.note.warn{color:var(--warn)}
+.stub{border:1px dashed var(--line);border-radius:3px;padding:10px;background:rgba(198,180,151,.12)}
+
+/* options editor */
+.grp{border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.55)}
+.grp-h{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--field-2)}
+.grp-h .t{flex:1 1 auto;font-weight:600;font-size:14px}
+.grp-h .src{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.grp-h .src.implied{border-color:var(--warn);color:var(--warn)}
+.opt{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid var(--field-2)}
+.opt:last-child{border-bottom:0}
+.opt .l{flex:1 1 auto;min-width:0;font-size:14px}
+.opt .price{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px}
+.opt .price input{width:86px;padding:6px 8px;border:1px solid var(--line);border-radius:3px;text-align:right;font-variant-numeric:tabular-nums;background:#fff}
+.opt{flex-wrap:wrap}
+.opt .inh{flex:0 1 auto;min-width:0;font-size:11px;color:var(--muted)}
+.opt.priced .inh{color:var(--warn);font-weight:600}
+
+/* the payload drawer */
+.saveline{position:sticky;bottom:0;z-index:50;background:var(--paper);border-top:1px solid var(--line);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.saveline .c{flex:1 1 auto;font-size:13px;color:var(--ink-dim)}
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(36,24,19,.55)}
+.modal.on{display:flex}
+.modal .box{background:var(--paper);border-radius:5px;max-width:720px;width:100%;padding:20px;max-height:86vh;overflow:auto}
+.modal h2{font-family:var(--serif);font-size:18px;margin:0 0 6px}
+.modal pre{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:10px;overflow:auto;border-radius:3px;white-space:pre-wrap}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:74px;z-index:90;background:var(--field-deep);color:var(--paper-on-dark);
+  padding:9px 15px;border-radius:3px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+@media(max-width:560px){.rhead{flex-wrap:wrap}.rhead .nm{flex:1 1 100%;order:-1;white-space:normal}.nav h1{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="sandbox">Oefenversie — <b>er wordt niets opgeslagen</b>. Wijzigingen blijven alleen in deze browser staan.</div>
+
+<nav class="nav"><div class="nav-in">
+  <h1>Menukaart beheren</h1>
+  <span class="grow"></span>
+  <button class="btn" id="add" type="button">+ Nieuw gerecht</button>
+</div></nav>
+
+<div class="wrap">
+  <div class="tools">
+    <input type="search" id="q" placeholder="Zoek een gerecht of drankje…" aria-label="Zoeken">
+    <button class="btn btn-quiet" id="only-so" type="button" aria-pressed="false">Alleen uitverkocht</button>
+  </div>
+  <div class="cats" id="cats" role="group" aria-label="Categorieën"></div>
+  <div id="list"></div>
+</div>
+
+<div class="saveline">
+  <span class="c" id="count">Geen wijzigingen</span>
+  <button class="btn btn-quiet" id="reset" type="button" disabled>Alles terugzetten</button>
+  <button class="btn btn-gold" id="save" type="button" disabled>Opslaan</button>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="box">
+  <h2 id="mt">Dit zou naar de kassa gaan</h2>
+  <p class="note">In de echte versie stuurt deze knop precies dit naar de server, die het in de database zet. Nu niet — dit is een oefenversie.</p>
+  <pre id="payload"></pre>
+  <button class="btn" id="mx" type="button">Sluiten</button>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+var MENU=[{"id":"m-start-0","kind":"food","cat":"start","pos":0,"name":{"nl":"Soep van de dag","en":"Soup of the Day","de":"Tagessuppe"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-start-1","kind":"food","cat":"start","pos":1,"name":{"nl":"Caesar Salad","en":"Caesar Salad","de":"Caesar Salad"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1000,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-start-2","kind":"food","cat":"start","pos":2,"name":{"nl":"Salade met geitenkaas","en":"Goat Cheese Salad","de":"Salat mit Ziegenkäse"},"desc":{"nl":null,"en":null,"de":null},"price_cents":950,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-start-3","kind":"food","cat":"start","pos":3,"name":{"nl":"Kroepoek met huisgemaakte pindasaus","en":"Prawn crackers with homemade peanut sauce","de":"Krupuk mit hausgemachter Erdnusssauce"},"desc":{"nl":null,"en":null,"de":null},"price_cents":650,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-start-4","kind":"food","cat":"start","pos":4,"name":{"nl":"Brood met smeersel","en":"Bread with spread","de":"Brot mit Aufstrich"},"desc":{"nl":null,"en":null,"de":null},"price_cents":895,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-main-0","kind":"food","cat":"main","pos":0,"name":{"nl":"Kaasfondue","en":"Cheese Fondue","de":"Käsefondue"},"desc":{"nl":"1 dag van tevoren reserveren - minimaal 2 personen.","en":"Reservation required 1 day in advance - minimum 2 persons.","de":"1 Tag im Voraus reservieren - mindestens 2 Personen."},"price_cents":2595,"vat_rate":9,"orderable":false,"orderable_note":"reservation-only, 1 day ahead","prep_minutes":null,"options":[]},{"id":"m-main-1","kind":"food","cat":"main","pos":1,"name":{"nl":"Biefstuk","en":"Steak","de":"Rindersteak"},"desc":{"nl":"Met friet en salade.","en":"Served with fries and salad.","de":"Mit Pommes frites und Salat."},"price_cents":2395,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"bakwijze","source":"implied","required":true,"label":{"nl":"Hoe gebakken?","en":"How would you like it cooked?","de":"Wie gebraten?"},"options":[{"id":"rood","label":{"nl":"Rood","en":"Rare","de":"Blutig"}},{"id":"medium","label":{"nl":"Medium","en":"Medium","de":"Medium"}},{"id":"doorbakken","label":{"nl":"Doorbakken","en":"Well done","de":"Durchgebraten"}}]}]},{"id":"m-main-2","kind":"food","cat":"main","pos":2,"name":{"nl":"Sliptong - 2 stuks","en":"Slip Sole - 2 pieces","de":"Gebratene Seezunge - 2 Stück"},"desc":{"nl":"Met friet en salade.","en":"Served with fries and salad.","de":"Mit Pommes frites und Salat."},"price_cents":2795,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-main-3","kind":"food","cat":"main","pos":3,"name":{"nl":"Varkens schnitzel","en":"Pork Schnitzel","de":"Schweineschnitzel"},"desc":{"nl":"Met patat, salade, champignon- of pepersaus.","en":"With fries, salad, mushroom or pepper sauce.","de":"Mit Pommes frites, Salat und Champignon- oder Pfeffersoße."},"price_cents":1395,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"schnitzelsaus","source":"menu","required":true,"label":{"nl":"Champignon- of pepersaus?","en":"Mushroom or pepper sauce?","de":"Champignon- oder Pfeffersoße?"},"options":[{"id":"champignon","label":{"nl":"Champignonsaus","en":"Mushroom sauce","de":"Champignonsoße"}},{"id":"peper","label":{"nl":"Pepersaus","en":"Pepper sauce","de":"Pfeffersoße"}}]}]},{"id":"m-main-4","kind":"food","cat":"main","pos":4,"name":{"nl":"Spaghetti bolognese","en":"Spaghetti Bolognese","de":"Spaghetti Bolognese"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1395,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-main-5","kind":"food","cat":"main","pos":5,"name":{"nl":"Duitse Braadworst","en":"German Bratwurst","de":"Deutsche Bratwurst"},"desc":{"nl":"Met friet en salade.","en":"With fries and salad.","de":"Mit Pommes frites und Salat."},"price_cents":1595,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-main-6","kind":"food","cat":"main","pos":6,"name":{"nl":"Kibbeling","en":"Kibbeling","de":"Kibbeling"},"desc":{"nl":"Met friet en salade.","en":"With fries and salad.","de":"Mit Pommes frites und Salat."},"price_cents":1795,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-lunch-0","kind":"food","cat":"lunch","pos":0,"name":{"nl":"Frikandel - 2 stuks","en":"Frikandel - 2 pieces","de":"Frikadelle - 2 Stück"},"desc":{"nl":"Met patat of brood.","en":"With fries or bread.","de":"Mit Pommes frites oder Brot."},"price_cents":995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"patat-brood","source":"menu","required":true,"label":{"nl":"Patat of brood?","en":"Fries or bread?","de":"Pommes frites oder Brot?"},"options":[{"id":"patat","label":{"nl":"Patat","en":"Fries","de":"Pommes frites"}},{"id":"brood","label":{"nl":"Brood","en":"Bread","de":"Brot"}}]}]},{"id":"m-lunch-1","kind":"food","cat":"lunch","pos":1,"name":{"nl":"Kroket - 2 stuks","en":"Croquette - 2 pieces","de":"Kroketten - 2 Stück"},"desc":{"nl":"Met patat of brood.","en":"With fries or bread.","de":"Mit Pommes frites oder Brot."},"price_cents":995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"patat-brood","source":"menu","required":true,"label":{"nl":"Patat of brood?","en":"Fries or bread?","de":"Pommes frites oder Brot?"},"options":[{"id":"patat","label":{"nl":"Patat","en":"Fries","de":"Pommes frites"}},{"id":"brood","label":{"nl":"Brood","en":"Bread","de":"Brot"}}]}]},{"id":"m-lunch-2","kind":"food","cat":"lunch","pos":2,"name":{"nl":"Uitsmijter ham kaas","en":"Fried eggs with ham & cheese","de":"Spiegeleier mit Schinken & Käse"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1100,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-lunch-3","kind":"food","cat":"lunch","pos":3,"name":{"nl":"Boerenomelet","en":"Farmer's omelette","de":"Bauernomelett"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1250,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-lunch-4","kind":"food","cat":"lunch","pos":4,"name":{"nl":"Tosti ham kaas","en":"Ham & cheese toastie","de":"Toast Schinken & Käse"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-indo-0","kind":"food","cat":"indo","pos":0,"name":{"nl":"Soto Ajam","en":"Soto Ajam","de":"Soto Ajam"},"desc":{"nl":"Traditionele Indonesische kippensoep met kip, ei, taugé, glasnoedels en verse kruiden.","en":"Traditional Indonesian chicken soup with chicken, egg, bean sprouts, glass noodles and fresh herbs.","de":"Traditionelle indonesische Hühnersuppe mit Hähnchen, Ei, Sojasprossen, Glasnudeln und frischen Kräutern."},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-indo-1","kind":"food","cat":"indo","pos":1,"name":{"nl":"Beef Rendang","en":"Beef Rendang","de":"Beef Rendang"},"desc":{"nl":"Langzaam gegaard rundvlees in een rijke Indonesische saus.","en":"Slow-cooked beef in a rich Indonesian sauce.","de":"Langsam geschmortes Rindfleisch in einer reichhaltigen indonesischen Soße."},"price_cents":2095,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-indo-2","kind":"food","cat":"indo","pos":2,"name":{"nl":"Ajam Pedis","en":"Ajam Pedis","de":"Ajam Pedis"},"desc":{"nl":"Pittige kip in een kruidige Indonesische saus.","en":"Spicy chicken in a savoury Indonesian sauce.","de":"Scharfes Hähnchen in einer würzigen indonesischen Soße."},"price_cents":1995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-indo-3","kind":"food","cat":"indo","pos":3,"name":{"nl":"Sajoer Lodeh","en":"Sajoer Lodeh","de":"Sajoer Lodeh"},"desc":{"nl":"Vegetarische Indonesische groenten in een romige kokossaus, met atjar en bami of nasi.","en":"Vegetarian Indonesian vegetables in a creamy coconut sauce, served with atjar and bami or nasi.","de":"Vegetarisches indonesisches Gemüse in einer cremigen Kokossoße, mit Atjar und Bami oder Nasi."},"price_cents":1695,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"bami-nasi","source":"menu","required":true,"label":{"nl":"Bami of nasi?","en":"Bami or nasi?","de":"Bami oder Nasi?"},"options":[{"id":"bami","label":{"nl":"Bami","en":"Bami","de":"Bami"}},{"id":"nasi","label":{"nl":"Nasi","en":"Nasi","de":"Nasi"}}]}]},{"id":"m-indo-4","kind":"food","cat":"indo","pos":4,"name":{"nl":"Vega Rendang","en":"Vega Rendang","de":"Vega Rendang"},"desc":{"nl":"Vegetarische Indonesische groente met soyabrokken, atjar en bami of nasi.","en":"Vegetarian Indonesian vegetables with soy chunks, atjar and bami or nasi.","de":"Vegetarisches indonesisches Gemüse mit Sojastücken, Atjar und Bami oder Nasi."},"price_cents":1695,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"bami-nasi","source":"menu","required":true,"label":{"nl":"Bami of nasi?","en":"Bami or nasi?","de":"Bami oder Nasi?"},"options":[{"id":"bami","label":{"nl":"Bami","en":"Bami","de":"Bami"}},{"id":"nasi","label":{"nl":"Nasi","en":"Nasi","de":"Nasi"}}]}]},{"id":"m-indo-5","kind":"food","cat":"indo","pos":5,"name":{"nl":"Kipsaté","en":"Chicken Satay","de":"Hühnchen-Saté"},"desc":{"nl":"Met huisgemaakte satésaus, kroepoek, atjar en bami of nasi.","en":"Served with homemade satay sauce, prawn crackers, atjar and bami or nasi.","de":"Mit hausgemachter Saté-Sauce, Krupuk, Atjar und Bami oder Nasi."},"price_cents":1995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"bami-nasi","source":"menu","required":true,"label":{"nl":"Bami of nasi?","en":"Bami or nasi?","de":"Bami oder Nasi?"},"options":[{"id":"bami","label":{"nl":"Bami","en":"Bami","de":"Bami"}},{"id":"nasi","label":{"nl":"Nasi","en":"Nasi","de":"Nasi"}}]}]},{"id":"m-indo-6","kind":"food","cat":"indo","pos":6,"name":{"nl":"Nasi Goreng Schotel","en":"Nasi Goreng Platter","de":"Nasi-Goreng-Teller"},"desc":{"nl":"Gebakken nasi met kipsaté, ei, kroepoek en atjar, geserveerd met sambal goreng boontjes óf sajoer lodeh (niet-pittige groenten).","en":"Fried rice with chicken satay, egg, prawn crackers and atjar, served with sambal goreng green beans or sajoer lodeh (mild vegetables).","de":"Gebratener Reis mit Hähnchen-Saté, Ei, Krupuk und Atjar, serviert mit Sambal-Goreng-Bohnen oder Sajoer Lodeh (nicht scharfes Gemüse)."},"price_cents":1995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"boontjes-sajoer","source":"menu","required":true,"label":{"nl":"Boontjes of sajoer lodeh?","en":"Green beans or sajoer lodeh?","de":"Bohnen oder Sajoer Lodeh?"},"options":[{"id":"boontjes","label":{"nl":"Sambal goreng boontjes","en":"Sambal goreng green beans","de":"Sambal-Goreng-Bohnen"}},{"id":"sajoer","label":{"nl":"Sajoer lodeh (niet-pittige groenten)","en":"Sajoer lodeh (mild vegetables)","de":"Sajoer Lodeh (nicht scharfes Gemüse)"}}]}]},{"id":"m-indo-7","kind":"food","cat":"indo","pos":7,"name":{"nl":"Bami Goreng Schotel","en":"Bami Goreng Platter","de":"Bami-Goreng-Teller"},"desc":{"nl":"Gebakken bami met kipsaté, ei, kroepoek en atjar, geserveerd met sambal goreng boontjes óf sajoer lodeh (niet-pittige groenten).","en":"Fried noodles with chicken satay, egg, prawn crackers and atjar, served with sambal goreng green beans or sajoer lodeh (mild vegetables).","de":"Gebratene Bami mit Hähnchen-Saté, Ei, Krupuk und Atjar, serviert mit Sambal-Goreng-Bohnen oder Sajoer Lodeh (nicht scharfes Gemüse)."},"price_cents":1995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"boontjes-sajoer","source":"menu","required":true,"label":{"nl":"Boontjes of sajoer lodeh?","en":"Green beans or sajoer lodeh?","de":"Bohnen oder Sajoer Lodeh?"},"options":[{"id":"boontjes","label":{"nl":"Sambal goreng boontjes","en":"Sambal goreng green beans","de":"Sambal-Goreng-Bohnen"}},{"id":"sajoer","label":{"nl":"Sajoer lodeh (niet-pittige groenten)","en":"Sajoer lodeh (mild vegetables)","de":"Sajoer Lodeh (nicht scharfes Gemüse)"}}]}]},{"id":"m-veg-0","kind":"food","cat":"veg","pos":0,"name":{"nl":"Pasta met champignons","en":"Pasta with Mushrooms","de":"Pasta mit Champignons"},"desc":{"nl":"Met salade.","en":"With salad.","de":"Mit Salat."},"price_cents":1750,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-pancake-0","kind":"food","cat":"pancake","pos":0,"name":{"nl":"Pannenkoek Naturel","en":"Traditional Pancake","de":"Natur-Pfannkuchen"},"desc":{"nl":"Met stroop, suiker en boter.","en":"With syrup, sugar and butter.","de":"Mit Sirup, Zucker und Butter."},"price_cents":995,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-snack-0","kind":"food","cat":"snack","pos":0,"name":{"nl":"Bittergarnituur (8 stuks)","en":"Mixed Fried Snacks (8 pcs)","de":"Bittergarnitur (8 Stück)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":750,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-snack-1","kind":"food","cat":"snack","pos":1,"name":{"nl":"Bitterballen (8 stuks)","en":"Bitterballs (8 pcs)","de":"Bitterbällchen (8 Stück)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":750,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-snack-2","kind":"food","cat":"snack","pos":2,"name":{"nl":"Chicken Wings (8 stuks)","en":"Chicken Wings (8 pcs)","de":"Chicken Wings (8 Stück)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-snack-3","kind":"food","cat":"snack","pos":3,"name":{"nl":"Kip Nuggets (8 stuks)","en":"Chicken Nuggets (8 pcs)","de":"Chicken Nuggets (8 Stück)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-snack-4","kind":"food","cat":"snack","pos":4,"name":{"nl":"Kaassoufflés mini (8 stuks)","en":"Mini Cheese Soufflés (8 pcs)","de":"Mini-Käsesoufflés (8 Stück)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":750,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-kids-0","kind":"food","cat":"kids","pos":0,"name":{"nl":"Kindermenu","en":"Children's menu","de":"Kindermenü"},"desc":{"nl":"Frites met frikandel, kroket of 4 chicken nuggets, of pannenkoek. Inclusief appelmoes & mayonaise, kinderijsje en verrassing.","en":"Fries with frikandel, croquette or 4 chicken nuggets, or pancake. Includes applesauce & mayonnaise, ice cream and surprise.","de":"Pommes mit Frikadelle, Kroketten oder 4 Chicken Nuggets, oder Pfannkuchen. Inklusive Apfelmus & Mayonnaise, Kindereis und Überraschung."},"price_cents":895,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[{"id":"kindermenu","source":"menu","required":true,"label":{"nl":"Waarmee?","en":"With what?","de":"Womit?"},"options":[{"id":"frikandel","label":{"nl":"Frites met frikandel","en":"Fries with frikandel","de":"Pommes mit Frikadelle"}},{"id":"kroket","label":{"nl":"Frites met kroket","en":"Fries with croquette","de":"Pommes mit Krokette"}},{"id":"nuggets","label":{"nl":"Frites met 4 chicken nuggets","en":"Fries with 4 chicken nuggets","de":"Pommes mit 4 Chicken Nuggets"}},{"id":"pannenkoek","label":{"nl":"Pannenkoek","en":"Pancake","de":"Pfannkuchen"}}]}]},{"id":"m-dessert-0","kind":"food","cat":"dessert","pos":0,"name":{"nl":"Kaasplankje","en":"Cheese Platter","de":"Käseplatte"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1295,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-dessert-1","kind":"food","cat":"dessert","pos":1,"name":{"nl":"IJs met aardbeien en slagroom","en":"Ice Cream with Strawberries & Whipped Cream","de":"Eis mit Erdbeeren und Sahne"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-dessert-2","kind":"food","cat":"dessert","pos":2,"name":{"nl":"Vanille-ijs met advocaat","en":"Vanilla Ice Cream with Advocaat","de":"Vanilleeis mit Eierlikör"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-dessert-3","kind":"food","cat":"dessert","pos":3,"name":{"nl":"Dame Blanche","en":"Dame Blanche","de":"Dame Blanche"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"m-extra-0","kind":"food","cat":"extra","pos":0,"name":{"nl":"Portie friet","en":"Side of Fries","de":"Portion Pommes frites"},"desc":{"nl":null,"en":null,"de":null},"price_cents":350,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-0","kind":"drink","cat":"hot","pos":0,"name":{"nl":"Koffie","en":"Coffee","de":"Kaffee"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-1","kind":"drink","cat":"hot","pos":1,"name":{"nl":"Thee","en":"Tea","de":"Tee"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-2","kind":"drink","cat":"hot","pos":2,"name":{"nl":"Espresso","en":"Espresso","de":"Espresso"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-3","kind":"drink","cat":"hot","pos":3,"name":{"nl":"Dubbele Espresso","en":"Double Espresso","de":"Doppelter Espresso"},"desc":{"nl":null,"en":null,"de":null},"price_cents":450,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-4","kind":"drink","cat":"hot","pos":4,"name":{"nl":"Cappuccino","en":"Cappuccino","de":"Cappuccino"},"desc":{"nl":null,"en":null,"de":null},"price_cents":350,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-5","kind":"drink","cat":"hot","pos":5,"name":{"nl":"Latte Macchiato","en":"Latte Macchiato","de":"Latte Macchiato"},"desc":{"nl":null,"en":null,"de":null},"price_cents":395,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-6","kind":"drink","cat":"hot","pos":6,"name":{"nl":"Warme Chocolademelk","en":"Hot Chocolate","de":"Heiße Schokolade"},"desc":{"nl":null,"en":null,"de":null},"price_cents":350,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-7","kind":"drink","cat":"hot","pos":7,"name":{"nl":"IJskoffie","en":"Iced Coffee","de":"Eiskaffee"},"desc":{"nl":null,"en":null,"de":null},"price_cents":395,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-hot-8","kind":"drink","cat":"hot","pos":8,"name":{"nl":"Irish Coffee","en":"Irish Coffee","de":"Irish Coffee"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-0","kind":"drink","cat":"soft","pos":0,"name":{"nl":"Coca-Cola","en":"Coca-Cola","de":"Coca-Cola"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-1","kind":"drink","cat":"soft","pos":1,"name":{"nl":"Coca-Cola Zero","en":"Coca-Cola Zero","de":"Coca-Cola Zero"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-2","kind":"drink","cat":"soft","pos":2,"name":{"nl":"Fanta","en":"Fanta","de":"Fanta"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-3","kind":"drink","cat":"soft","pos":3,"name":{"nl":"Fanta 0","en":"Fanta 0","de":"Fanta 0"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-4","kind":"drink","cat":"soft","pos":4,"name":{"nl":"7UP","en":"7UP","de":"7UP"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-5","kind":"drink","cat":"soft","pos":5,"name":{"nl":"7UP Zero","en":"7UP Zero","de":"7UP Zero"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-6","kind":"drink","cat":"soft","pos":6,"name":{"nl":"Bitter Lemon","en":"Bitter Lemon","de":"Bitter Lemon"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-7","kind":"drink","cat":"soft","pos":7,"name":{"nl":"Tonic","en":"Tonic","de":"Tonic"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-8","kind":"drink","cat":"soft","pos":8,"name":{"nl":"Spa Blauw","en":"Still Water","de":"Mineralwasser still"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-9","kind":"drink","cat":"soft","pos":9,"name":{"nl":"Spa Rood","en":"Sparkling Water","de":"Mineralwasser sprudel"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-10","kind":"drink","cat":"soft","pos":10,"name":{"nl":"Lipton Ice Tea Lemon","en":"Lipton Ice Tea Lemon","de":"Lipton Ice Tea Lemon"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-11","kind":"drink","cat":"soft","pos":11,"name":{"nl":"Lipton Ice Tea Peach","en":"Lipton Ice Tea Peach","de":"Lipton Ice Tea Peach"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-12","kind":"drink","cat":"soft","pos":12,"name":{"nl":"Lipton Ice Tea Green","en":"Lipton Ice Tea Green","de":"Lipton Ice Tea Green"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-13","kind":"drink","cat":"soft","pos":13,"name":{"nl":"Lipton Ice Tea Green Zero","en":"Lipton Ice Tea Green Zero","de":"Lipton Ice Tea Green Zero"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-14","kind":"drink","cat":"soft","pos":14,"name":{"nl":"Appelsap","en":"Apple Juice","de":"Apfelsaft"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-15","kind":"drink","cat":"soft","pos":15,"name":{"nl":"Multivitaminasap","en":"Multivitamin Juice","de":"Multivitaminsaft"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-16","kind":"drink","cat":"soft","pos":16,"name":{"nl":"Sinaasappelsap","en":"Orange Juice","de":"Orangensaft"},"desc":{"nl":null,"en":null,"de":null},"price_cents":320,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-17","kind":"drink","cat":"soft","pos":17,"name":{"nl":"Fristi","en":"Fristi","de":"Fristi"},"desc":{"nl":null,"en":null,"de":null},"price_cents":325,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-18","kind":"drink","cat":"soft","pos":18,"name":{"nl":"Chocomel","en":"Chocolate Milk","de":"Schokomilch"},"desc":{"nl":null,"en":null,"de":null},"price_cents":325,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-19","kind":"drink","cat":"soft","pos":19,"name":{"nl":"Spezi (Cola/Fanta)","en":"Spezi (Cola/Fanta)","de":"Spezi (Cola/Fanta)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":300,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-20","kind":"drink","cat":"soft","pos":20,"name":{"nl":"Red Bull","en":"Red Bull","de":"Red Bull"},"desc":{"nl":null,"en":null,"de":null},"price_cents":695,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-soft-21","kind":"drink","cat":"soft","pos":21,"name":{"nl":"Red Bull Sugar Free","en":"Red Bull Sugar Free","de":"Red Bull Sugar Free"},"desc":{"nl":null,"en":null,"de":null},"price_cents":695,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-cocktail-0","kind":"drink","cat":"cocktail","pos":0,"name":{"nl":"Aperol Spritz","en":"Aperol Spritz","de":"Aperol Spritz"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-cocktail-1","kind":"drink","cat":"cocktail","pos":1,"name":{"nl":"Gin Tonic","en":"Gin Tonic","de":"Gin Tonic"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-cocktail-2","kind":"drink","cat":"cocktail","pos":2,"name":{"nl":"Bacardi Cola","en":"Bacardi Cola","de":"Bacardi Cola"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-cocktail-3","kind":"drink","cat":"cocktail","pos":3,"name":{"nl":"Whisky Cola","en":"Whisky Cola","de":"Whisky Cola"},"desc":{"nl":null,"en":null,"de":null},"price_cents":850,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-cocktail-4","kind":"drink","cat":"cocktail","pos":4,"name":{"nl":"Mojito","en":"Mojito","de":"Mojito"},"desc":{"nl":null,"en":null,"de":null},"price_cents":820,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-0","kind":"drink","cat":"wine","pos":0,"name":{"nl":"Chardonnay (glas)","en":"Chardonnay (glass)","de":"Chardonnay (Glas)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":475,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-1","kind":"drink","cat":"wine","pos":1,"name":{"nl":"Cabernet Sauvignon (glas)","en":"Cabernet Sauvignon (glass)","de":"Cabernet Sauvignon (Glas)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":475,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-2","kind":"drink","cat":"wine","pos":2,"name":{"nl":"Merlot (glas)","en":"Merlot (glass)","de":"Merlot (Glas)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":475,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-3","kind":"drink","cat":"wine","pos":3,"name":{"nl":"Rosé (glas)","en":"Rosé (glass)","de":"Rosé (Glas)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":475,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-4","kind":"drink","cat":"wine","pos":4,"name":{"nl":"Zoete Witte Wijn (glas)","en":"Sweet White Wine (glass)","de":"Süßer Weißwein (Glas)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":475,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-5","kind":"drink","cat":"wine","pos":5,"name":{"nl":"Prosecco (glas)","en":"Prosecco (glass)","de":"Prosecco (Glas)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":550,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-6","kind":"drink","cat":"wine","pos":6,"name":{"nl":"Witte Wijn (fles)","en":"White Wine (bottle)","de":"Weißwein (Flasche)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1995,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-7","kind":"drink","cat":"wine","pos":7,"name":{"nl":"Rode Wijn (fles)","en":"Red Wine (bottle)","de":"Rotwein (Flasche)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1995,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-wine-8","kind":"drink","cat":"wine","pos":8,"name":{"nl":"Rosé Wijn (fles)","en":"Rosé Wine (bottle)","de":"Roséwein (Flasche)"},"desc":{"nl":null,"en":null,"de":null},"price_cents":1995,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-0","kind":"drink","cat":"beer","pos":0,"name":{"nl":"Tap bier","en":"Draught beer","de":"Bier vom Fass"},"desc":{"nl":null,"en":null,"de":null},"price_cents":340,"vat_rate":21,"orderable":false,"orderable_note":"draught","prep_minutes":null,"options":[]},{"id":"d-beer-1","kind":"drink","cat":"beer","pos":1,"name":{"nl":"Groot tapbier","en":"Large draught beer","de":"Großes Fassbier"},"desc":{"nl":null,"en":null,"de":null},"price_cents":680,"vat_rate":21,"orderable":false,"orderable_note":"draught","prep_minutes":null,"options":[]},{"id":"d-beer-2","kind":"drink","cat":"beer","pos":2,"name":{"nl":"Heineken","en":"Heineken","de":"Heineken"},"desc":{"nl":null,"en":null,"de":null},"price_cents":340,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-3","kind":"drink","cat":"beer","pos":3,"name":{"nl":"Hertog Jan Bier","en":"Hertog Jan Bier","de":"Hertog Jan Bier"},"desc":{"nl":null,"en":null,"de":null},"price_cents":340,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-4","kind":"drink","cat":"beer","pos":4,"name":{"nl":"Radler 2.0%","en":"Radler 2.0%","de":"Radler 2.0%"},"desc":{"nl":null,"en":null,"de":null},"price_cents":425,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-5","kind":"drink","cat":"beer","pos":5,"name":{"nl":"Radler citroen 0.0 Grolsch","en":"Radler Lemon 0.0 Grolsch","de":"Radler Zitrone 0.0 Grolsch"},"desc":{"nl":null,"en":null,"de":null},"price_cents":450,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-6","kind":"drink","cat":"beer","pos":6,"name":{"nl":"Radler citroen 0.0 Amstel","en":"Radler Lemon 0.0 Amstel","de":"Radler Zitrone 0.0 Amstel"},"desc":{"nl":null,"en":null,"de":null},"price_cents":450,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-7","kind":"drink","cat":"beer","pos":7,"name":{"nl":"Duvel 8,5%","en":"Duvel 8.5%","de":"Duvel 8,5%"},"desc":{"nl":null,"en":null,"de":null},"price_cents":575,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-8","kind":"drink","cat":"beer","pos":8,"name":{"nl":"Duvel Blond 6,66%","en":"Duvel Blond 6.66%","de":"Duvel Blond 6,66%"},"desc":{"nl":null,"en":null,"de":null},"price_cents":550,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-9","kind":"drink","cat":"beer","pos":9,"name":{"nl":"Duvel Tripel Hop 9,5%","en":"Duvel Tripel Hop 9.5%","de":"Duvel Tripel Hop 9,5%"},"desc":{"nl":null,"en":null,"de":null},"price_cents":625,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-10","kind":"drink","cat":"beer","pos":10,"name":{"nl":"Desperados","en":"Desperados","de":"Desperados"},"desc":{"nl":null,"en":null,"de":null},"price_cents":550,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-11","kind":"drink","cat":"beer","pos":11,"name":{"nl":"Affligem Blond","en":"Affligem Blond","de":"Affligem Blond"},"desc":{"nl":null,"en":null,"de":null},"price_cents":550,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-12","kind":"drink","cat":"beer","pos":12,"name":{"nl":"La Chouffe Blond","en":"La Chouffe Blond","de":"La Chouffe Blond"},"desc":{"nl":null,"en":null,"de":null},"price_cents":575,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-beer-13","kind":"drink","cat":"beer","pos":13,"name":{"nl":"Liefmans Bier 0.0","en":"Liefmans Beer 0.0","de":"Liefmans Bier 0.0"},"desc":{"nl":null,"en":null,"de":null},"price_cents":550,"vat_rate":9,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-0","kind":"drink","cat":"spirit","pos":0,"name":{"nl":"Amaretto","en":"Amaretto","de":"Amaretto"},"desc":{"nl":null,"en":null,"de":null},"price_cents":480,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-1","kind":"drink","cat":"spirit","pos":1,"name":{"nl":"Limoncello","en":"Limoncello","de":"Limoncello"},"desc":{"nl":null,"en":null,"de":null},"price_cents":450,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-2","kind":"drink","cat":"spirit","pos":2,"name":{"nl":"Jonge Jenever","en":"Jonge Jenever","de":"Junger Genever"},"desc":{"nl":null,"en":null,"de":null},"price_cents":395,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-3","kind":"drink","cat":"spirit","pos":3,"name":{"nl":"Schrobbelèr","en":"Schrobbelèr","de":"Schrobbelèr"},"desc":{"nl":null,"en":null,"de":null},"price_cents":450,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-4","kind":"drink","cat":"spirit","pos":4,"name":{"nl":"Gordon Gin","en":"Gordon Gin","de":"Gordon Gin"},"desc":{"nl":null,"en":null,"de":null},"price_cents":450,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-5","kind":"drink","cat":"spirit","pos":5,"name":{"nl":"Cointreau","en":"Cointreau","de":"Cointreau"},"desc":{"nl":null,"en":null,"de":null},"price_cents":480,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-6","kind":"drink","cat":"spirit","pos":6,"name":{"nl":"Kahlua","en":"Kahlua","de":"Kahlua"},"desc":{"nl":null,"en":null,"de":null},"price_cents":480,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-7","kind":"drink","cat":"spirit","pos":7,"name":{"nl":"Licor 43","en":"Licor 43","de":"Licor 43"},"desc":{"nl":null,"en":null,"de":null},"price_cents":500,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-8","kind":"drink","cat":"spirit","pos":8,"name":{"nl":"Jack Daniel's","en":"Jack Daniel's","de":"Jack Daniel's"},"desc":{"nl":null,"en":null,"de":null},"price_cents":495,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-9","kind":"drink","cat":"spirit","pos":9,"name":{"nl":"Glen Talloch Whisky","en":"Glen Talloch Whisky","de":"Glen Talloch Whisky"},"desc":{"nl":null,"en":null,"de":null},"price_cents":480,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-10","kind":"drink","cat":"spirit","pos":10,"name":{"nl":"Bacardi Spiced","en":"Bacardi Spiced","de":"Bacardi Spiced"},"desc":{"nl":null,"en":null,"de":null},"price_cents":490,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-11","kind":"drink","cat":"spirit","pos":11,"name":{"nl":"Absolut Vodka","en":"Absolut Vodka","de":"Absolut Vodka"},"desc":{"nl":null,"en":null,"de":null},"price_cents":490,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]},{"id":"d-spirit-12","kind":"drink","cat":"spirit","pos":12,"name":{"nl":"Port Reserve Ruby","en":"Port Reserve Ruby","de":"Port Reserve Ruby"},"desc":{"nl":null,"en":null,"de":null},"price_cents":480,"vat_rate":21,"orderable":true,"orderable_note":"","prep_minutes":null,"options":[]}];
+var CATS={"nl":{"start":"Voorgerechten","main":"Hoofdgerechten","lunch":"Lunch & frituur","indo":"Authentieke Indonesische specialiteiten","veg":"Vegetarische gerechten","pancake":"Pannenkoeken","snack":"Borrelhapjes","kids":"Kindermenu","dessert":"Nagerechten","extra":"Extra's","hot":"Warme dranken","soft":"Frisdranken","cocktail":"Cocktails","wine":"Wijnen","beer":"Bieren","spirit":"Likeuren & gedistilleerd"}};
+var CATORDER=['start','main','lunch','indo','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
+var BY={}; MENU.forEach(function(m){ BY[m.id]=m; });
+
+/* The draft lives in this browser and nowhere else. Every change the owner makes is recorded as an
+   OPERATION rather than as a new copy of the menu, because that is what the Worker will accept
+   later: one endpoint per verb, and a price edit that never touches an order already placed. */
+var DRAFT={edits:{},added:[],removed:{},order:{}};
+try{ var d=JSON.parse(localStorage.getItem('ok-beheer')||'null'); if(d&&d.edits) DRAFT=d; }catch(e){}
+function store(){ try{ localStorage.setItem('ok-beheer',JSON.stringify(DRAFT)); }catch(e){} }
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function eur(c){ return '€ '+Math.floor(c/100)+','+String(Math.abs(c)%100).padStart(2,'0'); }
+function cents(s){ s=String(s).replace(/[^0-9,.\-]/g,'').replace(',','.'); var n=parseFloat(s); return isNaN(n)?null:Math.round(n*100); }
+function toast(m){ var el=document.getElementById('toast'); el.textContent=m; el.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(function(){el.classList.remove('on');},2200); }
+
+/* `orderable` currently carries TWO different facts: "sold out today" (the owner's daily toggle)
+   and "never orderable online" (the fondue needs a day's notice; draught beer cannot be carried
+   home). They are not the same thing and must not share one checkbox — unticking it for the
+   fondue would quietly put a reservation-only dish on the takeaway menu. Here the second kind is
+   shown as a locked state with its reason. Whether the database should separate them is a
+   question for the gate, raised from this sandbox rather than guessed at. */
+function lockShort(m){ return m.orderable_note==='draught' ? 'alleen aan de bar' : 'reserveren'; }
+function lockWhy(m){ return m.orderable_note==='draught'
+  ? 'Tapbier kan niet mee naar huis — staat niet op de afhaalkaart.'
+  : 'Reserveren, minimaal 1 dag van tevoren — staat niet op de afhaalkaart.'; }
+
+/* the item as the owner currently sees it: the real row with their unsaved edits laid over it */
+function view(id){ var base=BY[id]||DRAFT.added.filter(function(a){return a.id===id;})[0]; if(!base) return null;
+  var e=DRAFT.edits[id]||{}, out={};
+  Object.keys(base).forEach(function(k){ out[k]=base[k]; });
+  Object.keys(e).forEach(function(k){
+    if(k==='name'||k==='desc'){ out[k]={}; Object.keys(base[k]||{}).forEach(function(l){out[k][l]=base[k][l];}); Object.keys(e[k]).forEach(function(l){out[k][l]=e[k][l];}); }
+    else out[k]=e[k]; });
+  return out; }
+function edit(id,k,v){ if(!DRAFT.edits[id]) DRAFT.edits[id]={}; DRAFT.edits[id][k]=v; store(); patchRow(id); refreshCount(); }
+function editLang(id,k,lang,v){ if(!DRAFT.edits[id]) DRAFT.edits[id]={}; if(!DRAFT.edits[id][k]) DRAFT.edits[id][k]={}; DRAFT.edits[id][k][lang]=v; store(); patchRow(id); refreshCount(); }
+/* Update the one row's summary without touching the editor below it. Text nodes and a class only —
+   rebuilding the header would destroy the checkbox or input the owner just used. Rebuilding the
+   whole list, which is what this used to do, destroyed the field they were still typing in and the
+   edit was lost on the way to the payload. */
+function patchRow(id){ var el=document.querySelector('.row[data-id="'+CSS.escape(id)+'"]'); if(!el) return; var m=view(id);
+  var isNew=DRAFT.added.some(function(a){return a.id===id;});
+  el.querySelector('.nm').textContent=(m.name.nl||'(zonder naam)')+(isNew?' NIEUW':'');
+  el.querySelector('.pr').textContent=eur(m.price_cents||0);
+  el.querySelector('.vat').textContent='btw '+m.vat_rate+'%';
+  el.classList.toggle('soldout',m.orderable===false); }
+
+function allIds(){ var ids=MENU.map(function(m){return m.id;}).concat(DRAFT.added.map(function(a){return a.id;}));
+  return ids.filter(function(i){ return !DRAFT.removed[i]; }); }
+function inCat(cat){ var ids=allIds().filter(function(i){ return view(i).cat===cat; });
+  var ord=DRAFT.order[cat];
+  if(ord){ var pos={}; ord.forEach(function(i,n){pos[i]=n;});
+    ids.sort(function(a,b){ var pa=pos[a],pb=pos[b]; if(pa==null&&pb==null) return view(a).pos-view(b).pos; if(pa==null) return 1; if(pb==null) return -1; return pa-pb; }); }
+  else ids.sort(function(a,b){ return view(a).pos-view(b).pos; });
+  return ids; }
+
+/* ---- filters ---- */
+var filterCat='', query='', onlySold=false;
+function visible(id){ var m=view(id);
+  if(filterCat && m.cat!==filterCat) return false;
+  if(onlySold && m.orderable!==false) return false;
+  if(query){ var q=query.toLowerCase();
+    var hay=[m.name.nl,m.name.en,m.name.de,(m.desc||{}).nl||''].join(' ').toLowerCase();
+    if(hay.indexOf(q)<0) return false; }
+  return true; }
+
+/* ---- render ---- */
+function renderCats(){ var el=document.getElementById('cats');
+  el.innerHTML='<button type="button" data-cat="" aria-pressed="'+(filterCat===''?'true':'false')+'">Alles</button>'+
+    CATORDER.filter(function(c){ return allIds().some(function(i){return view(i).cat===c;}); }).map(function(c){
+      return '<button type="button" data-cat="'+esc(c)+'" aria-pressed="'+(filterCat===c?'true':'false')+'">'+esc(CATS.nl[c]||c)+'</button>'; }).join('');
+  el.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){ filterCat=b.dataset.cat; renderCats(); renderList(); }); }); }
+
+function renderList(){ var root=document.getElementById('list'); root.innerHTML='';
+  var open=root.dataset.open||'';
+  CATORDER.forEach(function(cat){
+    var ids=inCat(cat).filter(visible); if(!ids.length) return;
+    var h=document.createElement('div'); h.className='cat-h';
+    h.innerHTML='<h2>'+esc(CATS.nl[cat]||cat)+'</h2><span class="n">'+ids.length+'</span>';
+    root.appendChild(h);
+    var box=document.createElement('div'); box.className='rows'; box.dataset.cat=cat;
+    ids.forEach(function(id){ box.appendChild(rowEl(id,cat,id===open)); });
+    root.appendChild(box); });
+  if(!root.children.length) root.innerHTML='<p class="note">Niets gevonden.</p>';
+  wireDrag(); }
+
+function rowEl(id,cat,openIt){ var m=view(id), el=document.createElement('div');
+  el.className='row'+(m.orderable===false?' soldout':''); el.dataset.id=id;
+  var isNew=DRAFT.added.some(function(a){return a.id===id;});
+  el.innerHTML='<div class="rhead">'+
+    '<button class="grip" type="button" aria-label="Versleep om te ordenen" title="Versleep om te ordenen">⠿</button>'+
+    '<span class="moves"><button type="button" data-mv="-1" aria-label="Omhoog">▲</button><button type="button" data-mv="1" aria-label="Omlaag">▼</button></span>'+
+    '<span class="nm">'+esc(m.name.nl||'(zonder naam)')+(isNew?' <span class="lang-tag">NIEUW</span>':'')+'</span>'+
+    '<span class="pr">'+eur(m.price_cents||0)+'</span>'+
+    '<span class="vat">btw '+m.vat_rate+'%</span>'+
+    (m.orderable_note ? '<span class="locked" title="'+esc(lockWhy(m))+'">'+esc(lockShort(m))+'</span>'
+                      : '<label class="so"><input type="checkbox" '+(m.orderable===false?'checked':'')+'> Uitverkocht</label>')+
+    '<button class="btn btn-quiet" type="button" data-act="edit">'+(openIt?'Sluiten':'Bewerken')+'</button>'+
+  '</div><div class="edit" '+(openIt?'':'hidden')+'></div>';
+  var so=el.querySelector('.so input');
+  if(so) so.addEventListener('change',function(e){ edit(id,'orderable',!e.target.checked); toast(e.target.checked?'Uitverkocht — direct zichtbaar voor klanten':'Weer te bestellen'); });
+  el.querySelectorAll('[data-mv]').forEach(function(b){ b.addEventListener('click',function(){ move(cat,id,parseInt(b.dataset.mv,10)); }); });
+  el.querySelector('[data-act=edit]').addEventListener('click',function(){
+    var root=document.getElementById('list'); root.dataset.open=(root.dataset.open===id?'':id); renderList(); });
+  if(openIt) fillEditor(el.querySelector('.edit'),id);
+  return el; }
+
+/* ---- the editor for one dish ---- */
+var LANGS=[['nl','Nederlands'],['en','English'],['de','Deutsch']];
+function fillEditor(box,id){ var m=view(id);
+  var h='';
+  h+='<div class="cols">'+LANGS.map(function(L){ return '<div class="fld"><label>Naam <span class="lang-tag">'+L[0].toUpperCase()+'</span></label>'+
+      '<input type="text" data-f="name" data-l="'+L[0]+'" value="'+esc((m.name||{})[L[0]]||'')+'" maxlength="80"></div>'; }).join('')+'</div>';
+  h+='<div class="cols">'+LANGS.map(function(L){ return '<div class="fld"><label>Omschrijving <span class="lang-tag">'+L[0].toUpperCase()+'</span></label>'+
+      '<textarea data-f="desc" data-l="'+L[0]+'" maxlength="300">'+esc((m.desc||{})[L[0]]||'')+'</textarea></div>'; }).join('')+'</div>';
+  h+='<div class="cols">'+
+    '<div class="fld"><label>Prijs</label><input type="text" inputmode="decimal" data-f="price" value="'+(((m.price_cents||0)/100).toFixed(2).replace('.',','))+'"></div>'+
+    '<div class="fld"><label>Bereidingstijd (min)</label><input type="number" min="0" max="180" data-f="prep" value="'+(m.prep_minutes==null?'':m.prep_minutes)+'" placeholder="standaard 45"></div>'+
+    '<div class="fld"><label>Btw</label><select data-f="vat"><option value="9"'+(m.vat_rate===9?' selected':'')+'>9% — eten &amp; frisdrank</option><option value="21"'+(m.vat_rate===21?' selected':'')+'>21% — alcohol</option></select></div>'+
+  '</div>';
+  if(m.orderable_note) h+='<div class="stub"><strong>Niet op de afhaalkaart</strong><p class="note" style="margin:4px 0 0">'+esc(lockWhy(m))+
+    ' Dit is geen dagelijkse knop zoals uitverkocht — het hoort bij wat het gerecht is. Wilt u dit veranderen, laat het ons weten.</p></div>';
+  h+='<p class="note warn" data-vatwarn hidden>Het btw-tarief staat op het door de eigenaar ondertekende blad. Wijzig het alleen als dat blad wijzigt — niet omdat een categorie er anders uitziet.</p>';
+  /* photos: the field is hidden rather than broken while R2 is off and the question is open */
+  h+='<div class="stub"><strong>Foto</strong><p class="note" style="margin:4px 0 0">Nog niet ingeschakeld. Foto-opslag (Cloudflare R2) staat uit op de account van het café, en of er überhaupt foto\'s komen is vraag 7 aan de eigenaar. Zodra dat ja is, komt hier een uploadveld.</p></div>';
+  h+=optionsEditor(id,m);
+  h+='<div><button class="btn btn-quiet" type="button" data-act="rm">Verwijderen van de kaart</button> '+
+     '<span class="note">Blijft in de geschiedenis staan: oude bestellingen bewaren hun eigen naam en prijs.</span></div>';
+  box.innerHTML=h;
+
+  box.querySelectorAll('[data-f=name],[data-f=desc]').forEach(function(el){
+    el.addEventListener('change',function(){ editLang(id,el.dataset.f,el.dataset.l,el.value); }); });
+  box.querySelector('[data-f=price]').addEventListener('change',function(e){ var c=cents(e.target.value);
+    if(c==null||c<0){ toast('Geen geldige prijs'); return; } edit(id,'price_cents',c); });
+  box.querySelector('[data-f=prep]').addEventListener('change',function(e){ var v=e.target.value.trim();
+    edit(id,'prep_minutes', v===''?null:Math.max(0,Math.min(180,parseInt(v,10)||0))); });
+  var vatSel=box.querySelector('[data-f=vat]'), vw=box.querySelector('[data-vatwarn]');
+  vatSel.addEventListener('change',function(e){ vw.hidden=false; edit(id,'vat_rate',parseInt(e.target.value,10)); });
+  box.querySelector('[data-act=rm]').addEventListener('click',function(){
+    DRAFT.removed[id]=true; delete DRAFT.edits[id]; store();
+    document.getElementById('list').dataset.open=''; refresh(); toast('Van de kaart gehaald'); });
+  wireOptions(box,id); }
+
+/* ---- options: the one place Part Two can change what a customer pays ---- */
+function optionsEditor(id,m){ var gs=m.options||[];
+  if(!gs.length) return '<p class="note">Dit gerecht heeft geen keuzes. (Keuzes toevoegen komt in de volgende stap.)</p>';
+  return gs.map(function(g){
+    return '<div class="grp" data-g="'+esc(g.id)+'"><div class="grp-h"><span class="t">'+esc(g.label.nl)+'</span>'+
+      '<span class="src'+(g.source==='implied'?' implied':'')+'">'+(g.source==='implied'?'niet op de kaart':'van de kaart')+'</span></div>'+
+      g.options.map(function(o){ var pc=optPrice(id,g.id,o.id);
+        return '<div class="opt'+(pc>0?' priced':'')+'" data-o="'+esc(o.id)+'"><span class="l">'+esc(o.label.nl)+'</span>'+
+          '<span class="price">+<input type="text" inputmode="decimal" aria-label="Meerprijs voor '+esc(o.label.nl)+'" value="'+((pc/100).toFixed(2).replace('.',','))+'"></span>'+
+          '<span class="inh">btw '+m.vat_rate+'% — zelfde als het gerecht</span></div>'; }).join('')+
+      '</div>'; }).join('')+
+    '<p class="note warn" data-optwarn'+(anyPriced(id)?'':' hidden')+'>Een keuze met een meerprijs verandert wat de klant betaalt. Het btw-tarief volgt het gerecht (zie hierboven), en zodra een keuze geld kost moet de eigenaar dat blad opnieuw ondertekenen.</p>'; }
+function optPrice(id,gid,oid){ var e=(DRAFT.edits[id]||{}).optPrices||{}; return e[gid+'/'+oid]||0; }
+function anyPriced(id){ var e=(DRAFT.edits[id]||{}).optPrices||{}; return Object.keys(e).some(function(k){ return e[k]>0; }); }
+function wireOptions(box,id){ box.querySelectorAll('.grp .opt').forEach(function(row){
+  var gid=row.closest('.grp').dataset.g, oid=row.dataset.o, inp=row.querySelector('input');
+  inp.addEventListener('change',function(){ var c=cents(inp.value);
+    if(c==null||c<0){ toast('Geen geldige meerprijs'); inp.value='0,00'; return; }
+    if(!DRAFT.edits[id]) DRAFT.edits[id]={}; if(!DRAFT.edits[id].optPrices) DRAFT.edits[id].optPrices={};
+    DRAFT.edits[id].optPrices[gid+'/'+oid]=c; store();
+    row.classList.toggle('priced',c>0);
+    var w=box.querySelector('[data-optwarn]'); if(w) w.hidden=!anyPriced(id);
+    refreshCount(); }); }); }
+
+/* ---- reordering: drag for the tablet, arrows for everyone else ----
+   A drag-only reorder is unusable with a keyboard and awkward with a trembling hand, so the same
+   operation has two doors. Both write the SAME thing: the category's full id order. */
+function move(cat,id,dir){ var ids=inCat(cat), i=ids.indexOf(id), j=i+dir;
+  if(i<0||j<0||j>=ids.length) return;
+  ids.splice(j,0,ids.splice(i,1)[0]); DRAFT.order[cat]=ids; store();
+  refresh(); var el=document.querySelector('.row[data-id="'+id+'"]'); if(el) el.querySelector('.grip').focus(); }
+
+function wireDrag(){ document.querySelectorAll('.rows').forEach(function(box){
+  box.querySelectorAll('.grip').forEach(function(grip){
+    grip.addEventListener('pointerdown',function(ev){
+      if(ev.button!==0&&ev.pointerType==='mouse') return;
+      var row=grip.closest('.row'), cat=box.dataset.cat, started=false;
+      grip.setPointerCapture(ev.pointerId);
+      function onMove(e){
+        if(!started){ started=true; row.classList.add('drag'); }
+        var over=document.elementFromPoint(e.clientX,e.clientY); over=over&&over.closest('.row');
+        box.querySelectorAll('.row.over').forEach(function(r){r.classList.remove('over');});
+        if(over&&over!==row&&over.parentNode===box) over.classList.add('over');
+        e.preventDefault(); }
+      function onUp(e){
+        grip.removeEventListener('pointermove',onMove); grip.removeEventListener('pointerup',onUp); grip.removeEventListener('pointercancel',onUp);
+        row.classList.remove('drag');
+        var tgt=box.querySelector('.row.over'); box.querySelectorAll('.row.over').forEach(function(r){r.classList.remove('over');});
+        if(!started||!tgt) return;
+        var ids=inCat(cat), from=ids.indexOf(row.dataset.id), to=ids.indexOf(tgt.dataset.id);
+        if(from<0||to<0||from===to) return;
+        ids.splice(to,0,ids.splice(from,1)[0]); DRAFT.order[cat]=ids; store(); refresh(); }
+      grip.addEventListener('pointermove',onMove); grip.addEventListener('pointerup',onUp); grip.addEventListener('pointercancel',onUp); }); }); }); }
+
+/* ---- a new dish ---- */
+var newSeq=0;
+document.getElementById('add').addEventListener('click',function(){
+  var cat=filterCat||'main';
+  var id='nieuw-'+(++newSeq)+'-'+Date.now().toString(36).slice(-4);
+  var maxPos=allIds().filter(function(i){return view(i).cat===cat;}).reduce(function(a,i){return Math.max(a,view(i).pos||0);},-1);
+  DRAFT.added.push({id:id,kind:(['hot','soft','beer','wine','cocktail','spirit'].indexOf(cat)>=0?'drink':'food'),
+    cat:cat,pos:maxPos+1,name:{nl:'',en:'',de:''},desc:{nl:'',en:'',de:''},
+    price_cents:0,vat_rate:(['beer','wine','cocktail','spirit'].indexOf(cat)>=0?21:9),orderable:true,orderable_note:'',options:[],prep_minutes:null});
+  store(); filterCat=cat; document.getElementById('list').dataset.open=id; refresh();
+  var el=document.querySelector('.row[data-id="'+id+'"] input[data-f=name][data-l=nl]'); if(el) el.focus();
+  toast('Nieuw gerecht in '+(CATS.nl[cat]||cat)); });
+
+/* ---- what would actually be sent ---- */
+function ops(){ var out=[];
+  Object.keys(DRAFT.edits).forEach(function(id){ if(DRAFT.removed[id]) return;
+    var e=DRAFT.edits[id], fields={}, optp=null;
+    Object.keys(e).forEach(function(k){ if(k==='optPrices') optp=e[k]; else fields[k]=e[k]; });
+    if(Object.keys(fields).length) out.push({op:'update',id:id,fields:fields});
+    if(optp) Object.keys(optp).forEach(function(k){ var p=k.split('/');
+      out.push({op:'option_price',item_id:id,group_id:p[0],option_id:p[1],price_cents:optp[k]}); }); });
+  DRAFT.added.forEach(function(a){ if(!DRAFT.removed[a.id]) out.push({op:'create',item:a}); });
+  Object.keys(DRAFT.removed).forEach(function(id){ out.push({op:'archive',id:id}); });
+  Object.keys(DRAFT.order).forEach(function(cat){ out.push({op:'reorder',cat:cat,ids:DRAFT.order[cat]}); });
+  return out; }
+function refreshCount(){ var n=ops().length;
+  document.getElementById('count').textContent=n?(n===1?'1 wijziging':n+' wijzigingen'):'Geen wijzigingen';
+  document.getElementById('save').disabled=!n; document.getElementById('reset').disabled=!n; }
+
+document.getElementById('save').addEventListener('click',function(){
+  document.getElementById('payload').textContent=JSON.stringify(ops(),null,1);
+  document.getElementById('modal').classList.add('on'); document.getElementById('mx').focus(); });
+document.getElementById('mx').addEventListener('click',function(){ document.getElementById('modal').classList.remove('on'); });
+document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('on'); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') document.getElementById('modal').classList.remove('on'); });
+document.getElementById('reset').addEventListener('click',function(){
+  DRAFT={edits:{},added:[],removed:{},order:{}}; store(); document.getElementById('list').dataset.open=''; refresh(); toast('Terug naar de kaart zoals hij nu is'); });
+
+document.getElementById('q').addEventListener('input',function(e){ query=e.target.value.trim(); renderList(); });
+document.getElementById('only-so').addEventListener('click',function(){ onlySold=!onlySold;
+  this.setAttribute('aria-pressed',String(onlySold)); this.classList.toggle('btn-gold',onlySold); renderList(); });
+
+function refresh(){ renderCats(); renderList(); refreshCount(); }
+refresh();
+</script>
+</body>
+</html>

@@ -20,3 +20,7 @@ data/
 # The ordering app itself (own hostname, own Worker). Q28 makes /bestellen on www a REDIRECT to
 # the subdomain, so publishing these here would contradict a ruling, not merely be untidy.
 ordering/
+# The menu manager — STAFF ONLY. It is not a page with a private URL; in production it sits behind
+# Cloudflare Access on the ordering Worker. Published under www it would be an open edit screen for
+# the café's prices, which is the worst thing in this repo to leak.
+beheer/
