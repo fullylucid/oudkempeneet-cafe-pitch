@@ -1618,7 +1618,12 @@ document.querySelectorAll('.lang button').forEach(b=>{
   var RES_ENDPOINT='https://formsubmit.co/ajax/'+RES_BOX[0]+String.fromCharCode(64)+RES_BOX[1];
   function deliverReservation(service,data){
     return fetch(RES_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-      body:JSON.stringify(data)}).then(function(r){if(!r.ok)throw r.status;return r.json().catch(function(){return{};});});
+      body:JSON.stringify(data)}).then(function(r){if(!r.ok)throw r.status;return r.json().catch(function(){return{};});})
+      /* FormSubmit answers 200 with {"success":"false"} for a soft refusal — an address that was
+         never activated, a rate limit, a spam block. Checking only r.ok told the guest "Bedankt,
+         wij nemen spoedig contact op" while the café received nothing: a lost booking that looks
+         to everyone like a made one. Treat a false body as the failure it is. */
+      .then(function(j){ if(j&&String(j.success)==='false') throw (j.message||'rejected'); return j; });
   }
 
   function onSubmit(e){
