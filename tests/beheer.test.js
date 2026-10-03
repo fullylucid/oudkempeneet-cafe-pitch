@@ -189,6 +189,65 @@ const ops = page => page.evaluate(() => { document.getElementById('save').click(
     }
   }
 
+  { // the manager reads in the café's three languages — Schyler and Zach in English, the café in Dutch
+    const p = await fresh();
+    const nl = await p.evaluate(() => ({ h1: document.querySelector('h1').textContent, lang: document.documentElement.lang }));
+    ok(nl.h1 === 'Menukaart beheren' && nl.lang === 'nl', `Dutch is the default (got ${JSON.stringify(nl)})`);
+    await p.locator('.row[data-id="m-indo-3"] .so input').check(); await p.waitForTimeout(150);   // a draft to carry across
+    await p.locator('.lang button[data-lang="en"]').click(); await p.waitForTimeout(250);
+    const en = await p.evaluate(() => ({
+      h1: document.querySelector('h1').textContent, lang: document.documentElement.lang,
+      banner: document.querySelector('.sandbox').textContent, add: document.getElementById('add').textContent,
+      save: document.getElementById('save').textContent, ph: document.getElementById('q').placeholder,
+      count: document.getElementById('count').textContent,
+      chip: [...document.querySelectorAll('.cats button')][1].textContent,
+      steak: document.querySelector('.row[data-id="m-main-1"] .nm').textContent,
+      sold: document.querySelector('.row[data-id="m-main-1"] .so').textContent.trim(),
+      fondue: document.querySelector('.row[data-id="m-main-0"] .locked').textContent,
+      draftKept: document.querySelector('.row[data-id="m-indo-3"] .so input').checked }));
+    ok(en.h1 === 'Manage the menu' && en.lang === 'en', `switching to English renames the page (got ${en.h1}/${en.lang})`);
+    ok(/nothing is saved/.test(en.banner) && en.add === '+ New dish' && en.save === 'Save' && /Search/.test(en.ph),
+      `the chrome is English — banner, buttons, search (got ${JSON.stringify({ add: en.add, save: en.save, ph: en.ph })})`);
+    ok(en.chip !== 'Voorgerechten' && en.chip.length > 0, `categories come in English from the café's own menu (got "${en.chip}")`);
+    ok(en.steak !== 'Biefstuk' && en.steak.length > 0, `dish names show in English (Biefstuk → "${en.steak}")`);
+    ok(en.sold === 'Sold out' && en.fondue === 'reservation', `the row controls are English (got ${en.sold} / ${en.fondue})`);
+    ok(en.count === '1 change', `the change counter is English (got "${en.count}")`);
+    ok(en.draftKept, 'switching language does not throw away the draft');
+
+    // open an editor: labels, VAT options, the inherited-rate line and the option labels themselves
+    await p.locator('.row[data-id="m-indo-3"] [data-act=edit]').click(); await p.waitForTimeout(250);
+    const ed = await p.evaluate(() => { const r = document.querySelector('.row[data-id="m-indo-3"]');
+      return { labels: [...r.querySelectorAll('.fld label')].map(l => l.textContent.replace(/\s+(NL|EN|DE)$/, '').trim()),
+        vat: [...r.querySelectorAll('[data-f=vat] option')].map(o => o.textContent),
+        inh: r.querySelector('.opt .inh').textContent, q: r.querySelector('.grp-h .t').textContent,
+        nameFields: r.querySelectorAll('[data-f=name]').length, descFields: r.querySelectorAll('[data-f=desc]').length }; });
+    ok(ed.labels.includes('Name') && ed.labels.includes('Price') && ed.labels.includes('Prep time (min)'),
+      `editor labels are English (got ${ed.labels})`);
+    ok(/food/.test(ed.vat[0]) && /alcohol/.test(ed.vat[1]), `VAT choices are English (got ${ed.vat})`);
+    ok(ed.inh === 'VAT 9% — same as the dish', `the inherited-rate line — a gate condition — is translated, not dropped (got "${ed.inh}")`);
+    ok(ed.q === 'Bami or nasi?', `the dish's own question shows in English (got "${ed.q}")`);
+    ok(ed.nameFields === 3 && ed.descFields === 3, 'the CONTENT stays trilingual: all three name and description fields, whatever the interface language');
+
+    // nothing Dutch may leak into the English or German view. Compare against the dictionary itself,
+    // so a string added later as a Dutch literal fails here instead of quietly showing Dutch.
+    const leak = async (lang) => { await p.locator(`.lang button[data-lang="${lang}"]`).click(); await p.waitForTimeout(250);
+      const ed2 = await p.evaluate(() => !document.querySelector('.row[data-id="m-indo-3"] .edit').hidden);
+      if (!ed2) { await p.locator('.row[data-id="m-indo-3"] [data-act=edit]').click(); await p.waitForTimeout(200); }
+      return p.evaluate((l) => { const text = document.body.innerText;
+        return Object.entries(UI.nl).filter(([k, v]) => v !== UI[l][k] && !/[<{]/.test(v) && v.length >= 7 && text.includes(v)).map(([k]) => k); }, lang); };
+    const enLeak = await leak('en'), deLeak = await leak('de');
+    ok(enLeak.length === 0, `no Dutch interface text in the English view (leaked: ${enLeak})`);
+    ok(deLeak.length === 0, `no Dutch interface text in the German view (leaked: ${deLeak})`);
+    const de = await p.evaluate(() => ({ h1: document.querySelector('h1').textContent, lang: document.documentElement.lang }));
+    ok(de.h1 === 'Speisekarte verwalten' && de.lang === 'de', `German works too (got ${JSON.stringify(de)})`);
+
+    // the choice is remembered, and shared with the customer pages through ok-lang
+    await p.reload(); await p.waitForTimeout(400);
+    const kept = await p.evaluate(() => ({ h1: document.querySelector('h1').textContent, ls: localStorage.getItem('ok-lang') }));
+    ok(kept.h1 === 'Speisekarte verwalten' && kept.ls === 'de', `the language survives a reload, under the site's own key (got ${JSON.stringify(kept)})`);
+    await p.close();
+  }
+
   ok(errors.length === 0, 'no page errors: ' + errors.join(' | '));
   await browser.close();
   if (fails.length) { console.error('tests/beheer.test.js: ' + fails.length + ' of ' + n + ' checks FAILED');

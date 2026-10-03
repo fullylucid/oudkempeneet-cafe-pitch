@@ -35,6 +35,10 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 .btn-quiet{background:transparent;border-color:transparent;color:var(--ink-dim)}
 .btn-quiet:hover{color:var(--ink);border-color:var(--line)}
 .btn[disabled]{opacity:.45;cursor:default}
+.lang{display:inline-flex;border:1px solid rgba(122,106,87,.4);border-radius:2px;overflow:hidden}
+.lang button{font-size:12px;letter-spacing:.1em;padding:7px 8px;min-width:36px;min-height:36px;background:transparent;border:0;cursor:pointer;color:var(--ink-dim);border-right:1px solid rgba(122,106,87,.28)}
+.lang button:last-child{border-right:0}
+.lang button[aria-pressed="true"]{background:var(--accent-2);color:#241300;font-weight:600}
 
 /* search + category filter */
 .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
@@ -114,34 +118,35 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 </style>
 </head>
 <body>
-<div class="sandbox">Oefenversie — <b>er wordt niets opgeslagen</b>. Wijzigingen blijven alleen in deze browser staan.</div>
+<div class="sandbox" data-i18n-html="sandbox">Oefenversie — <b>er wordt niets opgeslagen</b>. Wijzigingen blijven alleen in deze browser staan.</div>
 
 <nav class="nav"><div class="nav-in">
-  <h1>Menukaart beheren</h1>
+  <h1 data-i18n="title">Menukaart beheren</h1>
   <span class="grow"></span>
-  <button class="btn" id="add" type="button">+ Nieuw gerecht</button>
+  <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="nl" aria-pressed="true">NL</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="de" aria-pressed="false">DE</button></div>
+  <button class="btn" id="add" type="button" data-i18n="add">+ Nieuw gerecht</button>
 </div></nav>
 
 <div class="wrap">
   <div class="tools">
-    <input type="search" id="q" placeholder="Zoek een gerecht of drankje…" aria-label="Zoeken">
-    <button class="btn btn-quiet" id="only-so" type="button" aria-pressed="false">Alleen uitverkocht</button>
+    <input type="search" id="q" placeholder="Zoek een gerecht of drankje…" aria-label="Zoeken" data-i18n-ph="search" data-i18n-aria="searchA">
+    <button class="btn btn-quiet" id="only-so" type="button" aria-pressed="false" data-i18n="onlySo">Alleen uitverkocht</button>
   </div>
   <div class="cats" id="cats" role="group" aria-label="Categorieën"></div>
   <div id="list"></div>
 </div>
 
 <div class="saveline">
-  <span class="c" id="count">Geen wijzigingen</span>
-  <button class="btn btn-quiet" id="reset" type="button" disabled>Alles terugzetten</button>
-  <button class="btn btn-gold" id="save" type="button" disabled>Opslaan</button>
+  <span class="c" id="count"></span>
+  <button class="btn btn-quiet" id="reset" type="button" disabled data-i18n="reset">Alles terugzetten</button>
+  <button class="btn btn-gold" id="save" type="button" disabled data-i18n="save">Opslaan</button>
 </div>
 
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="box">
-  <h2 id="mt">Dit zou naar de kassa gaan</h2>
-  <p class="note">In de echte versie stuurt deze knop precies dit naar de server, die het in de database zet. Nu niet — dit is een oefenversie.</p>
+  <h2 id="mt" data-i18n="mTitle">Dit zou naar de kassa gaan</h2>
+  <p class="note" data-i18n="mBody">In de echte versie stuurt deze knop precies dit naar de server, die het in de database zet. Nu niet — dit is een oefenversie.</p>
   <pre id="payload"></pre>
-  <button class="btn" id="mx" type="button">Sluiten</button>
+  <button class="btn" id="mx" type="button" data-i18n="close">Sluiten</button>
 </div></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -150,6 +155,16 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 var MENU=/*__MENU__*/[];
 var CATS=/*__CATS__*/{};
 var CATORDER=['start','main','lunch','indo','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
+/* The manager's own words, in the café's three languages. Schyler and Zach read it in English, the
+   café runs it in Dutch; the switch is shared with the rest of the site (ok-lang), so whoever has
+   picked a language on the customer pages lands here in the same one. The MENU CONTENT stays
+   trilingual underneath whichever is chosen — the editor still shows all three fields. */
+var UI={"nl": {"title": "Menukaart beheren", "sandbox": "Oefenversie — <b>er wordt niets opgeslagen</b>. Wijzigingen blijven alleen in deze browser staan.", "add": "+ Nieuw gerecht", "search": "Zoek een gerecht of drankje…", "searchA": "Zoeken", "onlySo": "Alleen uitverkocht", "reset": "Alles terugzetten", "save": "Opslaan", "mTitle": "Dit zou naar de kassa gaan", "mBody": "In de echte versie stuurt deze knop precies dit naar de server, die het in de database zet. Nu niet — dit is een oefenversie.", "close": "Sluiten", "edit": "Bewerken", "all": "Alles", "none": "Niets gevonden.", "drag": "Versleep om te ordenen", "up": "Omhoog", "down": "Omlaag", "noName": "(zonder naam)", "newTag": "NIEUW", "vatShort": "btw", "soldOut": "Uitverkocht", "tSold": "Uitverkocht — direct zichtbaar voor klanten", "tBack": "Weer te bestellen", "fName": "Naam", "fDesc": "Omschrijving", "fPrice": "Prijs", "fPrep": "Bereidingstijd (min)", "prepPh": "standaard 45", "fVat": "Btw", "vat9": "9% — eten & frisdrank", "vat21": "21% — alcohol", "notTake": "Niet op de afhaalkaart", "notDaily": "Dit is geen dagelijkse knop zoals uitverkocht — het hoort bij wat het gerecht is. Wilt u dit veranderen, laat het ons weten.", "vatWarn": "Het btw-tarief staat op het door de eigenaar ondertekende blad. Wijzig het alleen als dat blad wijzigt — niet omdat een categorie er anders uitziet.", "photo": "Foto", "photoOff": "Nog niet ingeschakeld. Foto-opslag (Cloudflare R2) staat uit op de account van het café, en of er überhaupt foto's komen is een vraag aan de eigenaar. Zodra dat ja is, komt hier een uploadveld.", "remove": "Verwijderen van de kaart", "removeNote": "Blijft in de geschiedenis staan: oude bestellingen bewaren hun eigen naam en prijs.", "badPrice": "Geen geldige prijs", "tRemoved": "Van de kaart gehaald", "noOpts": "Dit gerecht heeft geen keuzes. (Keuzes toevoegen komt in de volgende stap.)", "srcImplied": "niet op de kaart", "srcMenu": "van de kaart", "surcharge": "Meerprijs voor {n}", "inherit": "btw {r}% — zelfde als het gerecht", "optWarn": "Een keuze met een meerprijs verandert wat de klant betaalt. Het btw-tarief volgt het gerecht (zie hierboven), en zodra een keuze geld kost moet de eigenaar dat blad opnieuw ondertekenen.", "badSurcharge": "Geen geldige meerprijs", "tNew": "Nieuw gerecht in {c}", "one": "1 wijziging", "many": "{n} wijzigingen", "noChanges": "Geen wijzigingen", "tReset": "Terug naar de kaart zoals hij nu is", "lockBar": "alleen aan de bar", "lockRes": "reserveren", "whyDraught": "Tapbier kan niet mee naar huis — staat niet op de afhaalkaart.", "whyReserve": "Reserveren, minimaal 1 dag van tevoren — staat niet op de afhaalkaart."}, "en": {"title": "Manage the menu", "sandbox": "Practice copy — <b>nothing is saved</b>. Changes stay in this browser only.", "add": "+ New dish", "search": "Search for a dish or drink…", "searchA": "Search", "onlySo": "Sold out only", "reset": "Undo everything", "save": "Save", "mTitle": "This is what would go to the till", "mBody": "In the real version this button sends exactly this to the server, which writes it to the database. Not here — this is a practice copy.", "close": "Close", "edit": "Edit", "all": "All", "none": "Nothing found.", "drag": "Drag to reorder", "up": "Move up", "down": "Move down", "noName": "(no name)", "newTag": "NEW", "vatShort": "VAT", "soldOut": "Sold out", "tSold": "Sold out — customers see it straight away", "tBack": "Back on the menu", "fName": "Name", "fDesc": "Description", "fPrice": "Price", "fPrep": "Prep time (min)", "prepPh": "default 45", "fVat": "VAT", "vat9": "9% — food & soft drinks", "vat21": "21% — alcohol", "notTake": "Not on the takeaway menu", "notDaily": "This is not a daily switch like sold out — it is part of what the dish is. If you want it changed, tell us.", "vatWarn": "The VAT rate is on the sheet the owner signed. Change it only when that sheet changes — not because a category looks different.", "photo": "Photo", "photoOff": "Not switched on yet. Photo storage (Cloudflare R2) is off on the café's account, and whether there will be photos at all is a question for the owner. Once that is yes, an upload field appears here.", "remove": "Remove from the menu", "removeNote": "Stays in the history: past orders keep their own name and price.", "badPrice": "Not a valid price", "tRemoved": "Taken off the menu", "noOpts": "This dish has no choices. (Adding choices comes in the next step.)", "srcImplied": "not on the menu", "srcMenu": "from the menu", "surcharge": "Surcharge for {n}", "inherit": "VAT {r}% — same as the dish", "optWarn": "A choice with a surcharge changes what the customer pays. Its VAT rate follows the dish (see above), and once any choice costs money the owner has to sign that sheet again.", "badSurcharge": "Not a valid surcharge", "tNew": "New dish in {c}", "one": "1 change", "many": "{n} changes", "noChanges": "No changes", "tReset": "Back to the menu as it stands", "lockBar": "at the bar only", "lockRes": "reservation", "whyDraught": "Draught beer cannot be taken home — it is not on the takeaway menu.", "whyReserve": "Reservation, at least 1 day ahead — it is not on the takeaway menu."}, "de": {"title": "Speisekarte verwalten", "sandbox": "Übungsversion — <b>es wird nichts gespeichert</b>. Änderungen bleiben nur in diesem Browser.", "add": "+ Neues Gericht", "search": "Gericht oder Getränk suchen…", "searchA": "Suchen", "onlySo": "Nur ausverkauft", "reset": "Alles zurücksetzen", "save": "Speichern", "mTitle": "Das würde an die Kasse gehen", "mBody": "In der echten Version schickt dieser Knopf genau das an den Server, der es in die Datenbank schreibt. Hier nicht — das ist eine Übungsversion.", "close": "Schließen", "edit": "Bearbeiten", "all": "Alle", "none": "Nichts gefunden.", "drag": "Zum Sortieren ziehen", "up": "Nach oben", "down": "Nach unten", "noName": "(ohne Namen)", "newTag": "NEU", "vatShort": "MwSt.", "soldOut": "Ausverkauft", "tSold": "Ausverkauft — sofort für Gäste sichtbar", "tBack": "Wieder bestellbar", "fName": "Name", "fDesc": "Beschreibung", "fPrice": "Preis", "fPrep": "Zubereitung (Min.)", "prepPh": "Standard 45", "fVat": "MwSt.", "vat9": "9 % — Speisen & Softdrinks", "vat21": "21 % — Alkohol", "notTake": "Nicht auf der Abholkarte", "notDaily": "Das ist kein täglicher Schalter wie ausverkauft — es gehört zum Gericht. Wenn Sie es ändern möchten, sagen Sie uns Bescheid.", "vatWarn": "Der MwSt.-Satz steht auf dem vom Inhaber unterschriebenen Blatt. Ändern Sie ihn nur, wenn sich dieses Blatt ändert — nicht weil eine Kategorie anders aussieht.", "photo": "Foto", "photoOff": "Noch nicht eingeschaltet. Der Fotospeicher (Cloudflare R2) ist im Konto des Cafés aus, und ob es überhaupt Fotos gibt, ist eine Frage an den Inhaber. Sobald das ja ist, erscheint hier ein Upload-Feld.", "remove": "Von der Karte nehmen", "removeNote": "Bleibt in der Historie: frühere Bestellungen behalten ihren eigenen Namen und Preis.", "badPrice": "Kein gültiger Preis", "tRemoved": "Von der Karte genommen", "noOpts": "Dieses Gericht hat keine Auswahl. (Auswahl hinzufügen kommt im nächsten Schritt.)", "srcImplied": "nicht auf der Karte", "srcMenu": "von der Karte", "surcharge": "Aufpreis für {n}", "inherit": "MwSt. {r} % — wie das Gericht", "optWarn": "Eine Auswahl mit Aufpreis ändert, was der Gast zahlt. Ihr MwSt.-Satz folgt dem Gericht (siehe oben), und sobald eine Auswahl Geld kostet, muss der Inhaber das Blatt neu unterschreiben.", "badSurcharge": "Kein gültiger Aufpreis", "tNew": "Neues Gericht in {c}", "one": "1 Änderung", "many": "{n} Änderungen", "noChanges": "Keine Änderungen", "tReset": "Zurück zur aktuellen Karte", "lockBar": "nur an der Bar", "lockRes": "Reservierung", "whyDraught": "Fassbier kann nicht mitgenommen werden — steht nicht auf der Abholkarte.", "whyReserve": "Reservierung, mindestens 1 Tag vorher — steht nicht auf der Abholkarte."}};
+var LANG='nl'; try{ var s=localStorage.getItem('ok-lang'); if(UI[s]) LANG=s; }catch(e){}
+function T(k,v){ var s=(UI[LANG]&&UI[LANG][k]); if(s==null) s=UI.nl[k]; if(s==null) s=k;
+  Object.keys(v||{}).forEach(function(x){ s=s.split('{'+x+'}').join(v[x]); }); return s; }
+function nm(m){ return (m.name&&(m.name[LANG]||m.name.nl))||''; }
+function catLabel(c){ return (CATS[LANG]&&CATS[LANG][c])||(CATS.nl&&CATS.nl[c])||c; }
 var BY={}; MENU.forEach(function(m){ BY[m.id]=m; });
 
 /* The draft lives in this browser and nowhere else. Every change the owner makes is recorded as an
@@ -171,10 +186,9 @@ function toast(m){ var el=document.getElementById('toast'); el.textContent=m; el
    shown as a locked state with its reason. Whether the database should separate them is a
    question for the gate, raised from this sandbox rather than guessed at. */
 function soldOut(m){ return !!m.sold_out_at; }
-function lockShort(m){ return m.orderable_note==='draught' ? 'alleen aan de bar' : 'reserveren'; }
+function lockShort(m){ return m.orderable_note==='draught' ? T('lockBar') : T('lockRes'); }
 function lockWhy(m){ return m.orderable_note==='draught'
-  ? 'Tapbier kan niet mee naar huis — staat niet op de afhaalkaart.'
-  : 'Reserveren, minimaal 1 dag van tevoren — staat niet op de afhaalkaart.'; }
+  ? T('whyDraught') : T('whyReserve'); }
 
 /* the item as the owner currently sees it: the real row with their unsaved edits laid over it */
 function view(id){ var base=BY[id]||DRAFT.added.filter(function(a){return a.id===id;})[0]; if(!base) return null;
@@ -218,9 +232,9 @@ function visible(id){ var m=view(id);
 
 /* ---- render ---- */
 function renderCats(){ var el=document.getElementById('cats');
-  el.innerHTML='<button type="button" data-cat="" aria-pressed="'+(filterCat===''?'true':'false')+'">Alles</button>'+
+  el.innerHTML='<button type="button" data-cat="" aria-pressed="'+(filterCat===''?'true':'false')+'">'+esc(T('all'))+'</button>'+
     CATORDER.filter(function(c){ return allIds().some(function(i){return view(i).cat===c;}); }).map(function(c){
-      return '<button type="button" data-cat="'+esc(c)+'" aria-pressed="'+(filterCat===c?'true':'false')+'">'+esc(CATS.nl[c]||c)+'</button>'; }).join('');
+      return '<button type="button" data-cat="'+esc(c)+'" aria-pressed="'+(filterCat===c?'true':'false')+'">'+esc(catLabel(c))+'</button>'; }).join('');
   el.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){ filterCat=b.dataset.cat; renderCats(); renderList(); }); }); }
 
 function renderList(){ var root=document.getElementById('list'); root.innerHTML='';
@@ -228,26 +242,26 @@ function renderList(){ var root=document.getElementById('list'); root.innerHTML=
   CATORDER.forEach(function(cat){
     var ids=inCat(cat).filter(visible); if(!ids.length) return;
     var h=document.createElement('div'); h.className='cat-h';
-    h.innerHTML='<h2>'+esc(CATS.nl[cat]||cat)+'</h2><span class="n">'+ids.length+'</span>';
+    h.innerHTML='<h2>'+esc(catLabel(cat))+'</h2><span class="n">'+ids.length+'</span>';
     root.appendChild(h);
     var box=document.createElement('div'); box.className='rows'; box.dataset.cat=cat;
     ids.forEach(function(id){ box.appendChild(rowEl(id,cat,id===open)); });
     root.appendChild(box); });
-  if(!root.children.length) root.innerHTML='<p class="note">Niets gevonden.</p>';
+  if(!root.children.length) root.innerHTML='<p class="note">'+esc(T('none'))+'</p>';
   wireDrag(); }
 
 function rowEl(id,cat,openIt){ var m=view(id), el=document.createElement('div');
   el.className='row'+(soldOut(m)?' soldout':''); el.dataset.id=id;
   var isNew=DRAFT.added.some(function(a){return a.id===id;});
   el.innerHTML='<div class="rhead">'+
-    '<button class="grip" type="button" aria-label="Versleep om te ordenen" title="Versleep om te ordenen">⠿</button>'+
-    '<span class="moves"><button type="button" data-mv="-1" aria-label="Omhoog">▲</button><button type="button" data-mv="1" aria-label="Omlaag">▼</button></span>'+
-    '<span class="nm">'+esc(m.name.nl||'(zonder naam)')+(isNew?' <span class="lang-tag">NIEUW</span>':'')+'</span>'+
+    '<button class="grip" type="button" aria-label="'+esc(T('drag'))+'" title="'+esc(T('drag'))+'">⠿</button>'+
+    '<span class="moves"><button type="button" data-mv="-1" aria-label="'+esc(T('up'))+'">▲</button><button type="button" data-mv="1" aria-label="'+esc(T('down'))+'">▼</button></span>'+
+    '<span class="nm">'+esc(nm(m)||T('noName'))+(isNew?' <span class="lang-tag">'+esc(T('newTag'))+'</span>':'')+'</span>'+
     '<span class="pr">'+eur(m.price_cents||0)+'</span>'+
-    '<span class="vat">btw '+m.vat_rate+'%</span>'+
+    '<span class="vat">'+esc(T('vatShort'))+' '+m.vat_rate+'%</span>'+
     (m.orderable_note ? '<span class="locked" title="'+esc(lockWhy(m))+'">'+esc(lockShort(m))+'</span>'
-                      : '<label class="so"><input type="checkbox" '+(soldOut(m)?'checked':'')+'> Uitverkocht</label>')+
-    '<button class="btn btn-quiet" type="button" data-act="edit">'+(openIt?'Sluiten':'Bewerken')+'</button>'+
+                      : '<label class="so"><input type="checkbox" '+(soldOut(m)?'checked':'')+'> '+esc(T('soldOut'))+'</label>')+
+    '<button class="btn btn-quiet" type="button" data-act="edit">'+(openIt?T('close'):T('edit'))+'</button>'+
   '</div><div class="edit" '+(openIt?'':'hidden')+'></div>';
   var so=el.querySelector('.so input');
   if(so) so.addEventListener('change',function(e){
@@ -256,7 +270,7 @@ function rowEl(id,cat,openIt){ var m=view(id), el=document.createElement('div');
        half of it — showing them apart while still writing them into one field would have been a
        fix in appearance only. */
     edit(id,'sold_out_at', e.target.checked ? new Date().toISOString() : null);
-    toast(e.target.checked?'Uitverkocht — direct zichtbaar voor klanten':'Weer te bestellen'); });
+    toast(e.target.checked?T('tSold'):T('tBack')); });
   el.querySelectorAll('[data-mv]').forEach(function(b){ b.addEventListener('click',function(){ move(cat,id,parseInt(b.dataset.mv,10)); }); });
   el.querySelector('[data-act=edit]').addEventListener('click',function(){
     var root=document.getElementById('list'); root.dataset.open=(root.dataset.open===id?'':id); renderList(); });
@@ -267,56 +281,55 @@ function rowEl(id,cat,openIt){ var m=view(id), el=document.createElement('div');
 var LANGS=[['nl','Nederlands'],['en','English'],['de','Deutsch']];
 function fillEditor(box,id){ var m=view(id);
   var h='';
-  h+='<div class="cols">'+LANGS.map(function(L){ return '<div class="fld"><label>Naam <span class="lang-tag">'+L[0].toUpperCase()+'</span></label>'+
+  h+='<div class="cols">'+LANGS.map(function(L){ return '<div class="fld"><label>'+esc(T('fName'))+' <span class="lang-tag">'+L[0].toUpperCase()+'</span></label>'+
       '<input type="text" data-f="name" data-l="'+L[0]+'" value="'+esc((m.name||{})[L[0]]||'')+'" maxlength="80"></div>'; }).join('')+'</div>';
-  h+='<div class="cols">'+LANGS.map(function(L){ return '<div class="fld"><label>Omschrijving <span class="lang-tag">'+L[0].toUpperCase()+'</span></label>'+
+  h+='<div class="cols">'+LANGS.map(function(L){ return '<div class="fld"><label>'+esc(T('fDesc'))+' <span class="lang-tag">'+L[0].toUpperCase()+'</span></label>'+
       '<textarea data-f="desc" data-l="'+L[0]+'" maxlength="300">'+esc((m.desc||{})[L[0]]||'')+'</textarea></div>'; }).join('')+'</div>';
   h+='<div class="cols">'+
-    '<div class="fld"><label>Prijs</label><input type="text" inputmode="decimal" data-f="price" value="'+(((m.price_cents||0)/100).toFixed(2).replace('.',','))+'"></div>'+
-    '<div class="fld"><label>Bereidingstijd (min)</label><input type="number" min="0" max="180" data-f="prep" value="'+(m.prep_minutes==null?'':m.prep_minutes)+'" placeholder="standaard 45"></div>'+
-    '<div class="fld"><label>Btw</label><select data-f="vat"><option value="9"'+(m.vat_rate===9?' selected':'')+'>9% — eten &amp; frisdrank</option><option value="21"'+(m.vat_rate===21?' selected':'')+'>21% — alcohol</option></select></div>'+
+    '<div class="fld"><label>'+esc(T('fPrice'))+'</label><input type="text" inputmode="decimal" data-f="price" value="'+(((m.price_cents||0)/100).toFixed(2).replace('.',','))+'"></div>'+
+    '<div class="fld"><label>'+esc(T('fPrep'))+'</label><input type="number" min="0" max="180" data-f="prep" value="'+(m.prep_minutes==null?'':m.prep_minutes)+'" placeholder="'+esc(T('prepPh'))+'"></div>'+
+    '<div class="fld"><label>'+esc(T('fVat'))+'</label><select data-f="vat"><option value="9"'+(m.vat_rate===9?' selected':'')+'>'+esc(T('vat9'))+'</option><option value="21"'+(m.vat_rate===21?' selected':'')+'>'+esc(T('vat21'))+'</option></select></div>'+
   '</div>';
-  if(m.orderable_note) h+='<div class="stub"><strong>Niet op de afhaalkaart</strong><p class="note" style="margin:4px 0 0">'+esc(lockWhy(m))+
-    ' Dit is geen dagelijkse knop zoals uitverkocht — het hoort bij wat het gerecht is. Wilt u dit veranderen, laat het ons weten.</p></div>';
-  h+='<p class="note warn" data-vatwarn hidden>Het btw-tarief staat op het door de eigenaar ondertekende blad. Wijzig het alleen als dat blad wijzigt — niet omdat een categorie er anders uitziet.</p>';
+  if(m.orderable_note) h+='<div class="stub"><strong>'+esc(T('notTake'))+'</strong><p class="note" style="margin:4px 0 0">'+esc(lockWhy(m))+' '+esc(T('notDaily'))+'</p></div>';
+  h+='<p class="note warn" data-vatwarn hidden>'+esc(T('vatWarn'))+'</p>';
   /* photos: the field is hidden rather than broken while R2 is off and the question is open */
-  h+='<div class="stub"><strong>Foto</strong><p class="note" style="margin:4px 0 0">Nog niet ingeschakeld. Foto-opslag (Cloudflare R2) staat uit op de account van het café, en of er überhaupt foto\'s komen is vraag 7 aan de eigenaar. Zodra dat ja is, komt hier een uploadveld.</p></div>';
+  h+='<div class="stub"><strong>'+esc(T('photo'))+'</strong><p class="note" style="margin:4px 0 0">'+esc(T('photoOff'))+'</p></div>';
   h+=optionsEditor(id,m);
-  h+='<div><button class="btn btn-quiet" type="button" data-act="rm">Verwijderen van de kaart</button> '+
-     '<span class="note">Blijft in de geschiedenis staan: oude bestellingen bewaren hun eigen naam en prijs.</span></div>';
+  h+='<div><button class="btn btn-quiet" type="button" data-act="rm">'+esc(T('remove'))+'</button> '+
+     '<span class="note">'+esc(T('removeNote'))+'</span></div>';
   box.innerHTML=h;
 
   box.querySelectorAll('[data-f=name],[data-f=desc]').forEach(function(el){
     el.addEventListener('change',function(){ editLang(id,el.dataset.f,el.dataset.l,el.value); }); });
   box.querySelector('[data-f=price]').addEventListener('change',function(e){ var c=cents(e.target.value);
-    if(c==null||c<0){ toast('Geen geldige prijs'); return; } edit(id,'price_cents',c); });
+    if(c==null||c<0){ toast(T('badPrice')); return; } edit(id,'price_cents',c); });
   box.querySelector('[data-f=prep]').addEventListener('change',function(e){ var v=e.target.value.trim();
     edit(id,'prep_minutes', v===''?null:Math.max(0,Math.min(180,parseInt(v,10)||0))); });
   var vatSel=box.querySelector('[data-f=vat]'), vw=box.querySelector('[data-vatwarn]');
   vatSel.addEventListener('change',function(e){ vw.hidden=false; edit(id,'vat_rate',parseInt(e.target.value,10)); });
   box.querySelector('[data-act=rm]').addEventListener('click',function(){
     DRAFT.removed[id]=true; delete DRAFT.edits[id]; store();
-    document.getElementById('list').dataset.open=''; refresh(); toast('Van de kaart gehaald'); });
+    document.getElementById('list').dataset.open=''; refresh(); toast(T('tRemoved')); });
   wireOptions(box,id); }
 
 /* ---- options: the one place Part Two can change what a customer pays ---- */
 function optionsEditor(id,m){ var gs=m.options||[];
-  if(!gs.length) return '<p class="note">Dit gerecht heeft geen keuzes. (Keuzes toevoegen komt in de volgende stap.)</p>';
+  if(!gs.length) return '<p class="note">'+esc(T('noOpts'))+'</p>';
   return gs.map(function(g){
-    return '<div class="grp" data-g="'+esc(g.id)+'"><div class="grp-h"><span class="t">'+esc(g.label.nl)+'</span>'+
-      '<span class="src'+(g.source==='implied'?' implied':'')+'">'+(g.source==='implied'?'niet op de kaart':'van de kaart')+'</span></div>'+
+    return '<div class="grp" data-g="'+esc(g.id)+'"><div class="grp-h"><span class="t">'+esc(g.label[LANG]||g.label.nl)+'</span>'+
+      '<span class="src'+(g.source==='implied'?' implied':'')+'">'+(g.source==='implied'?T('srcImplied'):T('srcMenu'))+'</span></div>'+
       g.options.map(function(o){ var pc=optPrice(id,g.id,o.id);
-        return '<div class="opt'+(pc>0?' priced':'')+'" data-o="'+esc(o.id)+'"><span class="l">'+esc(o.label.nl)+'</span>'+
-          '<span class="price">+<input type="text" inputmode="decimal" aria-label="Meerprijs voor '+esc(o.label.nl)+'" value="'+((pc/100).toFixed(2).replace('.',','))+'"></span>'+
-          '<span class="inh">btw '+m.vat_rate+'% — zelfde als het gerecht</span></div>'; }).join('')+
+        return '<div class="opt'+(pc>0?' priced':'')+'" data-o="'+esc(o.id)+'"><span class="l">'+esc(o.label[LANG]||o.label.nl)+'</span>'+
+          '<span class="price">+<input type="text" inputmode="decimal" aria-label="'+esc(T('surcharge',{n:o.label[LANG]||o.label.nl}))+'" value="'+((pc/100).toFixed(2).replace('.',','))+'"></span>'+
+          '<span class="inh">'+esc(T('inherit',{r:m.vat_rate}))+'</span></div>'; }).join('')+
       '</div>'; }).join('')+
-    '<p class="note warn" data-optwarn'+(anyPriced(id)?'':' hidden')+'>Een keuze met een meerprijs verandert wat de klant betaalt. Het btw-tarief volgt het gerecht (zie hierboven), en zodra een keuze geld kost moet de eigenaar dat blad opnieuw ondertekenen.</p>'; }
+    '<p class="note warn" data-optwarn'+(anyPriced(id)?'':' hidden')+'>'+esc(T('optWarn'))+'</p>'; }
 function optPrice(id,gid,oid){ var e=(DRAFT.edits[id]||{}).optPrices||{}; return e[gid+'/'+oid]||0; }
 function anyPriced(id){ var e=(DRAFT.edits[id]||{}).optPrices||{}; return Object.keys(e).some(function(k){ return e[k]>0; }); }
 function wireOptions(box,id){ box.querySelectorAll('.grp .opt').forEach(function(row){
   var gid=row.closest('.grp').dataset.g, oid=row.dataset.o, inp=row.querySelector('input');
   inp.addEventListener('change',function(){ var c=cents(inp.value);
-    if(c==null||c<0){ toast('Geen geldige meerprijs'); inp.value='0,00'; return; }
+    if(c==null||c<0){ toast(T('badSurcharge')); inp.value='0,00'; return; }
     if(!DRAFT.edits[id]) DRAFT.edits[id]={}; if(!DRAFT.edits[id].optPrices) DRAFT.edits[id].optPrices={};
     DRAFT.edits[id].optPrices[gid+'/'+oid]=c; store();
     row.classList.toggle('priced',c>0);
@@ -364,7 +377,7 @@ document.getElementById('add').addEventListener('click',function(){
     price_cents:0,vat_rate:(['beer','wine','cocktail','spirit'].indexOf(cat)>=0?21:9),orderable:true,orderable_note:'',options:[],prep_minutes:null});
   store(); filterCat=cat; document.getElementById('list').dataset.open=id; refresh();
   var el=document.querySelector('.row[data-id="'+id+'"] input[data-f=name][data-l=nl]'); if(el) el.focus();
-  toast('Nieuw gerecht in '+(CATS.nl[cat]||cat)); });
+  toast(T('tNew',{c:catLabel(cat)})); });
 
 /* ---- what would actually be sent ---- */
 function ops(){ var out=[];
@@ -379,7 +392,7 @@ function ops(){ var out=[];
   Object.keys(DRAFT.order).forEach(function(cat){ out.push({op:'reorder',cat:cat,ids:DRAFT.order[cat]}); });
   return out; }
 function refreshCount(){ var n=ops().length;
-  document.getElementById('count').textContent=n?(n===1?'1 wijziging':n+' wijzigingen'):'Geen wijzigingen';
+  document.getElementById('count').textContent=n?(n===1?T('one'):T('many',{n:n})):T('noChanges');
   document.getElementById('save').disabled=!n; document.getElementById('reset').disabled=!n; }
 
 document.getElementById('save').addEventListener('click',function(){
@@ -389,14 +402,26 @@ document.getElementById('mx').addEventListener('click',function(){ document.getE
 document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('on'); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') document.getElementById('modal').classList.remove('on'); });
 document.getElementById('reset').addEventListener('click',function(){
-  DRAFT={edits:{},added:[],removed:{},order:{}}; store(); document.getElementById('list').dataset.open=''; refresh(); toast('Terug naar de kaart zoals hij nu is'); });
+  DRAFT={edits:{},added:[],removed:{},order:{}}; store(); document.getElementById('list').dataset.open=''; refresh(); toast(T('tReset')); });
 
 document.getElementById('q').addEventListener('input',function(e){ query=e.target.value.trim(); renderList(); });
 document.getElementById('only-so').addEventListener('click',function(){ onlySold=!onlySold;
   this.setAttribute('aria-pressed',String(onlySold)); this.classList.toggle('btn-gold',onlySold); renderList(); });
 
+function applyLang(l){ if(!UI[l]) l='nl'; LANG=l; document.documentElement.lang=l;
+  try{ localStorage.setItem('ok-lang',l); }catch(e){}
+  document.title=T('title')+' — Oud-Kempen Eetcafé';
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent=T(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el){ el.innerHTML=T(el.getAttribute('data-i18n-html')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ el.placeholder=T(el.getAttribute('data-i18n-ph')); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(function(el){ el.setAttribute('aria-label',T(el.getAttribute('data-i18n-aria'))); });
+  document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed',String(b.dataset.lang===l)); });
+  /* a toast still fading in the old language is stale the moment the language changes */
+  var to=document.getElementById('toast'); to.classList.remove('on'); to.textContent=''; clearTimeout(toast._t);
+  refresh(); }
+document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.dataset.lang); }); });
 function refresh(){ renderCats(); renderList(); refreshCount(); }
-refresh();
+applyLang(LANG);
 </script>
 </body>
 </html>
