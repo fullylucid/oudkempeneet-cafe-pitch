@@ -87,7 +87,7 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
       noindex: !!document.querySelector('meta[name="robots"][content*="noindex"]'),
       docW: document.documentElement.scrollWidth, winW: innerWidth }));
     ok(m.docW <= m.winW, `soon page ${vp.width}: no sideways scroll (${m.docW} in ${m.winW})`);
-    ok(m.tel === 'tel:+31627894034', `soon page ${vp.width}: the café's number is callable, so "coming soon" still takes an order (got ${m.tel})`);
+    ok(m.tel === 'tel:+31622334469', `soon page ${vp.width}: the café's number is callable, so "coming soon" still takes an order (got ${m.tel})`);
     ok(/15:00 – 21:00/.test(m.hours) && /12:30 – 21:00/.test(m.hours),
       `soon page ${vp.width}: the hours match the site's own (got "${m.hours}")`);
     ok(m.back && m.menu, `soon page ${vp.width}: a way back home and to the menu`);
