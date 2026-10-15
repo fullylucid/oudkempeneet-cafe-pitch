@@ -63,4 +63,12 @@ print('not orderable:',[(i['id'],i['name']['nl'],i['orderable_note']) for i in i
 print('vat overrides:',[(i['id'],i['name']['nl'],i['vat_rate']) for i in items if (i['cat']=='hot' and i['vat_rate']==21) or (i['cat']=='beer' and i['vat_rate']==9)])
 print('anomalies:',anomalies)
 print('drink heads:',dheads[:12])
-json.dump({"source":"menu.html client/main 3af8052","extracted":"2026-09-04","items":items},open(sys.argv[1],'w'),ensure_ascii=False,indent=1)
+# provenance is derived, never typed: the git blob hash of the exact menu.html read (content-
+# addressed, so it survives a squash merge and tests/test_menu.py can check it), plus the date of
+# the last commit touching menu.html — or today, when menu.html has uncommitted edits.
+import subprocess,datetime
+def git(*a): return subprocess.run(['git',*a],capture_output=True,text=True,check=True).stdout.strip()
+blob=git('hash-object','menu.html')[:12]
+dirty=subprocess.run(['git','diff','--quiet','HEAD','--','menu.html']).returncode!=0
+day=datetime.date.today().isoformat() if dirty else git('log','-1','--format=%cs','--','menu.html')
+json.dump({"source":"menu.html blob %s"%blob,"extracted":day,"items":items},open(sys.argv[1],'w'),ensure_ascii=False,indent=1)

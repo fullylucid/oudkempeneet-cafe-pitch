@@ -7,6 +7,13 @@ def check(cond,msg):
 menu=json.load(open('data/menu.json',encoding='utf-8'))['items']
 html=open('menu.html',encoding='utf-8').read()
 I18N=json.loads(re.search(r'var I18N=(\{.*?\});\n',html,re.S).group(1))
+# provenance: menu.json names the exact menu.html it came from, and the newest seed names menu.json's
+import subprocess
+src=json.load(open('data/menu.json',encoding='utf-8'))['source']
+blob=subprocess.run(['git','hash-object','menu.html'],capture_output=True,text=True).stdout.strip()[:12]
+check(src=='menu.html blob '+blob,'menu.json was extracted from another menu.html (%s, now %s): rerun tools/extract-menu.py'%(src,blob))
+newest=sorted(glob.glob('migrations/*seed*.sql'))[-1]
+check(src in open(newest,encoding='utf-8').readline(),'%s was not generated from this menu.json: rerun tools/gen-seed.py'%newest)
 check(len(menu)==125,'125 items expected, got %d'%len(menu))
 check(len(set(i['id'] for i in menu))==125,'ids unique')
 for i in menu:
