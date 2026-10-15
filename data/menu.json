@@ -822,6 +822,336 @@
    ]
   },
   {
+   "id": "m-pizza-0",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 0,
+   "name": {
+    "nl": "Margherita",
+    "en": "Margherita",
+    "de": "Margherita"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas.",
+    "en": "Tomato sauce, cheese.",
+    "de": "Tomatensauce, Käse."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-1",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 1,
+   "name": {
+    "nl": "Salame",
+    "en": "Salame",
+    "de": "Salame"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, salami.",
+    "en": "Tomato sauce, cheese, salami.",
+    "de": "Tomatensauce, Käse, Salami."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-2",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 2,
+   "name": {
+    "nl": "Prosciutto e Funghi",
+    "en": "Prosciutto e Funghi",
+    "de": "Prosciutto e Funghi"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ham, champignons.",
+    "en": "Tomato sauce, cheese, ham, mushrooms.",
+    "de": "Tomatensauce, Käse, Schinken, Champignons."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-3",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 3,
+   "name": {
+    "nl": "Funghi",
+    "en": "Funghi",
+    "de": "Funghi"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, champignons.",
+    "en": "Tomato sauce, cheese, mushrooms.",
+    "de": "Tomatensauce, Käse, Champignons."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-4",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 4,
+   "name": {
+    "nl": "Quattro Stagioni",
+    "en": "Quattro Stagioni",
+    "de": "Quattro Stagioni"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ham, salami, paprika, champignons.",
+    "en": "Tomato sauce, cheese, ham, salami, bell pepper, mushrooms.",
+    "de": "Tomatensauce, Käse, Schinken, Salami, Paprika, Champignons."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-5",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 5,
+   "name": {
+    "nl": "Quattro Formaggio",
+    "en": "Quattro Formaggio",
+    "de": "Quattro Formaggio"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, 4 soorten kaas.",
+    "en": "Tomato sauce, cheese, four kinds of cheese.",
+    "de": "Tomatensauce, Käse, vier Käsesorten."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-6",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 6,
+   "name": {
+    "nl": "Hawaii",
+    "en": "Hawaii",
+    "de": "Hawaii"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ham, ananas.",
+    "en": "Tomato sauce, cheese, ham, pineapple.",
+    "de": "Tomatensauce, Käse, Schinken, Ananas."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-7",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 7,
+   "name": {
+    "nl": "Peperoni",
+    "en": "Peperoni",
+    "de": "Peperoni"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, peperoni.",
+    "en": "Tomato sauce, cheese, pepperoni.",
+    "de": "Tomatensauce, Käse, Peperoni-Salami."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-8",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 8,
+   "name": {
+    "nl": "Diavola",
+    "en": "Diavola",
+    "de": "Diavola"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, salami, rode ui, paprika.",
+    "en": "Tomato sauce, cheese, salami, red onion, bell pepper.",
+    "de": "Tomatensauce, Käse, Salami, rote Zwiebel, Paprika."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-9",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 9,
+   "name": {
+    "nl": "Caprese",
+    "en": "Caprese",
+    "de": "Caprese"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, mozzarella, tomaat, basilicum.",
+    "en": "Tomato sauce, cheese, mozzarella, tomato, basil.",
+    "de": "Tomatensauce, Käse, Mozzarella, Tomate, Basilikum."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-10",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 10,
+   "name": {
+    "nl": "Napoli",
+    "en": "Napoli",
+    "de": "Napoli"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ansjovis, olijven, kappertjes.",
+    "en": "Tomato sauce, cheese, anchovies, olives, capers.",
+    "de": "Tomatensauce, Käse, Sardellen, Oliven, Kapern."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-11",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 11,
+   "name": {
+    "nl": "Tonno",
+    "en": "Tonno",
+    "de": "Tonno"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, tonijn, olijven, rode ui, kappertjes.",
+    "en": "Tomato sauce, cheese, tuna, olives, red onion, capers.",
+    "de": "Tomatensauce, Käse, Thunfisch, Oliven, rote Zwiebel, Kapern."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-12",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 12,
+   "name": {
+    "nl": "Shoarma",
+    "en": "Shoarma",
+    "de": "Shoarma"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, shoarma, jalapeños, rode ui.",
+    "en": "Tomato sauce, cheese, shawarma, jalapeños, red onion.",
+    "de": "Tomatensauce, Käse, Schawarma, Jalapeños, rote Zwiebel."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-13",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 13,
+   "name": {
+    "nl": "BBQ",
+    "en": "BBQ",
+    "de": "BBQ"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, gebroken kip, rode ui, BBQ saus.",
+    "en": "Tomato sauce, cheese, chicken, red onion, BBQ sauce.",
+    "de": "Tomatensauce, Käse, Hähnchen, rote Zwiebel, BBQ-Sauce."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
+   "id": "m-pizza-14",
+   "kind": "food",
+   "cat": "pizza",
+   "pos": 14,
+   "name": {
+    "nl": "Zalm",
+    "en": "Zalm",
+    "de": "Zalm"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, zalm, knoflook, witte wijn, kappertjes.",
+    "en": "Tomato sauce, cheese, salmon, garlic, white wine, capers.",
+    "de": "Tomatensauce, Käse, Lachs, Knoblauch, Weißwein, Kapern."
+   },
+   "price_cents": 1500,
+   "price_raw": "15,00",
+   "vat_rate": 9,
+   "orderable": true,
+   "orderable_note": "",
+   "options": []
+  },
+  {
    "id": "m-veg-0",
    "kind": "food",
    "cat": "veg",

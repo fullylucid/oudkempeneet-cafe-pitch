@@ -6,7 +6,7 @@
 import json,sys,html,datetime
 from weasyprint import HTML
 d=json.load(open(sys.argv[1],encoding='utf-8')); items=d['items']
-CAT={'start':'Voorgerechten','main':'Hoofdgerechten','lunch':'Lunch','snack':'Snacks','indo':'Indonesisch','veg':'Vegetarisch','kids':'Kindermenu','pancake':'Pannenkoeken','dessert':'Desserts','extra':'Extra','hot':'Warme dranken','soft':'Frisdranken','beer':'Bier','wine':'Wijn','spirit':'Sterke drank','cocktail':'Cocktails'}
+CAT={'start':'Voorgerechten','main':'Hoofdgerechten','lunch':'Lunch','snack':'Snacks','indo':'Indonesisch','pizza':'Pizza','veg':'Vegetarisch','kids':'Kindermenu','pancake':'Pannenkoeken','dessert':'Desserts','extra':'Extra','hot':'Warme dranken','soft':'Frisdranken','beer':'Bier','wine':'Wijn','spirit':'Sterke drank','cocktail':'Cocktails'}
 e=html.escape
 def eur(c): return '€ %d,%02d'%(c//100,c%100)
 css='''@page{size:A4;margin:14mm 14mm 16mm 14mm;@bottom-center{content:"Oud-Kempen Eetcafé · afhaalbestellen · btw & afhaallijst · blz. " counter(page) "/" counter(pages);font:8.5pt "DejaVu Sans",sans-serif;color:#7A817A}}
@@ -26,7 +26,7 @@ out=['<h1>Afhaalbestellen — btw-tarief en afhaallijst</h1><p class="sub">Oud-K
 out.append('''<div class="box"><p><b>Wat u doet.</b> Twee kolommen per regel. <b>btw</b>: het tarief dat wij voor dit artikel zullen rekenen (9% eten en alcoholvrij, 21% alcohol). Vier regels zijn met <span class="fix">correctie</span> gemarkeerd: daar wijkt het tarief af van de categorie. Klopt het niet? Streep door en schrijf het juiste tarief ernaast.
 <b>afhalen</b>: voorgevinkt = online te bestellen voor afhalen. Wilt u een artikel <i>niet</i> online aanbieden, zet dan een kruis in het vakje ernaast. Twee zijn al uitgesloten: tapbier en de kaasfondue (reserveren, 1 dag vooraf).</p>
 <p>Prijzen zijn de huidige kaartprijzen inclusief btw; ze veranderen hier niet. Onderteken onderaan en geef het blad terug via Zach. Zonder dit blad gaat de live betaalkoppeling niet aan.</p></div>''')
-order=['start','main','lunch','snack','indo','veg','kids','pancake','dessert','extra','hot','soft','beer','wine','spirit','cocktail']
+order=['start','main','lunch','snack','indo','pizza','veg','kids','pancake','dessert','extra','hot','soft','beer','wine','spirit','cocktail']
 for cat in order:
     rows=[i for i in items if i['cat']==cat]
     if not rows: continue
