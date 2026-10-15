@@ -30,7 +30,7 @@ const ops = page => page.evaluate(() => { document.getElementById('save').click(
     const m = await p.evaluate(() => ({ rows: document.querySelectorAll('.row').length,
       cats: [...document.querySelectorAll('.cats button')].map(b => b.textContent),
       sandbox: document.querySelector('.sandbox').textContent }));
-    ok(m.rows === 110, `all 110 dishes are listed (got ${m.rows})`);
+    ok(m.rows === 125, `all 125 dishes are listed (got ${m.rows})`);
     ok(m.cats[0] === 'Alles' && m.cats.includes('Voorgerechten'), `categories come from the café's own menu (got ${m.cats.slice(0,3)})`);
     ok(/niets opgeslagen/i.test(m.sandbox), 'the page says plainly that nothing is saved');
     await p.close();

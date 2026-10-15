@@ -7,8 +7,8 @@ def check(cond,msg):
 menu=json.load(open('data/menu.json',encoding='utf-8'))['items']
 html=open('menu.html',encoding='utf-8').read()
 I18N=json.loads(re.search(r'var I18N=(\{.*?\});\n',html,re.S).group(1))
-check(len(menu)==110,'110 items expected, got %d'%len(menu))
-check(len(set(i['id'] for i in menu))==110,'ids unique')
+check(len(menu)==125,'125 items expected, got %d'%len(menu))
+check(len(set(i['id'] for i in menu))==125,'ids unique')
 for i in menu:
     k=i['id'].replace('-','.')
     for l in ('nl','en','de'):
@@ -54,9 +54,9 @@ check(not by['m-main-1']['desc']['nl'] or 'gebakken' not in by['m-main-1']['desc
 
 db=sqlite3.connect(':memory:')
 for f in sorted(glob.glob('migrations/*.sql')): db.executescript(open(f,encoding='utf-8').read())
-n=db.execute('select count(*) from menu_items').fetchone()[0]; check(n==110,'seed rows %d'%n)
+n=db.execute('select count(*) from menu_items').fetchone()[0]; check(n==125,'seed rows %d'%n)
 for f in sorted(glob.glob('migrations/*.sql')): db.executescript(open(f,encoding='utf-8').read())   # idempotent
-check(db.execute('select count(*) from menu_items').fetchone()[0]==110,'seed idempotent')
+check(db.execute('select count(*) from menu_items').fetchone()[0]==125,'seed idempotent')
 r=db.execute("select vat_rate,orderable from menu_items where id='d-hot-8'").fetchone(); check(r==(21,1),'D1 Irish Coffee row')
 check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==3,'D1 non-orderable count')
 check(db.execute("select value from settings where key='standard_wait_min'").fetchone()[0]=='45','settings seeded')
@@ -104,5 +104,11 @@ try: db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_ce
 except sqlite3.IntegrityError: pass
 try: db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot) values('x',1,'m-start-0',21,850,9,'Soep')"); check(False,'qty<=20 CHECK enforced')
 except sqlite3.IntegrityError: pass
+# pizza (Dave's card, 2026-10-15): one size, so no choice at all — quantity is the only control
+pz=[i for i in menu if i['cat']=='pizza']
+check(len(pz)==15,'15 pizzas, got %d'%len(pz))
+check(all(i['price_cents']==1500 and i['vat_rate']==9 and i['orderable'] and not i['options'] for i in pz),'every pizza: €15, 9%, orderable, no size or other choice')
+for f in ('ordering/bestellen.template.html','beheer/beheer.template.html'):
+    check("'indo','pizza','veg'" in open(f,encoding='utf-8').read(),'%s lists the pizza category (else its dishes never render)'%f)
 print(('FAIL %d: '%len(fails)+'; '.join(fails)) if fails else 'tests/test_menu.py: %d items, all checks passed'%len(menu))
 sys.exit(1 if fails else 0)

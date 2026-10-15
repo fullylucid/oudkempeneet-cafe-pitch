@@ -294,7 +294,7 @@ function renderState(){ ST=orderingState(); var el=document.getElementById('stat
   var txt=ST.open?T('st.open',{w:SETTINGS.standard_wait_min,lo:fmt(ST.last)}):T('st.shut',{when:T(ST.when==='today'?'st.today':'st.tomorrow'),t:fmt(ST.at)});
   t.innerHTML=txt.split(' · ').map(function(x){ return '<span class="seg">'+esc(x)+'</span>'; }).join(' · '); }
 /* menu */
-var ORDER=['start','main','lunch','indo','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
+var ORDER=['start','main','lunch','indo','pizza','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
 function renderMenu(){ var root=document.getElementById('menu'), cats=document.getElementById('catrow'); root.innerHTML=''; cats.innerHTML='';
   ORDER.forEach(function(cat){ var items=MENU.filter(function(m){return m.cat===cat;}); if(!items.length) return;
     var label=(CATS[lang]&&CATS[lang][cat])||CATS.nl[cat]||cat;
