@@ -9,7 +9,7 @@
 // No request leaves this machine: every call to formsubmit.co is intercepted.
 let chromium;
 try { ({ chromium } = require('playwright')); }
-catch (e) { try { ({ chromium } = require('/home/fullylucid/.npm-global/lib/node_modules/playwright')); }
+catch (e) { try { ({ chromium } = require(require('path').join(require('os').homedir(), '.npm-global/lib/node_modules/playwright'))); }
   catch (e2) { console.log('tests/reservation-forms.test.js: SKIP — playwright not installed'); process.exit(0); } }
 const path = require('path');
 const URL = 'file://' + path.resolve('index.html');

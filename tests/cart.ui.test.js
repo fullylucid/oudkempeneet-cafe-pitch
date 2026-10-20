@@ -11,7 +11,7 @@
 let chromium;
 try { ({ chromium } = require('playwright')); }
 catch (e) {
-  try { ({ chromium } = require('/home/user/.npm-global/lib/node_modules/playwright')); }
+  try { ({ chromium } = require(require('path').join(require('os').homedir(), '.npm-global/lib/node_modules/playwright'))); }
   catch (e2) { console.log('tests/cart.ui.test.js: SKIP — playwright not installed (npm i -g playwright)'); process.exit(0); }
 }
 const URL = 'file://' + require('path').resolve('ordering/site/index.html');
