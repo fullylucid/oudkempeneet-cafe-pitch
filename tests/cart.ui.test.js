@@ -14,7 +14,12 @@ catch (e) {
   try { ({ chromium } = require(require('path').join(require('os').homedir(), '.npm-global/lib/node_modules/playwright'))); }
   catch (e2) { console.log('tests/cart.ui.test.js: SKIP — playwright not installed (npm i -g playwright)'); process.exit(0); }
 }
-const URL = 'file://' + require('path').resolve('ordering/site/index.html');
+// built from the FIXTURE menu (tests/fixtures/menu.json), not the café's current one: the mechanics
+// under test — invented choices, never-orderable rows, 21% alcohol — must stay pinned whatever is on sale
+const FIX = require('path').join(require('os').tmpdir(), 'ok-bestellen-fixture-' + process.pid + '.html');
+require('child_process').execFileSync('python3', ['tools/build-bestellen.py', FIX, 'tests/fixtures/menu.json'], { stdio: 'ignore' });
+process.on('exit', () => { try { require('fs').unlinkSync(FIX); } catch (e) {} });
+const URL = 'file://' + FIX;
 const MIN_LINES = 5;                                   // Zach: "about 5 items at once without having to scroll"
 
 let n = 0; const fails = [];

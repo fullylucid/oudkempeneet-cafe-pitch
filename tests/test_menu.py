@@ -1,88 +1,80 @@
 #!/usr/bin/env python3
-"""Step-2 checks: menu.json ↔ menu.html ↔ migrations agree. Run: python3 tests/test_menu.py (from repo root)."""
-import json,re,sqlite3,sys,glob
+"""The café's takeaway menu: data/takeaway.json (Dave's card) ↔ data/menu.json ↔ migrations agree.
+Run: python3 tests/test_menu.py (from repo root). The ordering MECHANICS are pinned elsewhere, against
+the frozen tests/fixtures/menu.json — this file checks only what the café actually sells."""
+import json,sqlite3,sys,glob,subprocess
 fails=[]
 def check(cond,msg):
     if not cond: fails.append(msg)
-menu=json.load(open('data/menu.json',encoding='utf-8'))['items']
-html=open('menu.html',encoding='utf-8').read()
-I18N=json.loads(re.search(r'var I18N=(\{.*?\});\n',html,re.S).group(1))
-# provenance: menu.json names the exact menu.html it came from, and the newest seed names menu.json's
-import subprocess
-src=json.load(open('data/menu.json',encoding='utf-8'))['source']
-blob=subprocess.run(['git','hash-object','menu.html'],capture_output=True,text=True).stdout.strip()[:12]
-check(src=='menu.html blob '+blob,'menu.json was extracted from another menu.html (%s, now %s): rerun tools/extract-menu.py'%(src,blob))
+M=json.load(open('data/menu.json',encoding='utf-8')); menu=M['items']
+S=json.load(open('data/takeaway.json',encoding='utf-8'))
+# provenance: menu.json names the exact takeaway.json it came from, and the newest seed names menu.json's
+blob=subprocess.run(['git','hash-object','data/takeaway.json'],capture_output=True,text=True).stdout.strip()[:12]
+check(M['source']=='data/takeaway.json blob '+blob,'menu.json was built from another takeaway.json (%s, now %s): rerun tools/build-menu.py'%(M['source'],blob))
 newest=sorted(glob.glob('migrations/*seed*.sql'))[-1]
-check(src in open(newest,encoding='utf-8').readline(),'%s was not generated from this menu.json: rerun tools/gen-seed.py'%newest)
-check(len(menu)==125,'125 items expected, got %d'%len(menu))
-check(len(set(i['id'] for i in menu))==125,'ids unique')
-for i in menu:
-    k=i['id'].replace('-','.')
-    for l in ('nl','en','de'):
-        check(i['name'][l]==I18N[l][k+'.n'],'name %s %s matches page'%(i['id'],l))
-    check(i['price_cents']>0,'price %s'%i['id'])
-    check(i['vat_rate'] in (9,21),'vat %s'%i['id'])
+check(M['source'] in open(newest,encoding='utf-8').readline(),'%s was not generated from this menu.json: rerun tools/gen-seed.py'%newest)
 by={i['id']:i for i in menu}
-check(by['d-hot-8']['name']['nl']=='Irish Coffee' and by['d-hot-8']['vat_rate']==21,'Irish Coffee 21%')
-for z in ('d-beer-5','d-beer-6','d-beer-13'):
-    check('0.0' in by[z]['name']['nl'] and by[z]['vat_rate']==9,'%s 0.0 beer 9%%'%z)
-check(by['d-beer-4']['vat_rate']==21,'Radler 2.0% stays 21')
-check(all(i['vat_rate']==9 for i in menu if i['kind']=='food'),'all food 9%')
-check(sum(1 for i in menu if not i['orderable'])==3,'3 non-orderable (fondue + 2 draught)')
-check(not by['m-main-0']['orderable'] and not by['d-beer-0']['orderable'] and not by['d-beer-1']['orderable'],'fondue, Tap bier, Groot tapbier excluded')
-# ---- per-dish choices (data/options.json resolved into the menu) ----
-OPT=json.load(open('data/options.json',encoding='utf-8'))
-groups={g['id']:g for g in OPT['groups']}
-check(len(groups)==len(OPT['groups']),'group ids unique')
-for g in OPT['groups']:
-    for l in ('nl','en','de'): check(g['label'].get(l),'group %s has a %s question'%(g['id'],l))
-    check(len(g['options'])>=2,'group %s offers at least two options'%g['id'])
-    check(len({o['id'] for o in g['options']})==len(g['options']),'option ids unique in %s'%g['id'])
+check(len(menu)==49 and len(by)==49,'49 items with unique ids, got %d/%d'%(len(menu),len(by)))
+# the card, price by price (msg 136) — a transcription slip fails here, not at the till
+CARD={'pizza-margherita':1250,'pizza-funghi':1350,'pizza-salame':1395,'pizza-hawaii':1450,'pizza-prosciutto-funghi':1500,
+ 'pizza-quattro-stagioni':1500,'pizza-quattro-formaggi':1500,'pizza-pepperoni':1500,'pizza-diavola':1500,'pizza-caprese':1500,
+ 'pizza-napoli':1500,'pizza-tonno':1500,'pizza-shoarma':1500,'pizza-bbq-chicken':1500,'pizza-salmon':1500,
+ 'indo-beef-rendang':2095,'indo-ajam-pedis':1995,'indo-ajam-cashew':1995,'indo-ajam-bali-roedjak':1995,'indo-kipsate':1995,
+ 'indo-vega-rendang':1695,'indo-sajoer-lodeh':1695,'indo-nasi-goreng-schotel':1995,'indo-bami-goreng-schotel':1995,
+ 'friet-klein':275,'friet-normaal':350,'friet-groot':450,
+ 'saus-mayonaise':50,'saus-ketchup':50,'saus-curry':50,'saus-mosterd':50,'saus-knoflook':75,'saus-pinda':100,'saus-speciaal':100,'saus-oorlog':125,
+ 'snack-frikandel':265,'snack-kroket':275,'snack-kaassouffle':275,'snack-kipcorn':300,'snack-mexicano':325,'snack-bamischijf':300,'snack-sate-ajam':825,'snack-broodje':110,
+ 'borrel-bittergarnituur':750,'borrel-bitterballen':750,'borrel-chicken-wings':850,'borrel-kipnuggets':595,'borrel-kaassouffle-mini':750,'borrel-vlammetjes':750}
+check(set(CARD)==set(by),'menu ids are exactly the card: missing %s, extra %s'%(sorted(set(CARD)-set(by)),sorted(set(by)-set(CARD))))
+for k,v in CARD.items():
+    if k in by: check(by[k]['price_cents']==v,'%s costs %d on the card, %d here'%(k,v,by[k]['price_cents']))
+check([i['id'] for i in menu if i['cat']=='pizza'][:4]==['pizza-margherita','pizza-funghi','pizza-salame','pizza-hawaii'],'pizzas keep the card order')
+for i in menu:
+    for l in ('nl','en','de'): check(i['name'][l],'%s has a %s name'%(i['id'],l))
+    check(i['vat_rate']==9 and i['kind']=='food' and i['orderable'],'%s: food, 9%%, orderable — the card sells no drinks'%i['id'])
+cats=[c['id'] for c in M['cats']]
+check(cats==['pizza','indo','friet','saus','snack','borrel'],'categories in card order, got %s'%cats)
+check(all(any(i['cat']==c for i in menu) for c in cats),'no empty category')
+saus=[c for c in M['cats'] if c['id']=='saus'][0]
+check(all((saus['note'] or {}).get(l) for l in ('nl','en','de')) and '2' in saus['note']['en'],'the sauces carry "Maximum 2 sauces" in all three languages')
+# ---- per-dish choices: only what the card prints ----
+withopts=[i for i in menu if i['options']]
+check(sorted(i['id'] for i in withopts)==sorted(['indo-beef-rendang','indo-ajam-pedis','indo-ajam-cashew','indo-ajam-bali-roedjak','indo-kipsate','indo-vega-rendang','indo-sajoer-lodeh']),
+      'the seven "Choose: Nasi Goreng or Bami Goreng" dishes carry the choice, the plates do not')
+for i in withopts:
+    check([g['id'] for g in i['options']]==['nasi-bami'],'%s asks only nasi or bami'%i['id'])
+    d=(i['desc']['nl'] or '').lower(); check('nasi goreng' in d and 'bami goreng' in d,'%s: the choice is written in its own description — do not invent choices'%i['id'])
+for g in S['groups']:
+    check(g['source']=='menu','group %s comes from the card (nothing implied on the takeaway menu)'%g['id'])
+    check(len(g['options'])>=2 and len({o['id'] for o in g['options']})==len(g['options']),'group %s: two or more distinct options'%g['id'])
     for o in g['options']:
         for l in ('nl','en','de'): check(o['label'].get(l),'option %s/%s has a %s label'%(g['id'],o['id'],l))
-    check(g['source'] in ('menu','implied'),'group %s declares its source'%g['id'])
-check({g['id'] for g in OPT['groups'] if g['source']=='implied'}=={'bakwijze'},
-      'only the steak doneness is ours to invent — everything else must come from the printed menu')
-withopts=[i for i in menu if i.get('options')]
-check(len(withopts)==10,'10 dishes carry choices, got %d'%len(withopts))
-check(all(i['id'] in OPT['items'] for i in withopts),'every dish with choices is listed in options.json')
-check(all(k in by for k in OPT['items']),'options.json names only dishes that exist')
-check(all(by[k]['orderable'] for k in OPT['items']),'a dish with choices must be orderable')
-# a menu-sourced choice must actually be written in the café's own Dutch description
-WORDS={'bami-nasi':('bami','nasi'),'boontjes-sajoer':('boontjes','sajoer'),'schnitzelsaus':('champignon','pepersaus'),
-       'patat-brood':('patat','brood'),'kindermenu':('frikandel','kroket','nuggets','pannenkoek')}
-for iid,gids in OPT['items'].items():
-    d=(by[iid]['desc']['nl'] or '').lower()
-    for gid in gids:
-        if groups[gid]['source']!='menu': continue
-        for w in WORDS[gid]: check(w in d,'"%s" is not in the printed description of %s — do not invent choices'%(w,iid))
-check(not by['m-main-1']['desc']['nl'] or 'gebakken' not in by['m-main-1']['desc']['nl'].lower(),
-      'the steak doneness is not on the printed menu (that is why it is source:implied)')
+# no template keeps its own category list any more — a category missing from one never rendered
+for f in ('ordering/bestellen.template.html','beheer/beheer.template.html','tools/gen-vat-sheet.py'):
+    check("'indo'" not in open(f,encoding='utf-8').read(),'%s hard-codes a category list again'%f)
 
 db=sqlite3.connect(':memory:')
 for f in sorted(glob.glob('migrations/*.sql')): db.executescript(open(f,encoding='utf-8').read())
-n=db.execute('select count(*) from menu_items').fetchone()[0]; check(n==125,'seed rows %d'%n)
+n=db.execute('select count(*) from menu_items').fetchone()[0]; check(n==49,'seed rows %d'%n)
 for f in sorted(glob.glob('migrations/*.sql')): db.executescript(open(f,encoding='utf-8').read())   # idempotent
-check(db.execute('select count(*) from menu_items').fetchone()[0]==125,'seed idempotent')
-r=db.execute("select vat_rate,orderable from menu_items where id='d-hot-8'").fetchone(); check(r==(21,1),'D1 Irish Coffee row')
-check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==3,'D1 non-orderable count')
+check(db.execute('select count(*) from menu_items').fetchone()[0]==49,'seed idempotent')
+check(db.execute("select price_cents,vat_rate,orderable from menu_items where id='pizza-margherita'").fetchone()==(1250,9,1),'D1 Margherita row: the takeaway price')
+check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==0,'nothing on the card is excluded from online ordering')
 check(db.execute("select value from settings where key='standard_wait_min'").fetchone()[0]=='45','settings seeded')
 check(db.execute("select value from settings where key='strip_contact_after_days'").fetchone()[0]=='0','retention = never (Q15 = b)')
-db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o1','ABCD','nl',850,70,0,850,45)")
-db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot,line_note) values('o1',1,'m-start-0',1,850,9,'Soep van de dag','zonder brood')")
-check(db.execute("select line_note from order_items where order_id='o1'").fetchone()[0]=='zonder brood','line_note column (Q23 = a)')
-# choices are ROWS now, not a blob on the item — Part Two's manager edits one option at a time
+db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o1','ABCD','nl',1250,103,0,1250,45)")
+db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot,line_note) values('o1',1,'pizza-margherita',1,1250,9,'Margherita','extra krokant')")
+check(db.execute("select line_note from order_items where order_id='o1'").fetchone()[0]=='extra krokant','line_note column (Q23 = a)')
+# choices are ROWS, not a blob on the item — Part Two's manager edits one option at a time
 n_opt=db.execute("select count(*) from item_options").fetchone()[0]
 want=sum(len(g['options']) for i in menu for g in (i.get('options') or []))
 check(n_opt==want,'every option is a row in D1 (%d, want %d)'%(n_opt,want))
-check(db.execute("select count(distinct item_id) from item_options").fetchone()[0]==10,'10 dishes carry choices in D1')
-r=db.execute("select group_nl,label_nl,required,source,price_cents from item_options where item_id='m-indo-3' and option_id='nasi'").fetchone()
-check(r==('Bami of nasi?','Nasi',1,'menu',0),'a choice row carries its question, its answer, its source and a zero surcharge (got %r)'%(r,))
-check(db.execute("select count(*) from item_options where item_id='m-start-0'").fetchone()[0]==0,'a dish with no choice has no rows')
+check(db.execute("select count(distinct item_id) from item_options").fetchone()[0]==7,'7 dishes carry choices in D1')
+r=db.execute("select group_nl,label_nl,required,source,price_cents from item_options where item_id='indo-sajoer-lodeh' and option_id='nasi'").fetchone()
+check(r==('Nasi goreng of bami goreng?','Nasi goreng',1,'menu',0),'a choice row carries its question, its answer, its source and a zero surcharge (got %r)'%(r,))
+check(db.execute("select count(*) from item_options where item_id='pizza-margherita'").fetchone()[0]==0,'a dish with no choice has no rows')
 check(db.execute("select count(*) from item_options where price_cents<>0").fetchone()[0]==0,'no option costs money today — Q14 decides whether any ever does')
-check(db.execute("select count(*) from item_options where source='implied'").fetchone()[0]==3,'only the steak doneness is ours to invent (3 rows)')
-# ordering is preserved so the manager can drag without inventing it
-check([x[0] for x in db.execute("select option_id from item_options where item_id='m-main-1' order by option_pos")]==['rood','medium','doorbakken'],'option order survives the seed')
+check([x[0] for x in db.execute("select option_id from item_options where item_id='indo-beef-rendang' order by option_pos")]==['nasi','bami'],'option order survives the seed (the card says Nasi first)')
 # --- Part Two columns are present BEFORE the schema freezes (PR #76, P2) ---
 cols={r[1] for r in db.execute("pragma table_info(menu_items)")}
 for c in ('prep_minutes','photo_key','archived_at','sold_out_at'): check(c in cols,'menu_items.%s folded into 0001'%c)
@@ -90,8 +82,6 @@ for c in ('prep_minutes','photo_key','archived_at','sold_out_at'): check(c in co
 # (clears at opening vs stays until cleared) is answered by the reader, not by a second column
 check([r[2] for r in db.execute("pragma table_info(menu_items)") if r[1]=='sold_out_at']==['TEXT'],'sold_out_at is a timestamp, not a boolean')
 check(db.execute("select count(*) from menu_items where sold_out_at is not null").fetchone()[0]==0,'nothing ships sold out')
-check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==3,'orderable still means never-orderable-online: fondue + 2 draught, unchanged')
-check([r[0] for r in db.execute("select orderable_note from menu_items where orderable=0 order by id")]==['draught','draught','reservation-only, 1 day ahead'],'and each one still says why')
 check('options_json' not in cols,'options_json is gone — one place holds the choices, not two')
 ocols={r[1] for r in db.execute("pragma table_info(orders)")}
 for c in ('kitchen_state','accepted_at','accepted_by','kitchen_prep_min','refused_at','refused_reason'):
@@ -100,22 +90,16 @@ icols={r[1] for r in db.execute("pragma table_info(order_items)")}
 check('options_cents' in icols,'order_items.options_cents folded into 0001')
 check(db.execute("select value from settings where key='ready_round_to_min'").fetchone()[0]=='5','ready-time numbers are settings, not code')
 # the kitchen's state is its own field, and it must NOT be constrained like the payment status
-db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o2','EFGH','nl',850,70,0,850,45)")
+db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o2','EFGH','nl',1250,103,0,1250,45)")
 check(db.execute("select kitchen_state from orders where id='o2'").fetchone()[0]=='new','a new order starts unseen by the kitchen')
 db.execute("update orders set kitchen_state='ready' where id='o2'")
 check(db.execute("select kitchen_state from orders where id='o2'").fetchone()[0]=='ready','kitchen_state takes a state we did not foresee — widening a CHECK in SQLite is a table rebuild')
 check(db.execute("select status from orders where id='o2'").fetchone()[0]=='pending','the payment status is untouched by a kitchen move')
-db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot,options_snapshot) values('o1',2,'m-indo-3',1,1695,9,'Sajoer Lodeh','Bami of nasi: Nasi')")
-check(db.execute("select options_snapshot from order_items where order_id='o1' and line=2").fetchone()[0]=='Bami of nasi: Nasi','the choice is snapshotted on the order line')
+db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot,options_snapshot) values('o1',2,'indo-sajoer-lodeh',1,1695,9,'Sajoer Lodeh','Nasi goreng of bami goreng?: Nasi goreng')")
+check(db.execute("select options_snapshot from order_items where order_id='o1' and line=2").fetchone()[0]=='Nasi goreng of bami goreng?: Nasi goreng','the choice is snapshotted on the order line')
 try: db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('x','ABCD','xx',1,0,0,1,45)"); check(False,'lang CHECK enforced')
 except sqlite3.IntegrityError: pass
-try: db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot) values('x',1,'m-start-0',21,850,9,'Soep')"); check(False,'qty<=20 CHECK enforced')
+try: db.execute("insert into order_items(order_id,line,item_id,qty,unit_price_cents,vat_rate,name_snapshot) values('x',1,'pizza-margherita',21,1250,9,'Margherita')"); check(False,'qty<=20 CHECK enforced')
 except sqlite3.IntegrityError: pass
-# pizza (Dave's card, 2026-10-15): one size, so no choice at all — quantity is the only control
-pz=[i for i in menu if i['cat']=='pizza']
-check(len(pz)==15,'15 pizzas, got %d'%len(pz))
-check(all(i['price_cents']==1500 and i['vat_rate']==9 and i['orderable'] and not i['options'] for i in pz),'every pizza: €15, 9%, orderable, no size or other choice')
-for f in ('ordering/bestellen.template.html','beheer/beheer.template.html'):
-    check("'indo','pizza','veg'" in open(f,encoding='utf-8').read(),'%s lists the pizza category (else its dishes never render)'%f)
 print(('FAIL %d: '%len(fails)+'; '.join(fails)) if fails else 'tests/test_menu.py: %d items, all checks passed'%len(menu))
 sys.exit(1 if fails else 0)

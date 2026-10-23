@@ -11,7 +11,12 @@ catch (e) {
   catch (e2) { console.log('tests/beheer.test.js: SKIP — playwright not installed (npm i -g playwright)'); process.exit(0); }
 }
 const path = require('path');
-const URL = 'file://' + path.resolve('beheer/site/index.html');
+// built from the FIXTURE menu (tests/fixtures/menu.json), not the café's current one: the mechanics
+// under test — invented choices, never-orderable rows, 21% alcohol — must stay pinned whatever is on sale
+const FIX = require('path').join(require('os').tmpdir(), 'ok-beheer-fixture-' + process.pid + '.html');
+require('child_process').execFileSync('python3', ['tools/build-beheer.py', FIX, 'tests/fixtures/menu.json'], { stdio: 'ignore' });
+process.on('exit', () => { try { require('fs').unlinkSync(FIX); } catch (e) {} });
+const URL = 'file://' + FIX;
 let n = 0; const fails = [];
 const ok = (c, m) => { n++; if (!c) fails.push(m); };
 const ops = page => page.evaluate(() => { document.getElementById('save').click();
