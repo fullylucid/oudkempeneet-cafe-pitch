@@ -13,7 +13,7 @@
 CREATE TABLE IF NOT EXISTS menu_items (
   id            TEXT PRIMARY KEY,            -- e.g. m-main-1 (from menu.html i18n key)
   kind          TEXT NOT NULL CHECK (kind IN ('food','drink')),
-  cat           TEXT NOT NULL,               -- start|main|lunch|snack|indo|veg|kids|pancake|dessert|extra|hot|soft|beer|wine|spirit|cocktail
+  cat           TEXT NOT NULL,               -- a category id from data/menu.json cats (pizza|indo|friet|saus|snack|borrel today)
   pos           INTEGER NOT NULL,            -- order within the category
   name_nl       TEXT NOT NULL,
   name_en       TEXT NOT NULL,

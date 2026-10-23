@@ -123,18 +123,24 @@ extracted text: `~/shmorganism/soma/state/merritt/assets/oudkempen-menus-2026-08
 - All three languages live in the `I18N` object in `menu.html`; the inline markup is only the
   default rendering, so counting inline prices undercounts badly.
 
-## Ordering menu: D1 is the truth, `menu.html` is not (from the first seed onward)
+## Ordering menu: its own card, and D1 is the truth from the first seed onward
 
-The takeaway ordering backend reads the menu from **D1**, seeded from `data/menu.json`, which
-`tools/extract-menu.py` produces from `menu.html`. From the moment the seed is applied, **editing
-`menu.html` does not change what customers can order or what they pay.** Until the menu manager
-(Part Two) exists, a menu change is:
+The takeaway menu is **not** the restaurant menu: Dave's takeaway card (studio group msg 136,
+2026-10-23) has its own prices and its own dishes. Its source is `data/takeaway.json`, transcribed
+from that card; `menu.html` is the restaurant page only and feeds nothing in ordering. The ordering
+backend reads the menu from **D1**, seeded from `data/menu.json`, which `tools/build-menu.py`
+produces from `data/takeaway.json`. Until the menu manager (Part Two) exists, a menu change is:
 
-1. update `menu.html` per the rules above (still the printed-card truth for the website);
-2. `python3 tools/extract-menu.py data/menu.json`;
-3. `python3 tools/gen-seed.py data/menu.json migrations/000N_seed_menu.sql` — a NEW migration
-   number, never an edit of an applied one;
-4. `python3 tests/test_menu.py` (must pass) and apply the migration to D1.
+1. edit `data/takeaway.json` (names in nl/en/de, price in cents, category, choices);
+2. `python3 tools/build-menu.py`, then `python3 tools/build-bestellen.py` and `python3 tools/build-beheer.py`;
+3. `python3 tools/gen-seed.py data/menu.json migrations/0002_seed_menu.sql` while no D1 has applied
+   0002 — after that, a NEW migration number, never an edit of an applied one;
+4. `python3 tests/test_menu.py` (must pass; it pins every price on the card) and apply the migration.
+
+Categories, their order, their labels and their notes (e.g. "Maximum 2 sauces") live in
+`data/takeaway.json` too; no template keeps a category list of its own. The ordering *mechanics*
+are tested against a frozen copy of the old restaurant menu, `tests/fixtures/menu.json`, because it
+exercises what the card does not (21% alcohol, never-orderable rows, an invented choice).
 
 **The schema freezes the same way the seed does.** `migrations/0001_schema.sql` may still be
 edited today only because it has never been applied — there is no `d1_databases` binding, no

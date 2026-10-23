@@ -1,7 +1,9 @@
 // node tests/tally.test.js — the totals function (gate condition 6). Run from repo root.
 const { tally } = require('../src/tally.js');
 const fs = require('fs');
-const menu = JSON.parse(fs.readFileSync('data/menu.json', 'utf8')).items;
+// the FIXTURE, not the café's current menu: these checks need 21% alcohol, its exceptions and an
+// invented choice, which the takeaway card does not have — the totals rules must stay pinned anyway
+const menu = JSON.parse(fs.readFileSync('tests/fixtures/menu.json', 'utf8')).items;
 const by = {}; menu.forEach(m => by[m.id] = m);
 let n = 0, fails = [];
 const ok = (c, m) => { n++; if (!c) fails.push(m); };

@@ -1,0 +1,893 @@
+{
+ "about": "The takeaway menu, hand-transcribed from Dave's takeaway card (English, studio group msg 136, 2026-10-23). This file is the source; tools/build-menu.py turns it into data/menu.json. NL/DE are ours where the card had only English; Dutch names follow the café's Dutch pizza card (msg 126, as ruled in msg 130). All items are food: VAT 9%.",
+ "cats": [
+  {
+   "id": "pizza",
+   "label": {
+    "nl": "Pizza's",
+    "en": "Pizzas",
+    "de": "Pizzen"
+   },
+   "note": null
+  },
+  {
+   "id": "indo",
+   "label": {
+    "nl": "Indonesische gerechten",
+    "en": "Indonesian dishes",
+    "de": "Indonesische Gerichte"
+   },
+   "note": null
+  },
+  {
+   "id": "friet",
+   "label": {
+    "nl": "Friet",
+    "en": "French fries",
+    "de": "Pommes frites"
+   },
+   "note": null
+  },
+  {
+   "id": "saus",
+   "label": {
+    "nl": "Sauzen",
+    "en": "Sauces",
+    "de": "Soßen"
+   },
+   "note": {
+    "nl": "Maximaal 2 sauzen.",
+    "en": "Maximum 2 sauces.",
+    "de": "Maximal 2 Soßen."
+   }
+  },
+  {
+   "id": "snack",
+   "label": {
+    "nl": "Snacks",
+    "en": "Snacks",
+    "de": "Snacks"
+   },
+   "note": null
+  },
+  {
+   "id": "borrel",
+   "label": {
+    "nl": "Borrelhapjes",
+    "en": "Fried snacks & appetizers",
+    "de": "Frittiertes & Häppchen"
+   },
+   "note": null
+  }
+ ],
+ "groups": [
+  {
+   "id": "nasi-bami",
+   "source": "menu",
+   "required": true,
+   "label": {
+    "nl": "Nasi goreng of bami goreng?",
+    "en": "Nasi goreng or bami goreng?",
+    "de": "Nasi Goreng oder Bami Goreng?"
+   },
+   "options": [
+    {
+     "id": "nasi",
+     "label": {
+      "nl": "Nasi goreng",
+      "en": "Nasi goreng",
+      "de": "Nasi Goreng"
+     }
+    },
+    {
+     "id": "bami",
+     "label": {
+      "nl": "Bami goreng",
+      "en": "Bami goreng",
+      "de": "Bami Goreng"
+     }
+    }
+   ]
+  }
+ ],
+ "items": [
+  {
+   "id": "pizza-margherita",
+   "cat": "pizza",
+   "price_cents": 1250,
+   "name": {
+    "nl": "Margherita",
+    "en": "Margherita",
+    "de": "Margherita"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas.",
+    "en": "Tomato sauce and cheese.",
+    "de": "Tomatensoße, Käse."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-funghi",
+   "cat": "pizza",
+   "price_cents": 1350,
+   "name": {
+    "nl": "Funghi",
+    "en": "Funghi",
+    "de": "Funghi"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, champignons.",
+    "en": "Tomato sauce, cheese and mushrooms.",
+    "de": "Tomatensoße, Käse, Champignons."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-salame",
+   "cat": "pizza",
+   "price_cents": 1395,
+   "name": {
+    "nl": "Salame",
+    "en": "Salame",
+    "de": "Salame"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, salami.",
+    "en": "Tomato sauce, cheese and salami.",
+    "de": "Tomatensoße, Käse, Salami."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-hawaii",
+   "cat": "pizza",
+   "price_cents": 1450,
+   "name": {
+    "nl": "Hawaii",
+    "en": "Hawaii",
+    "de": "Hawaii"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ham, ananas.",
+    "en": "Tomato sauce, cheese, ham and pineapple.",
+    "de": "Tomatensoße, Käse, Schinken, Ananas."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-prosciutto-funghi",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Prosciutto e Funghi",
+    "en": "Prosciutto e Funghi",
+    "de": "Prosciutto e Funghi"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ham, champignons.",
+    "en": "Tomato sauce, cheese, ham and mushrooms.",
+    "de": "Tomatensoße, Käse, Schinken, Champignons."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-quattro-stagioni",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Quattro Stagioni",
+    "en": "Quattro Stagioni",
+    "de": "Quattro Stagioni"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ham, salami, paprika, champignons.",
+    "en": "Tomato sauce, cheese, ham, salami, bell peppers and mushrooms.",
+    "de": "Tomatensoße, Käse, Schinken, Salami, Paprika, Champignons."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-quattro-formaggi",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Quattro Formaggio",
+    "en": "Quattro Formaggi",
+    "de": "Quattro Formaggi"
+   },
+   "desc": {
+    "nl": "Tomatensaus en vier soorten kaas.",
+    "en": "Tomato sauce and four cheeses.",
+    "de": "Tomatensoße und vier Käsesorten."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-pepperoni",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Peperoni",
+    "en": "Pepperoni",
+    "de": "Pepperoni"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, peperoni.",
+    "en": "Tomato sauce, cheese and pepperoni.",
+    "de": "Tomatensoße, Käse, Peperoni-Salami."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-diavola",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Diavola",
+    "en": "Diavola",
+    "de": "Diavola"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, salami, rode ui, paprika.",
+    "en": "Tomato sauce, cheese, salami, red onion and bell peppers.",
+    "de": "Tomatensoße, Käse, Salami, rote Zwiebel, Paprika."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-caprese",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Caprese",
+    "en": "Caprese",
+    "de": "Caprese"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, mozzarella, tomaat, basilicum.",
+    "en": "Tomato sauce, cheese, mozzarella, tomatoes and basil.",
+    "de": "Tomatensoße, Käse, Mozzarella, Tomaten, Basilikum."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-napoli",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Napoli",
+    "en": "Napoli",
+    "de": "Napoli"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, ansjovis, olijven, kappertjes.",
+    "en": "Tomato sauce, cheese, anchovies, olives and capers.",
+    "de": "Tomatensoße, Käse, Sardellen, Oliven, Kapern."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-tonno",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Tonno",
+    "en": "Tonno",
+    "de": "Tonno"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, tonijn, olijven, rode ui, kappertjes.",
+    "en": "Tomato sauce, cheese, tuna, olives, red onion and capers.",
+    "de": "Tomatensoße, Käse, Thunfisch, Oliven, rote Zwiebel, Kapern."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-shoarma",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Shoarma",
+    "en": "Shoarma",
+    "de": "Schawarma"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, shoarma, jalapeños, rode ui.",
+    "en": "Tomato sauce, cheese, shawarma meat, jalapeños and red onion.",
+    "de": "Tomatensoße, Käse, Schawarma-Fleisch, Jalapeños, rote Zwiebel."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-bbq-chicken",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "BBQ",
+    "en": "BBQ Chicken",
+    "de": "BBQ Chicken"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, kip, rode ui, BBQ-saus.",
+    "en": "Tomato sauce, cheese, chicken, red onion and BBQ sauce.",
+    "de": "Tomatensoße, Käse, Hähnchen, rote Zwiebel, BBQ-Soße."
+   },
+   "options": []
+  },
+  {
+   "id": "pizza-salmon",
+   "cat": "pizza",
+   "price_cents": 1500,
+   "name": {
+    "nl": "Zalm",
+    "en": "Salmon",
+    "de": "Lachs"
+   },
+   "desc": {
+    "nl": "Tomatensaus, kaas, zalm, knoflook, witte wijn, kappertjes.",
+    "en": "Tomato sauce, cheese, salmon, garlic, white wine and capers.",
+    "de": "Tomatensoße, Käse, Lachs, Knoblauch, Weißwein, Kapern."
+   },
+   "options": []
+  },
+  {
+   "id": "indo-beef-rendang",
+   "cat": "indo",
+   "price_cents": 2095,
+   "name": {
+    "nl": "Beef Rendang",
+    "en": "Beef Rendang",
+    "de": "Beef Rendang"
+   },
+   "desc": {
+    "nl": "Langzaam gegaard rundvlees in een rijke Indonesische kruidensaus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Slow-cooked beef in a rich Indonesian spiced sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Langsam geschmortes Rindfleisch in einer reichhaltigen indonesischen Gewürzsoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-ajam-pedis",
+   "cat": "indo",
+   "price_cents": 1995,
+   "name": {
+    "nl": "Ajam Pedis",
+    "en": "Ajam Pedis",
+    "de": "Ajam Pedis"
+   },
+   "desc": {
+    "nl": "Kip in een pittige Indonesische saus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Chicken in a spicy Indonesian sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Hähnchen in einer scharfen indonesischen Soße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-ajam-cashew",
+   "cat": "indo",
+   "price_cents": 1995,
+   "name": {
+    "nl": "Ajam Cashew",
+    "en": "Ajam Cashew",
+    "de": "Ajam Cashew"
+   },
+   "desc": {
+    "nl": "Kip met cashewnoten in een Indonesische saus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Chicken with cashew nuts in an Indonesian-style sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Hähnchen mit Cashewkernen in einer Soße nach indonesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-ajam-bali-roedjak",
+   "cat": "indo",
+   "price_cents": 1995,
+   "name": {
+    "nl": "Ajam Bali Roedjak",
+    "en": "Ajam Bali Roedjak",
+    "de": "Ajam Bali Roedjak"
+   },
+   "desc": {
+    "nl": "Kip in een geurige Balinese saus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Chicken in a fragrant Balinese-style sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Hähnchen in einer aromatischen Soße nach balinesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-kipsate",
+   "cat": "indo",
+   "price_cents": 1995,
+   "name": {
+    "nl": "Kipsaté",
+    "en": "Chicken Satay",
+    "de": "Hähnchen-Saté"
+   },
+   "desc": {
+    "nl": "Kipsaté met huisgemaakte satésaus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Chicken satay with homemade satay sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Hähnchen-Saté mit hausgemachter Satésoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-vega-rendang",
+   "cat": "indo",
+   "price_cents": 1695,
+   "name": {
+    "nl": "Vega Rendang",
+    "en": "Vegetarian Rendang",
+    "de": "Vegetarisches Rendang"
+   },
+   "desc": {
+    "nl": "Vegetarische rendang op Indonesische wijze. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Vegetarian Indonesian-style rendang. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Vegetarisches Rendang nach indonesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-sajoer-lodeh",
+   "cat": "indo",
+   "price_cents": 1695,
+   "name": {
+    "nl": "Sajoer Lodeh",
+    "en": "Sajoer Lodeh",
+    "de": "Sajoer Lodeh"
+   },
+   "desc": {
+    "nl": "Gemengde groenten in een milde Indonesische kokos-kruidensaus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "en": "Mixed vegetables in a mild Indonesian coconut and spice sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
+    "de": "Gemischtes Gemüse in einer milden indonesischen Kokos-Gewürzsoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+   },
+   "options": [
+    "nasi-bami"
+   ]
+  },
+  {
+   "id": "indo-nasi-goreng-schotel",
+   "cat": "indo",
+   "price_cents": 1995,
+   "name": {
+    "nl": "Nasi Goreng Schotel",
+    "en": "Nasi Goreng Plate",
+    "de": "Nasi-Goreng-Teller"
+   },
+   "desc": {
+    "nl": "Nasi goreng met kipsaté, ei, atjar en kroepoek.",
+    "en": "Nasi goreng with chicken satay, egg, atjar and prawn crackers.",
+    "de": "Nasi Goreng mit Hähnchen-Saté, Ei, Atjar und Krupuk."
+   },
+   "options": []
+  },
+  {
+   "id": "indo-bami-goreng-schotel",
+   "cat": "indo",
+   "price_cents": 1995,
+   "name": {
+    "nl": "Bami Goreng Schotel",
+    "en": "Bami Goreng Plate",
+    "de": "Bami-Goreng-Teller"
+   },
+   "desc": {
+    "nl": "Bami goreng met kipsaté, ei, atjar en kroepoek.",
+    "en": "Bami goreng with chicken satay, egg, atjar and prawn crackers.",
+    "de": "Bami Goreng mit Hähnchen-Saté, Ei, Atjar und Krupuk."
+   },
+   "options": []
+  },
+  {
+   "id": "friet-klein",
+   "cat": "friet",
+   "price_cents": 275,
+   "name": {
+    "nl": "Friet klein",
+    "en": "French fries, small",
+    "de": "Pommes frites, klein"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "friet-normaal",
+   "cat": "friet",
+   "price_cents": 350,
+   "name": {
+    "nl": "Friet normaal",
+    "en": "French fries, regular",
+    "de": "Pommes frites, normal"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "friet-groot",
+   "cat": "friet",
+   "price_cents": 450,
+   "name": {
+    "nl": "Friet groot",
+    "en": "French fries, large",
+    "de": "Pommes frites, groß"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-mayonaise",
+   "cat": "saus",
+   "price_cents": 50,
+   "name": {
+    "nl": "Mayonaise",
+    "en": "Mayonnaise",
+    "de": "Mayonnaise"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-ketchup",
+   "cat": "saus",
+   "price_cents": 50,
+   "name": {
+    "nl": "Ketchup",
+    "en": "Ketchup",
+    "de": "Ketchup"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-curry",
+   "cat": "saus",
+   "price_cents": 50,
+   "name": {
+    "nl": "Curry",
+    "en": "Curry ketchup",
+    "de": "Curry-Ketchup"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-mosterd",
+   "cat": "saus",
+   "price_cents": 50,
+   "name": {
+    "nl": "Mosterd",
+    "en": "Mustard",
+    "de": "Senf"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-knoflook",
+   "cat": "saus",
+   "price_cents": 75,
+   "name": {
+    "nl": "Knoflooksaus",
+    "en": "Garlic sauce",
+    "de": "Knoblauchsoße"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-pinda",
+   "cat": "saus",
+   "price_cents": 100,
+   "name": {
+    "nl": "Pindasaus",
+    "en": "Peanut sauce",
+    "de": "Erdnusssoße"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "saus-speciaal",
+   "cat": "saus",
+   "price_cents": 100,
+   "name": {
+    "nl": "Speciaal",
+    "en": "Special",
+    "de": "Spezial"
+   },
+   "desc": {
+    "nl": "Mayonaise, curry en uitjes.",
+    "en": "Mayonnaise, curry ketchup and onions.",
+    "de": "Mayonnaise, Curry-Ketchup und Zwiebeln."
+   },
+   "options": []
+  },
+  {
+   "id": "saus-oorlog",
+   "cat": "saus",
+   "price_cents": 125,
+   "name": {
+    "nl": "Oorlog",
+    "en": "Oorlog",
+    "de": "Oorlog"
+   },
+   "desc": {
+    "nl": "Mayonaise, pindasaus en uitjes.",
+    "en": "Mayonnaise, peanut sauce and onions.",
+    "de": "Mayonnaise, Erdnusssoße und Zwiebeln."
+   },
+   "options": []
+  },
+  {
+   "id": "snack-frikandel",
+   "cat": "snack",
+   "price_cents": 265,
+   "name": {
+    "nl": "Frikandel",
+    "en": "Frikandel",
+    "de": "Frikandel"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "snack-kroket",
+   "cat": "snack",
+   "price_cents": 275,
+   "name": {
+    "nl": "Kroket",
+    "en": "Kroket",
+    "de": "Kroket"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "snack-kaassouffle",
+   "cat": "snack",
+   "price_cents": 275,
+   "name": {
+    "nl": "Kaassoufflé",
+    "en": "Kaassoufflé",
+    "de": "Kaassoufflé"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "snack-kipcorn",
+   "cat": "snack",
+   "price_cents": 300,
+   "name": {
+    "nl": "Kipcorn",
+    "en": "Kipcorn",
+    "de": "Kipcorn"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "snack-mexicano",
+   "cat": "snack",
+   "price_cents": 325,
+   "name": {
+    "nl": "Mexicano",
+    "en": "Mexicano",
+    "de": "Mexicano"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "snack-bamischijf",
+   "cat": "snack",
+   "price_cents": 300,
+   "name": {
+    "nl": "Bamischijf",
+    "en": "Bamischijf",
+    "de": "Bamischijf"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "snack-sate-ajam",
+   "cat": "snack",
+   "price_cents": 825,
+   "name": {
+    "nl": "Saté Ajam",
+    "en": "Saté Ajam",
+    "de": "Saté Ajam"
+   },
+   "desc": {
+    "nl": "3 stokjes kipsaté met huisgemaakte satésaus.",
+    "en": "3 chicken satay skewers with homemade satay sauce.",
+    "de": "3 Hähnchen-Saté-Spieße mit hausgemachter Satésoße."
+   },
+   "options": []
+  },
+  {
+   "id": "snack-broodje",
+   "cat": "snack",
+   "price_cents": 110,
+   "name": {
+    "nl": "Broodje bij een snack",
+    "en": "Bread roll with a snack",
+    "de": "Brötchen zum Snack"
+   },
+   "desc": {
+    "nl": null,
+    "en": null,
+    "de": null
+   },
+   "options": []
+  },
+  {
+   "id": "borrel-bittergarnituur",
+   "cat": "borrel",
+   "price_cents": 750,
+   "name": {
+    "nl": "Bittergarnituur",
+    "en": "Mixed Fried Snacks",
+    "de": "Gemischte Frittiersnacks"
+   },
+   "desc": {
+    "nl": "8 stuks.",
+    "en": "8 pieces.",
+    "de": "8 Stück."
+   },
+   "options": []
+  },
+  {
+   "id": "borrel-bitterballen",
+   "cat": "borrel",
+   "price_cents": 750,
+   "name": {
+    "nl": "Bitterballen",
+    "en": "Bitterballen",
+    "de": "Bitterballen"
+   },
+   "desc": {
+    "nl": "8 stuks.",
+    "en": "8 pieces.",
+    "de": "8 Stück."
+   },
+   "options": []
+  },
+  {
+   "id": "borrel-chicken-wings",
+   "cat": "borrel",
+   "price_cents": 850,
+   "name": {
+    "nl": "Chicken Wings",
+    "en": "Chicken Wings",
+    "de": "Chicken Wings"
+   },
+   "desc": {
+    "nl": "8 stuks.",
+    "en": "8 pieces.",
+    "de": "8 Stück."
+   },
+   "options": []
+  },
+  {
+   "id": "borrel-kipnuggets",
+   "cat": "borrel",
+   "price_cents": 595,
+   "name": {
+    "nl": "Kipnuggets",
+    "en": "Chicken Nuggets",
+    "de": "Chicken Nuggets"
+   },
+   "desc": {
+    "nl": "8 stuks.",
+    "en": "8 pieces.",
+    "de": "8 Stück."
+   },
+   "options": []
+  },
+  {
+   "id": "borrel-kaassouffle-mini",
+   "cat": "borrel",
+   "price_cents": 750,
+   "name": {
+    "nl": "Mini kaassoufflés",
+    "en": "Mini Cheese Soufflés",
+    "de": "Mini-Käsesoufflés"
+   },
+   "desc": {
+    "nl": "8 stuks.",
+    "en": "8 pieces.",
+    "de": "8 Stück."
+   },
+   "options": []
+  },
+  {
+   "id": "borrel-vlammetjes",
+   "cat": "borrel",
+   "price_cents": 750,
+   "name": {
+    "nl": "Vlammetjes",
+    "en": "Vlammetjes",
+    "de": "Vlammetjes"
+   },
+   "desc": {
+    "nl": "8 stuks.",
+    "en": "8 pieces.",
+    "de": "8 Stück."
+   },
+   "options": []
+  }
+ ]
+}

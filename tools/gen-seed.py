@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # gen-seed — data/menu.json → migrations/0002_seed_menu.sql (idempotent upsert).
-# A menu change before Part Two = re-run extract-menu, re-run this, new migration number.
+# A menu change = edit data/takeaway.json, run tools/build-menu.py, then this. While no D1 has applied
+# 0002 it is regenerated in place; once one has, every change needs a NEW migration number.
 import json,sys
 d=json.load(open(sys.argv[1],encoding='utf-8'))
 def q(v): return 'NULL' if v is None else "'"+str(v).replace("'","''")+"'"

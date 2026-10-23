@@ -85,6 +85,7 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .cat-head{display:flex;align-items:center;gap:16px;margin-bottom:14px}
 .cat-head h2{font-size:clamp(17px,3.6vw,24px);letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;color:#2A1B10}
 .cat-rule{height:1px;flex:1;background:linear-gradient(90deg,var(--accent-2),transparent)}
+.cat-note{margin:-6px 0 14px;font-size:14px;color:var(--ink-dim);font-style:italic}
 .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
 .item{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border-radius:4px;padding:14px 14px 12px;box-shadow:0 18px 40px -30px rgba(36,24,19,.45)}
 .item .body{flex:1;min-width:0}
@@ -228,6 +229,7 @@ header.mhead{position:relative;z-index:1}   /* contains the art; .shop must NOT 
 /*__TALLY__*/
 var MENU=/*__MENU__*/[];
 var CATS=/*__CATS__*/{};
+var NOTES=/*__NOTES__*/{};
 var SETTINGS={last_orders_offset_min:30,standard_wait_min:45,min_order_cents:0,cart_max_lines:50,cart_max_qty_per_line:20,cart_max_total_cents:50000};
 var UI={
  nl:{"title":"Afhalen bestellen — Oud-Kempen Eetcafé","a.skip":"Naar de kaart","a.lang":"Taal","a.cats":"Categorieën","a.prev":"Eerdere categorieën","a.next":"Volgende categorieën","a.cart":"Bestelling","a.close":"Sluiten","a.expand":"Hele bestelling tonen","a.collapse":"Bestelling inklappen","a.add":"Toevoegen: {n}","a.less":"Minder: {n}","a.more":"Meer: {n}","a.remove":"Verwijderen: {n}","a.another":"Nog een {n}","sb.banner":"Voorbeeld — geen echte bestellingen, geen betaling","back.menu":"← De kaart","hdr.kicker":"Eetcafé · Stavenisse · Zeeland","o.title":"Afhalen","o.dek":"Bestel online, betaal veilig, haal op aan de bar. Wij bellen als er iets is.",
@@ -294,13 +296,14 @@ function renderState(){ ST=orderingState(); var el=document.getElementById('stat
   var txt=ST.open?T('st.open',{w:SETTINGS.standard_wait_min,lo:fmt(ST.last)}):T('st.shut',{when:T(ST.when==='today'?'st.today':'st.tomorrow'),t:fmt(ST.at)});
   t.innerHTML=txt.split(' · ').map(function(x){ return '<span class="seg">'+esc(x)+'</span>'; }).join(' · '); }
 /* menu */
-var ORDER=['start','main','lunch','indo','pizza','veg','pancake','snack','kids','dessert','extra','hot','soft','beer','wine','cocktail','spirit'];
+var ORDER=/*__ORDER__*/[];   // the category order and labels come from data/menu.json (cats), never a list kept here
 function renderMenu(){ var root=document.getElementById('menu'), cats=document.getElementById('catrow'); root.innerHTML=''; cats.innerHTML='';
   ORDER.forEach(function(cat){ var items=MENU.filter(function(m){return m.cat===cat;}); if(!items.length) return;
     var label=(CATS[lang]&&CATS[lang][cat])||CATS.nl[cat]||cat;
     var a=document.createElement('a'); a.href='#cat-'+cat; a.textContent=label; a.draggable=false; cats.appendChild(a);
     var sec=document.createElement('section'); sec.className='menu-cat'; sec.id='cat-'+cat;
-    sec.innerHTML='<div class="cat-head"><h2>'+esc(label)+'</h2><span class="cat-rule"></span></div>';
+    var note=(NOTES[lang]&&NOTES[lang][cat])||'';
+    sec.innerHTML='<div class="cat-head"><h2>'+esc(label)+'</h2><span class="cat-rule"></span></div>'+(note?'<p class="cat-note">'+esc(note)+'</p>':'');
     var grid=document.createElement('div'); grid.className='items';
     items.forEach(function(m){ var d=document.createElement('div'); d.className='item'+(m.orderable?'':' off'); d.dataset.id=m.id;
       var why=m.orderable?'':'<div class="why">'+esc(T(m.orderable_note==='draught'?'off.draught':'off.reservation'))+'</div>';
@@ -308,7 +311,7 @@ function renderMenu(){ var root=document.getElementById('menu'), cats=document.g
       grid.appendChild(d); });
     sec.appendChild(grid); root.appendChild(sec); });
   syncItemControls(); }
-/* the dish's choices (data/options.json, resolved into the menu at build) */
+/* the dish's choices (data/takeaway.json groups, resolved into the menu at build) */
 function optRow(l,m){ if(!m.options||!m.options.length) return '';
   return m.options.map(function(g){ var sel=(l.opts||{})[g.id]||'';
     return '<label class="opt"><span>'+esc(g.label[lang]||g.label.nl)+'</span><select data-g="'+esc(g.id)+'"'+(sel?'':' class="need"')+'>'+
