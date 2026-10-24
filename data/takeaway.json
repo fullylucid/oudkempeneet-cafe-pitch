@@ -1,5 +1,5 @@
 {
- "about": "The takeaway menu, hand-transcribed from Dave's takeaway card (English, studio group msg 136, 2026-10-23). This file is the source; tools/build-menu.py turns it into data/menu.json. NL/DE are ours where the card had only English; Dutch names follow the café's Dutch pizza card (msg 126, as ruled in msg 130). All items are food: VAT 9%.",
+ "about": "The takeaway menu, hand-transcribed from Dave's takeaway card: English (studio group msg 136) and Dutch (msg 140), both 2026-10-23. This file is the source; tools/build-menu.py turns it into data/menu.json. NL follows the Dutch card word for word; DE is ours. All items are food: VAT 9%.",
  "cats": [
   {
    "id": "pizza",
@@ -53,7 +53,7 @@
   {
    "id": "borrel",
    "label": {
-    "nl": "Borrelhapjes",
+    "nl": "Bittergarnituur & hapjes",
     "en": "Fried snacks & appetizers",
     "de": "Frittiertes & Häppchen"
    },
@@ -101,7 +101,7 @@
     "de": "Margherita"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas.",
+    "nl": "Tomatensaus en kaas.",
     "en": "Tomato sauce and cheese.",
     "de": "Tomatensoße, Käse."
    },
@@ -117,7 +117,7 @@
     "de": "Funghi"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, champignons.",
+    "nl": "Tomatensaus, kaas en champignons.",
     "en": "Tomato sauce, cheese and mushrooms.",
     "de": "Tomatensoße, Käse, Champignons."
    },
@@ -133,7 +133,7 @@
     "de": "Salame"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, salami.",
+    "nl": "Tomatensaus, kaas en salami.",
     "en": "Tomato sauce, cheese and salami.",
     "de": "Tomatensoße, Käse, Salami."
    },
@@ -149,7 +149,7 @@
     "de": "Hawaii"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, ham, ananas.",
+    "nl": "Tomatensaus, kaas, ham en ananas.",
     "en": "Tomato sauce, cheese, ham and pineapple.",
     "de": "Tomatensoße, Käse, Schinken, Ananas."
    },
@@ -165,7 +165,7 @@
     "de": "Prosciutto e Funghi"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, ham, champignons.",
+    "nl": "Tomatensaus, kaas, ham en champignons.",
     "en": "Tomato sauce, cheese, ham and mushrooms.",
     "de": "Tomatensoße, Käse, Schinken, Champignons."
    },
@@ -181,7 +181,7 @@
     "de": "Quattro Stagioni"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, ham, salami, paprika, champignons.",
+    "nl": "Tomatensaus, kaas, ham, salami, paprika en champignons.",
     "en": "Tomato sauce, cheese, ham, salami, bell peppers and mushrooms.",
     "de": "Tomatensoße, Käse, Schinken, Salami, Paprika, Champignons."
    },
@@ -192,7 +192,7 @@
    "cat": "pizza",
    "price_cents": 1500,
    "name": {
-    "nl": "Quattro Formaggio",
+    "nl": "Quattro Formaggi",
     "en": "Quattro Formaggi",
     "de": "Quattro Formaggi"
    },
@@ -208,12 +208,12 @@
    "cat": "pizza",
    "price_cents": 1500,
    "name": {
-    "nl": "Peperoni",
+    "nl": "Pepperoni",
     "en": "Pepperoni",
     "de": "Pepperoni"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, peperoni.",
+    "nl": "Tomatensaus, kaas en pepperoni.",
     "en": "Tomato sauce, cheese and pepperoni.",
     "de": "Tomatensoße, Käse, Peperoni-Salami."
    },
@@ -229,7 +229,7 @@
     "de": "Diavola"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, salami, rode ui, paprika.",
+    "nl": "Tomatensaus, kaas, salami, rode ui en paprika.",
     "en": "Tomato sauce, cheese, salami, red onion and bell peppers.",
     "de": "Tomatensoße, Käse, Salami, rote Zwiebel, Paprika."
    },
@@ -245,7 +245,7 @@
     "de": "Caprese"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, mozzarella, tomaat, basilicum.",
+    "nl": "Tomatensaus, kaas, mozzarella, tomaat en basilicum.",
     "en": "Tomato sauce, cheese, mozzarella, tomatoes and basil.",
     "de": "Tomatensoße, Käse, Mozzarella, Tomaten, Basilikum."
    },
@@ -261,7 +261,7 @@
     "de": "Napoli"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, ansjovis, olijven, kappertjes.",
+    "nl": "Tomatensaus, kaas, ansjovis, olijven en kappertjes.",
     "en": "Tomato sauce, cheese, anchovies, olives and capers.",
     "de": "Tomatensoße, Käse, Sardellen, Oliven, Kapern."
    },
@@ -277,7 +277,7 @@
     "de": "Tonno"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, tonijn, olijven, rode ui, kappertjes.",
+    "nl": "Tomatensaus, kaas, tonijn, olijven, rode ui en kappertjes.",
     "en": "Tomato sauce, cheese, tuna, olives, red onion and capers.",
     "de": "Tomatensoße, Käse, Thunfisch, Oliven, rote Zwiebel, Kapern."
    },
@@ -293,7 +293,7 @@
     "de": "Schawarma"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, shoarma, jalapeños, rode ui.",
+    "nl": "Tomatensaus, kaas, shoarma, jalapeños en rode ui.",
     "en": "Tomato sauce, cheese, shawarma meat, jalapeños and red onion.",
     "de": "Tomatensoße, Käse, Schawarma-Fleisch, Jalapeños, rote Zwiebel."
    },
@@ -304,12 +304,12 @@
    "cat": "pizza",
    "price_cents": 1500,
    "name": {
-    "nl": "BBQ",
+    "nl": "BBQ Chicken",
     "en": "BBQ Chicken",
     "de": "BBQ Chicken"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, kip, rode ui, BBQ-saus.",
+    "nl": "Tomatensaus, kaas, kip, rode ui en BBQ-saus.",
     "en": "Tomato sauce, cheese, chicken, red onion and BBQ sauce.",
     "de": "Tomatensoße, Käse, Hähnchen, rote Zwiebel, BBQ-Soße."
    },
@@ -320,12 +320,12 @@
    "cat": "pizza",
    "price_cents": 1500,
    "name": {
-    "nl": "Zalm",
+    "nl": "Salmon",
     "en": "Salmon",
     "de": "Lachs"
    },
    "desc": {
-    "nl": "Tomatensaus, kaas, zalm, knoflook, witte wijn, kappertjes.",
+    "nl": "Tomatensaus, kaas, zalm, knoflook, witte wijn en kappertjes.",
     "en": "Tomato sauce, cheese, salmon, garlic, white wine and capers.",
     "de": "Tomatensoße, Käse, Lachs, Knoblauch, Weißwein, Kapern."
    },
@@ -341,7 +341,7 @@
     "de": "Beef Rendang"
    },
    "desc": {
-    "nl": "Langzaam gegaard rundvlees in een rijke Indonesische kruidensaus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Langzaam gegaard rundvlees in een rijk gekruide Indonesische saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Slow-cooked beef in a rich Indonesian spiced sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Langsam geschmortes Rindfleisch in einer reichhaltigen indonesischen Gewürzsoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -359,7 +359,7 @@
     "de": "Ajam Pedis"
    },
    "desc": {
-    "nl": "Kip in een pittige Indonesische saus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kip in een pittige Indonesische saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Chicken in a spicy Indonesian sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Hähnchen in einer scharfen indonesischen Soße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -377,7 +377,7 @@
     "de": "Ajam Cashew"
    },
    "desc": {
-    "nl": "Kip met cashewnoten in een Indonesische saus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kip met cashewnoten in Indonesische saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Chicken with cashew nuts in an Indonesian-style sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Hähnchen mit Cashewkernen in einer Soße nach indonesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -395,7 +395,7 @@
     "de": "Ajam Bali Roedjak"
    },
    "desc": {
-    "nl": "Kip in een geurige Balinese saus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kip in een kruidige Balinese saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Chicken in a fragrant Balinese-style sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Hähnchen in einer aromatischen Soße nach balinesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -408,12 +408,12 @@
    "cat": "indo",
    "price_cents": 1995,
    "name": {
-    "nl": "Kipsaté",
+    "nl": "Kip Saté",
     "en": "Chicken Satay",
     "de": "Hähnchen-Saté"
    },
    "desc": {
-    "nl": "Kipsaté met huisgemaakte satésaus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kipsaté met huisgemaakte satésaus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Chicken satay with homemade satay sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Hähnchen-Saté mit hausgemachter Satésoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -426,12 +426,12 @@
    "cat": "indo",
    "price_cents": 1695,
    "name": {
-    "nl": "Vega Rendang",
+    "nl": "Vegetarische Rendang",
     "en": "Vegetarian Rendang",
     "de": "Vegetarisches Rendang"
    },
    "desc": {
-    "nl": "Vegetarische rendang op Indonesische wijze. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Vegetarische rendang op Indonesische wijze. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Vegetarian Indonesian-style rendang. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Vegetarisches Rendang nach indonesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -449,7 +449,7 @@
     "de": "Sajoer Lodeh"
    },
    "desc": {
-    "nl": "Gemengde groenten in een milde Indonesische kokos-kruidensaus. Met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Groenten in een milde Indonesische kokos-kruidensaus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
     "en": "Mixed vegetables in a mild Indonesian coconut and spice sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
     "de": "Gemischtes Gemüse in einer milden indonesischen Kokos-Gewürzsoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
    },
@@ -494,7 +494,7 @@
    "cat": "friet",
    "price_cents": 275,
    "name": {
-    "nl": "Friet klein",
+    "nl": "Kleine friet",
     "en": "French fries, small",
     "de": "Pommes frites, klein"
    },
@@ -510,7 +510,7 @@
    "cat": "friet",
    "price_cents": 350,
    "name": {
-    "nl": "Friet normaal",
+    "nl": "Normale friet",
     "en": "French fries, regular",
     "de": "Pommes frites, normal"
    },
@@ -526,7 +526,7 @@
    "cat": "friet",
    "price_cents": 450,
    "name": {
-    "nl": "Friet groot",
+    "nl": "Grote friet",
     "en": "French fries, large",
     "de": "Pommes frites, groß"
    },
@@ -574,7 +574,7 @@
    "cat": "saus",
    "price_cents": 50,
    "name": {
-    "nl": "Curry",
+    "nl": "Curry ketchup",
     "en": "Curry ketchup",
     "de": "Curry-Ketchup"
    },
@@ -643,7 +643,7 @@
     "de": "Spezial"
    },
    "desc": {
-    "nl": "Mayonaise, curry en uitjes.",
+    "nl": "Mayonaise, curry ketchup en ui.",
     "en": "Mayonnaise, curry ketchup and onions.",
     "de": "Mayonnaise, Curry-Ketchup und Zwiebeln."
    },
@@ -659,7 +659,7 @@
     "de": "Oorlog"
    },
    "desc": {
-    "nl": "Mayonaise, pindasaus en uitjes.",
+    "nl": "Mayonaise, pindasaus en ui.",
     "en": "Mayonnaise, peanut sauce and onions.",
     "de": "Mayonnaise, Erdnusssoße und Zwiebeln."
    },
@@ -782,7 +782,7 @@
    "cat": "snack",
    "price_cents": 110,
    "name": {
-    "nl": "Broodje bij een snack",
+    "nl": "Broodje erbij",
     "en": "Bread roll with a snack",
     "de": "Brötchen zum Snack"
    },
@@ -846,7 +846,7 @@
    "cat": "borrel",
    "price_cents": 595,
    "name": {
-    "nl": "Kipnuggets",
+    "nl": "Chicken Nuggets",
     "en": "Chicken Nuggets",
     "de": "Chicken Nuggets"
    },
@@ -862,7 +862,7 @@
    "cat": "borrel",
    "price_cents": 750,
    "name": {
-    "nl": "Mini kaassoufflés",
+    "nl": "Mini Kaassoufflés",
     "en": "Mini Cheese Soufflés",
     "de": "Mini-Käsesoufflés"
    },
