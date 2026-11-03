@@ -50,5 +50,25 @@ ok(tally([{ id: 'm-main-1', qty: 20 }, { id: 'm-main-2', qty: 3 }], by).error ==
 // the money math is untouched by the choice check
 ok(tally([{ id: 'd-hot-5', qty: 3 }], by).vat9 === 98, 'bucket rounding unchanged (98, not 99)');
 
+// ---- priced choices: sauces on a portion (Dave, msg 143). Inline menu: the fixture has no priced option.
+const SAUS = [{ id: 'mayonaise', price_cents: 50 }, { id: 'ketchup', price_cents: 50 }, { id: 'oorlog', price_cents: 125 }];
+const sm = { 'friet-normaal': { price_cents: 350, vat_rate: 9, orderable: true, kind: 'food',
+  options: [{ id: 'saus1', required: false, options: SAUS }, { id: 'saus2', required: false, options: SAUS }] },
+  'saus-mayonaise': { price_cents: 50, vat_rate: 9, orderable: false, kind: 'food', options: [] } };
+const fr = opts => tally([{ id: 'friet-normaal', qty: 1, opts }], sm);
+ok(fr({}).ok && fr({}).total === 350, 'zero sauces: regular fries €3,50');
+ok(fr({ saus1: 'mayonaise' }).total === 400, 'fries + mayonaise = €4,00 (the card\'s example)');
+t = fr({ saus1: 'mayonaise', saus2: 'ketchup' });
+ok(t.ok && t.total === 450 && t.lines[0].unit === 450 && t.lines[0].sub === 450, 'fries + mayonaise + ketchup = €4,50, and the line\'s unit carries it');
+ok(t.vat9 === 37 && t.sub9 === 450, 'the sauces are in the 9% bucket with the fries (450*9/109 = 37.16)');
+ok(JSON.stringify(t.lines[0].opts) === JSON.stringify([{ group: 'saus1', option: 'mayonaise', price: 50 }, { group: 'saus2', option: 'ketchup', price: 50 }]), 'each chosen sauce reaches the line with its price');
+ok(fr({ saus1: 'oorlog', saus2: 'oorlog' }).total === 600, 'the same sauce twice is two sauces: 350 + 2 × 125');
+ok(fr({ saus1: 'mayonaise', saus2: 'ketchup', saus3: 'oorlog' }).total === 450, 'a third sauce has no group to land in: never charged, never served');
+ok(tally([{ id: 'friet-normaal', qty: 1, price_cents: 1, unit: 1, opts: { saus1: { id: 'mayonaise', price_cents: 0 } } }], sm).total === 350, 'prices from the browser are ignored; an option must be an id');
+ok(fr({ saus1: 'truffel' }).ok && fr({ saus1: 'truffel' }).total === 350, 'a sauce not on the card is not charged (and an optional group never blocks the order)');
+t = tally([{ id: 'friet-normaal', qty: 2, opts: { saus1: 'mayonaise' } }], sm);
+ok(t.ok && t.total === 800 && t.lines[0].unit === 400, 'qty 2 of the same portion: the surcharge counts per portion');
+ok(tally([{ id: 'saus-mayonaise', qty: 3 }], sm).error === 'not_orderable', 'a sauce on its own is refused — the limit cannot be bypassed');
+
 console.log(fails.length ? 'FAIL ' + fails.length + ': ' + fails.join('; ') : 'tests/tally.test.js: ' + n + ' checks passed');
 process.exit(fails.length ? 1 : 0);

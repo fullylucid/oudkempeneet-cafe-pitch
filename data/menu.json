@@ -1,6 +1,6 @@
 {
- "source": "data/takeaway.json blob 0642180e5b3e",
- "extracted": "2026-10-23",
+ "source": "data/takeaway.json blob 52fe262c0656",
+ "extracted": "2026-11-03",
  "cats": [
   {
    "id": "pizza",
@@ -37,9 +37,9 @@
     "de": "Soßen"
    },
    "note": {
-    "nl": "Maximaal 2 sauzen.",
-    "en": "Maximum 2 sauces.",
-    "de": "Maximal 2 Soßen."
+    "nl": "Maximaal 2 sauzen per portie. Sauzen worden apart berekend.",
+    "en": "Maximum 2 sauces per portion. Sauces are charged separately.",
+    "de": "Maximal 2 Soßen pro Portion. Soßen werden extra berechnet."
    }
   },
   {
@@ -49,16 +49,24 @@
     "en": "Snacks",
     "de": "Snacks"
    },
-   "note": null
+   "note": {
+    "nl": "Broodje erbij +€ 1,10. Saus naar keuze volgens de sausprijzen hierboven. Maximaal 2 sauzen per snack. Sauzen worden apart berekend.",
+    "en": "Add a bread roll +€ 1.10. Sauce of your choice at the sauce prices above. Maximum 2 sauces per snack. Sauces are charged separately.",
+    "de": "Brötchen dazu +€ 1,10. Soße nach Wahl zu den Soßenpreisen oben. Maximal 2 Soßen pro Snack. Soßen werden extra berechnet."
+   }
   },
   {
    "id": "borrel",
    "label": {
     "nl": "Bittergarnituur & hapjes",
     "en": "Fried snacks & appetizers",
-    "de": "Frittiertes & Häppchen"
+    "de": "Frittierte Snacks & Häppchen"
    },
-   "note": null
+   "note": {
+    "nl": "Extra sauzen kunnen worden geselecteerd volgens de bovenstaande sausprijzen, maximaal 2 per product.",
+    "en": "Extra sauces can be added at the sauce prices above, maximum 2 per product.",
+    "de": "Extra Soßen können zu den Soßenpreisen oben gewählt werden, maximal 2 pro Produkt."
+   }
   }
  ],
  "items": [
@@ -75,7 +83,7 @@
    "desc": {
     "nl": "Tomatensaus en kaas.",
     "en": "Tomato sauce and cheese.",
-    "de": "Tomatensoße, Käse."
+    "de": "Tomatensoße und Käse."
    },
    "price_cents": 1250,
    "price_raw": "12,50",
@@ -97,7 +105,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas en champignons.",
     "en": "Tomato sauce, cheese and mushrooms.",
-    "de": "Tomatensoße, Käse, Champignons."
+    "de": "Tomatensoße, Käse und Champignons."
    },
    "price_cents": 1350,
    "price_raw": "13,50",
@@ -119,7 +127,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas en salami.",
     "en": "Tomato sauce, cheese and salami.",
-    "de": "Tomatensoße, Käse, Salami."
+    "de": "Tomatensoße, Käse und Salami."
    },
    "price_cents": 1395,
    "price_raw": "13,95",
@@ -141,7 +149,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, ham en ananas.",
     "en": "Tomato sauce, cheese, ham and pineapple.",
-    "de": "Tomatensoße, Käse, Schinken, Ananas."
+    "de": "Tomatensoße, Käse, Schinken und Ananas."
    },
    "price_cents": 1450,
    "price_raw": "14,50",
@@ -163,7 +171,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, ham en champignons.",
     "en": "Tomato sauce, cheese, ham and mushrooms.",
-    "de": "Tomatensoße, Käse, Schinken, Champignons."
+    "de": "Tomatensoße, Käse, Schinken und Champignons."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -185,7 +193,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, ham, salami, paprika en champignons.",
     "en": "Tomato sauce, cheese, ham, salami, bell peppers and mushrooms.",
-    "de": "Tomatensoße, Käse, Schinken, Salami, Paprika, Champignons."
+    "de": "Tomatensoße, Käse, Schinken, Salami, Paprika und Champignons."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -229,7 +237,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas en pepperoni.",
     "en": "Tomato sauce, cheese and pepperoni.",
-    "de": "Tomatensoße, Käse, Peperoni-Salami."
+    "de": "Tomatensoße, Käse und Peperoni-Salami."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -251,7 +259,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, salami, rode ui en paprika.",
     "en": "Tomato sauce, cheese, salami, red onion and bell peppers.",
-    "de": "Tomatensoße, Käse, Salami, rote Zwiebel, Paprika."
+    "de": "Tomatensoße, Käse, Salami, rote Zwiebel und Paprika."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -273,7 +281,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, mozzarella, tomaat en basilicum.",
     "en": "Tomato sauce, cheese, mozzarella, tomatoes and basil.",
-    "de": "Tomatensoße, Käse, Mozzarella, Tomaten, Basilikum."
+    "de": "Tomatensoße, Käse, Mozzarella, Tomaten und Basilikum."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -295,7 +303,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, ansjovis, olijven en kappertjes.",
     "en": "Tomato sauce, cheese, anchovies, olives and capers.",
-    "de": "Tomatensoße, Käse, Sardellen, Oliven, Kapern."
+    "de": "Tomatensoße, Käse, Sardellen, Oliven und Kapern."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -317,7 +325,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, tonijn, olijven, rode ui en kappertjes.",
     "en": "Tomato sauce, cheese, tuna, olives, red onion and capers.",
-    "de": "Tomatensoße, Käse, Thunfisch, Oliven, rote Zwiebel, Kapern."
+    "de": "Tomatensoße, Käse, Thunfisch, Oliven, rote Zwiebel und Kapern."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -339,7 +347,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, shoarma, jalapeños en rode ui.",
     "en": "Tomato sauce, cheese, shawarma meat, jalapeños and red onion.",
-    "de": "Tomatensoße, Käse, Schawarma-Fleisch, Jalapeños, rote Zwiebel."
+    "de": "Tomatensoße, Käse, Schawarma-Fleisch, Jalapeños und rote Zwiebel."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -361,7 +369,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, kip, rode ui en BBQ-saus.",
     "en": "Tomato sauce, cheese, chicken, red onion and BBQ sauce.",
-    "de": "Tomatensoße, Käse, Hähnchen, rote Zwiebel, BBQ-Soße."
+    "de": "Tomatensoße, Käse, Hähnchen, rote Zwiebel und BBQ-Soße."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -383,7 +391,7 @@
    "desc": {
     "nl": "Tomatensaus, kaas, zalm, knoflook, witte wijn en kappertjes.",
     "en": "Tomato sauce, cheese, salmon, garlic, white wine and capers.",
-    "de": "Tomatensoße, Käse, Lachs, Knoblauch, Weißwein, Kapern."
+    "de": "Tomatensoße, Käse, Lachs, Knoblauch, Weißwein und Kapern."
    },
    "price_cents": 1500,
    "price_raw": "15,00",
@@ -403,9 +411,9 @@
     "de": "Beef Rendang"
    },
    "desc": {
-    "nl": "Langzaam gegaard rundvlees in een rijk gekruide Indonesische saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Langzaam gegaard rundvlees in een rijk gekruide Indonesische saus. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Slow-cooked beef in a rich Indonesian spiced sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Langsam geschmortes Rindfleisch in einer reichhaltigen indonesischen Gewürzsoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Langsam gegartes Rindfleisch in einer reich gewürzten indonesischen Soße. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 2095,
    "price_raw": "20,95",
@@ -429,7 +437,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -437,7 +446,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -454,9 +464,9 @@
     "de": "Ajam Pedis"
    },
    "desc": {
-    "nl": "Kip in een pittige Indonesische saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kip in een pittige Indonesische saus. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Chicken in a spicy Indonesian sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Hähnchen in einer scharfen indonesischen Soße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Hähnchen in einer scharfen indonesischen Soße. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 1995,
    "price_raw": "19,95",
@@ -480,7 +490,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -488,7 +499,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -505,9 +517,9 @@
     "de": "Ajam Cashew"
    },
    "desc": {
-    "nl": "Kip met cashewnoten in Indonesische saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kip met cashewnoten in Indonesische saus. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Chicken with cashew nuts in an Indonesian-style sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Hähnchen mit Cashewkernen in einer Soße nach indonesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Hähnchen mit Cashewkernen in indonesischer Soße. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 1995,
    "price_raw": "19,95",
@@ -531,7 +543,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -539,7 +552,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -556,9 +570,9 @@
     "de": "Ajam Bali Roedjak"
    },
    "desc": {
-    "nl": "Kip in een kruidige Balinese saus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kip in een kruidige Balinese saus. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Chicken in a fragrant Balinese-style sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Hähnchen in einer aromatischen Soße nach balinesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Hähnchen in einer würzigen balinesischen Soße. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 1995,
    "price_raw": "19,95",
@@ -582,7 +596,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -590,7 +605,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -607,9 +623,9 @@
     "de": "Hähnchen-Saté"
    },
    "desc": {
-    "nl": "Kipsaté met huisgemaakte satésaus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Kipsaté met huisgemaakte satésaus. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Chicken satay with homemade satay sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Hähnchen-Saté mit hausgemachter Satésoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Hähnchen-Saté mit hausgemachter Satésoße. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 1995,
    "price_raw": "19,95",
@@ -633,7 +649,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -641,7 +658,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -658,9 +676,9 @@
     "de": "Vegetarisches Rendang"
    },
    "desc": {
-    "nl": "Vegetarische rendang op Indonesische wijze. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Vegetarische rendang op Indonesische wijze. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Vegetarian Indonesian-style rendang. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Vegetarisches Rendang nach indonesischer Art. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Vegetarisches Rendang nach indonesischer Art. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 1695,
    "price_raw": "16,95",
@@ -684,7 +702,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -692,7 +711,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -709,9 +729,9 @@
     "de": "Sajoer Lodeh"
    },
    "desc": {
-    "nl": "Groenten in een milde Indonesische kokos-kruidensaus. Geserveerd met atjar en kroepoek. Keuze uit nasi goreng of bami goreng.",
+    "nl": "Groenten in een milde Indonesische kokos-kruidensaus. Keuze uit nasi goreng of bami goreng. Geserveerd met atjar en kroepoek.",
     "en": "Mixed vegetables in a mild Indonesian coconut and spice sauce. Served with atjar and prawn crackers. Choose nasi goreng or bami goreng.",
-    "de": "Gemischtes Gemüse in einer milden indonesischen Kokos-Gewürzsoße. Mit Atjar und Krupuk. Wahl zwischen Nasi Goreng und Bami Goreng."
+    "de": "Gemüse in einer milden indonesischen Kokos-Gewürzsoße. Wahl zwischen Nasi Goreng und Bami Goreng. Serviert mit Atjar und Krupuk."
    },
    "price_cents": 1695,
    "price_raw": "16,95",
@@ -735,7 +755,8 @@
         "nl": "Nasi goreng",
         "en": "Nasi goreng",
         "de": "Nasi Goreng"
-       }
+       },
+       "price_cents": 0
       },
       {
        "id": "bami",
@@ -743,7 +764,8 @@
         "nl": "Bami goreng",
         "en": "Bami goreng",
         "de": "Bami Goreng"
-       }
+       },
+       "price_cents": 0
       }
      ]
     }
@@ -801,7 +823,7 @@
    "name": {
     "nl": "Kleine friet",
     "en": "French fries, small",
-    "de": "Pommes frites, klein"
+    "de": "Kleine Pommes"
    },
    "desc": {
     "nl": null,
@@ -813,7 +835,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "friet-normaal",
@@ -823,7 +1014,7 @@
    "name": {
     "nl": "Normale friet",
     "en": "French fries, regular",
-    "de": "Pommes frites, normal"
+    "de": "Normale Pommes"
    },
    "desc": {
     "nl": null,
@@ -835,7 +1026,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "friet-groot",
@@ -845,7 +1205,7 @@
    "name": {
     "nl": "Grote friet",
     "en": "French fries, large",
-    "de": "Pommes frites, groß"
+    "de": "Große Pommes"
    },
    "desc": {
     "nl": null,
@@ -857,7 +1217,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "saus-mayonaise",
@@ -877,8 +1406,8 @@
    "price_cents": 50,
    "price_raw": "0,50",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -899,8 +1428,8 @@
    "price_cents": 50,
    "price_raw": "0,50",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -921,8 +1450,8 @@
    "price_cents": 50,
    "price_raw": "0,50",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -943,8 +1472,8 @@
    "price_cents": 50,
    "price_raw": "0,50",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -965,8 +1494,8 @@
    "price_cents": 75,
    "price_raw": "0,75",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -987,8 +1516,8 @@
    "price_cents": 100,
    "price_raw": "1,00",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -1009,8 +1538,8 @@
    "price_cents": 100,
    "price_raw": "1,00",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -1031,8 +1560,8 @@
    "price_cents": 125,
    "price_raw": "1,25",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "sauce",
    "options": []
   },
   {
@@ -1055,7 +1584,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-kroket",
@@ -1077,7 +1796,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-kaassouffle",
@@ -1099,7 +2008,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-kipcorn",
@@ -1121,7 +2220,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-mexicano",
@@ -1143,7 +2432,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-bamischijf",
@@ -1165,7 +2644,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-sate-ajam",
@@ -1187,7 +2856,197 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "broodje",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Broodje erbij",
+      "en": "Bread roll",
+      "de": "Brötchen dazu"
+     },
+     "options": [
+      {
+       "id": "broodje",
+       "label": {
+        "nl": "Broodje erbij",
+        "en": "Add a bread roll",
+        "de": "Brötchen dazu"
+       },
+       "price_cents": 110
+      }
+     ]
+    },
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "snack-broodje",
@@ -1197,7 +3056,7 @@
    "name": {
     "nl": "Broodje erbij",
     "en": "Bread roll with a snack",
-    "de": "Brötchen zum Snack"
+    "de": "Brötchen dazu"
    },
    "desc": {
     "nl": null,
@@ -1207,8 +3066,8 @@
    "price_cents": 110,
    "price_raw": "1,10",
    "vat_rate": 9,
-   "orderable": true,
-   "orderable_note": "",
+   "orderable": false,
+   "orderable_note": "roll",
    "options": []
   },
   {
@@ -1231,7 +3090,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "borrel-bitterballen",
@@ -1253,7 +3281,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "borrel-chicken-wings",
@@ -1275,7 +3472,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "borrel-kipnuggets",
@@ -1297,7 +3663,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "borrel-kaassouffle-mini",
@@ -1319,7 +3854,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "borrel-vlammetjes",
@@ -1341,7 +4045,176 @@
    "vat_rate": 9,
    "orderable": true,
    "orderable_note": "",
-   "options": []
+   "options": [
+    {
+     "id": "saus1",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Saus",
+      "en": "Sauce",
+      "de": "Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    },
+    {
+     "id": "saus2",
+     "source": "menu",
+     "required": false,
+     "label": {
+      "nl": "Tweede saus",
+      "en": "Second sauce",
+      "de": "Zweite Soße"
+     },
+     "options": [
+      {
+       "id": "mayonaise",
+       "label": {
+        "nl": "Mayonaise",
+        "en": "Mayonnaise",
+        "de": "Mayonnaise"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "ketchup",
+       "label": {
+        "nl": "Ketchup",
+        "en": "Ketchup",
+        "de": "Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "curry",
+       "label": {
+        "nl": "Curry ketchup",
+        "en": "Curry ketchup",
+        "de": "Curry-Ketchup"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "mosterd",
+       "label": {
+        "nl": "Mosterd",
+        "en": "Mustard",
+        "de": "Senf"
+       },
+       "price_cents": 50
+      },
+      {
+       "id": "knoflook",
+       "label": {
+        "nl": "Knoflooksaus",
+        "en": "Garlic sauce",
+        "de": "Knoblauchsoße"
+       },
+       "price_cents": 75
+      },
+      {
+       "id": "pinda",
+       "label": {
+        "nl": "Pindasaus",
+        "en": "Peanut sauce",
+        "de": "Erdnusssoße"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "speciaal",
+       "label": {
+        "nl": "Speciaal",
+        "en": "Special",
+        "de": "Spezial"
+       },
+       "price_cents": 100
+      },
+      {
+       "id": "oorlog",
+       "label": {
+        "nl": "Oorlog",
+        "en": "Oorlog",
+        "de": "Oorlog"
+       },
+       "price_cents": 125
+      }
+     ]
+    }
+   ]
   }
  ]
 }

@@ -6,7 +6,7 @@
  *   lines:    [{ id, qty, note?, opts? }]    — what the browser sends; prices are NEVER taken from it
  *                                              opts = { <groupId>: <optionId> }, e.g. { 'bami-nasi': 'nasi' }
  *   menuById: { id: { price_cents, vat_rate, orderable, kind, options? } }
- *                options = [{ id, required, options:[{id}] }] — a dish's choices (data/options.json)
+ *                options = [{ id, required, options:[{id, price_cents?}] }] — a dish's choices (data/takeaway.json groups)
  *   limits:   { maxLines, maxQty, maxTotalCents, minOrderCents }
  * error codes (localised by the caller): empty, unknown_item, not_orderable, bad_qty, too_many_lines, over_max_total, under_minimum, missing_choice
  *
@@ -14,6 +14,10 @@
  * missing_choice: the totals are still computed so the cart can show them, but ok is false and
  * `missing` lists [{ id, group }] so the caller can point at the dish. The kitchen must never be
  * handed a Sajoer Lodeh with no side, and the browser is not trusted to enforce that.
+ *
+ * A chosen option's price_cents is added to the line's unit price (sauces on a portion of fries,
+ * msg 143), from the MENU, never from the browser, at the dish's own VAT rate. The limit on how
+ * many a product takes is structural: one pick per group, so two sauce groups = at most two sauces.
  */
 function tally(lines, menuById, limits) {
   var L = Object.assign({ maxLines: 50, maxQty: 20, maxTotalCents: 50000, minOrderCents: 0 }, limits || {});
@@ -26,17 +30,17 @@ function tally(lines, menuById, limits) {
     if (!m.orderable) { out.error = 'not_orderable'; return out; }
     var qty = ln.qty;
     if (typeof qty !== 'number' || qty !== Math.floor(qty) || qty < 1 || qty > L.maxQty) { out.error = 'bad_qty'; return out; }
-    var sub = m.price_cents * qty;
-    if (m.vat_rate === 9) out.sub9 += sub; else if (m.vat_rate === 21) out.sub21 += sub; else { out.error = 'unknown_item'; return out; }
-    if (m.kind === 'drink' && m.vat_rate === 21) out.alcohol = true;
-    var groups = Array.isArray(m.options) ? m.options : [], chosen = [];
+    var groups = Array.isArray(m.options) ? m.options : [], chosen = [], unit = m.price_cents;
     for (var g = 0; g < groups.length; g++) {
-      var grp = groups[g], want = (ln.opts && typeof ln.opts === 'object') ? ln.opts[grp.id] : undefined, valid = '';
-      for (var o = 0; o < grp.options.length; o++) if (grp.options[o].id === want) valid = want;
-      if (valid) chosen.push({ group: grp.id, option: valid });
+      var grp = groups[g], want = (ln.opts && typeof ln.opts === 'object') ? ln.opts[grp.id] : undefined, valid = null;
+      for (var o = 0; o < grp.options.length; o++) if (grp.options[o].id === want) valid = grp.options[o];
+      if (valid) { var pc = valid.price_cents || 0; unit += pc; chosen.push({ group: grp.id, option: valid.id, price: pc }); }
       else if (grp.required !== false) out.missing.push({ id: ln.id, group: grp.id });
     }
-    out.lines.push({ id: ln.id, qty: qty, unit: m.price_cents, vat: m.vat_rate, sub: sub, note: typeof ln.note === 'string' ? ln.note.slice(0, 200) : '', opts: chosen });
+    var sub = unit * qty;
+    if (m.vat_rate === 9) out.sub9 += sub; else if (m.vat_rate === 21) out.sub21 += sub; else { out.error = 'unknown_item'; return out; }
+    if (m.kind === 'drink' && m.vat_rate === 21) out.alcohol = true;
+    out.lines.push({ id: ln.id, qty: qty, unit: unit, vat: m.vat_rate, sub: sub, note: typeof ln.note === 'string' ? ln.note.slice(0, 200) : '', opts: chosen });
   }
   out.vat9 = Math.round(out.sub9 * 9 / 109);
   out.vat21 = Math.round(out.sub21 * 21 / 121);

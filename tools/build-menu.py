@@ -10,6 +10,9 @@ L=('nl','en','de')
 cats=[c['id'] for c in S['cats']]
 G={g['id']:g for g in S['groups']}
 errs=[]
+for g in S['groups']:   # an option's surcharge is integer cents >= 0 (sauces on top of a portion, msg 143)
+    for o in g['options']:
+        if not (isinstance(o.get('price_cents'),int) and o['price_cents']>=0): errs.append('choice %s/%s: bad price'%(g['id'],o['id']))
 if len(set(cats))!=len(cats): errs.append('duplicate category')
 if len({i['id'] for i in S['items']})!=len(S['items']): errs.append('duplicate item id')
 pos=collections.Counter(); items=[]
@@ -20,10 +23,11 @@ for i in S['items']:
     if not (isinstance(i['price_cents'],int) and i['price_cents']>0): errs.append('%s: bad price'%i['id'])
     for gid in i['options']:
         if gid not in G: errs.append('%s: unknown choice %s'%(i['id'],gid))
-    c=i['price_cents']
+    c=i['price_cents']; on=i.get('orderable',True)   # a sauce is on the card but sold only as a choice on a product
+    if not on and i['options']: errs.append('%s: not orderable but has choices'%i['id'])
     items.append({"id":i['id'],"kind":"food","cat":i['cat'],"pos":pos[i['cat']],"name":i['name'],
                   "desc":{l:i['desc'].get(l) for l in L},"price_cents":c,"price_raw":'%d,%02d'%(c//100,c%100),
-                  "vat_rate":9,"orderable":True,"orderable_note":"","options":[G[g] for g in i['options']]})
+                  "vat_rate":9,"orderable":on,"orderable_note":'' if on else i['orderable_note'],"options":[G[g] for g in i['options']]})
     pos[i['cat']]+=1
 if errs: raise SystemExit('takeaway.json: '+'; '.join(errs))
 # provenance is derived, never typed: the git blob of the exact takeaway.json read (content-addressed,

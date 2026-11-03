@@ -31,22 +31,39 @@ for k,v in CARD.items():
 check([i['id'] for i in menu if i['cat']=='pizza'][:4]==['pizza-margherita','pizza-funghi','pizza-salame','pizza-hawaii'],'pizzas keep the card order')
 for i in menu:
     for l in ('nl','en','de'): check(i['name'][l],'%s has a %s name'%(i['id'],l))
-    check(i['vat_rate']==9 and i['kind']=='food' and i['orderable'],'%s: food, 9%%, orderable — the card sells no drinks'%i['id'])
+    check(i['vat_rate']==9 and i['kind']=='food','%s: food, 9%% — the card sells no drinks'%i['id'])
+    # sauces and the roll are on the card but sold only as a choice on a product (msg 143)
+    asopt=i['cat']=='saus' or i['id']=='snack-broodje'
+    check(i['orderable']==(not asopt) and (asopt or not i['orderable_note']),'%s: orderable on its own %s'%(i['id'],'NO — it is a choice' if asopt else 'yes'))
 cats=[c['id'] for c in M['cats']]
 check(cats==['pizza','indo','friet','saus','snack','borrel'],'categories in card order, got %s'%cats)
 check(all(any(i['cat']==c for i in menu) for c in cats),'no empty category')
 saus=[c for c in M['cats'] if c['id']=='saus'][0]
-check(all((saus['note'] or {}).get(l) for l in ('nl','en','de')) and '2' in saus['note']['en'],'the sauces carry "Maximum 2 sauces" in all three languages')
+check(all((saus['note'] or {}).get(l) for l in ('nl','en','de')) and saus['note']['nl']=='Maximaal 2 sauzen per portie. Sauzen worden apart berekend.','the sauces carry the card\'s "Maximaal 2 sauzen per portie" in all three languages')
 # ---- per-dish choices: only what the card prints ----
-withopts=[i for i in menu if i['options']]
-check(sorted(i['id'] for i in withopts)==sorted(['indo-beef-rendang','indo-ajam-pedis','indo-ajam-cashew','indo-ajam-bali-roedjak','indo-kipsate','indo-vega-rendang','indo-sajoer-lodeh']),
-      'the seven "Choose: Nasi Goreng or Bami Goreng" dishes carry the choice, the plates do not')
-for i in withopts:
-    check([g['id'] for g in i['options']]==['nasi-bami'],'%s asks only nasi or bami'%i['id'])
-    d=(i['desc']['nl'] or '').lower(); check('nasi goreng' in d and 'bami goreng' in d,'%s: the choice is written in its own description — do not invent choices'%i['id'])
+def gids(i): return [g['id'] for g in i['options']]
+NB=['indo-beef-rendang','indo-ajam-pedis','indo-ajam-cashew','indo-ajam-bali-roedjak','indo-kipsate','indo-vega-rendang','indo-sajoer-lodeh']
+check(sorted(i['id'] for i in menu if 'nasi-bami' in gids(i))==sorted(NB),'the seven "Keuze uit nasi goreng of bami goreng" dishes carry the choice, the plates do not')
+for i in menu:
+    if i['id'] in NB:
+        check(gids(i)==['nasi-bami'],'%s asks only nasi or bami'%i['id'])
+        d=(i['desc']['nl'] or '').lower(); check('nasi goreng' in d and 'bami goreng' in d,'%s: the choice is written in its own description — do not invent choices'%i['id'])
+    elif i['cat']=='friet' or i['cat']=='borrel' or (i['cat']=='snack' and i['orderable']):
+        # msg 143: at most two sauces per portion / snack / product — two optional sauce questions, structurally
+        want=(['broodje'] if i['cat']=='snack' else [])+['saus1','saus2']
+        check(gids(i)==want,'%s asks %s, got %s'%(i['id'],want,gids(i)))
+    else: check(gids(i)==[],'%s asks nothing'%i['id'])
+# a sauce choice costs exactly what the card charges for that sauce; the roll costs the card's +€1,10
+G={g['id']:g for g in S['groups']}
+card_sauce=[(i['id'][5:],i['price_cents'],i['name']['nl']) for i in menu if i['cat']=='saus']
+for gid in ('saus1','saus2'):
+    check(not G[gid]['required'],'%s is optional (zero sauces is allowed)'%gid)
+    check([(o['id'],o['price_cents'],o['label']['nl']) for o in G[gid]['options']]==card_sauce,'%s offers the card\'s sauces at the card\'s prices'%gid)
+check(not G['broodje']['required'] and [(o['id'],o['price_cents']) for o in G['broodje']['options']]==[('broodje',CARD['snack-broodje'])],'the roll is an optional +€1,10')
+check(all(o['price_cents']==0 for o in G['nasi-bami']['options']),'nasi or bami costs nothing extra')
 for g in S['groups']:
     check(g['source']=='menu','group %s comes from the card (nothing implied on the takeaway menu)'%g['id'])
-    check(len(g['options'])>=2 and len({o['id'] for o in g['options']})==len(g['options']),'group %s: two or more distinct options'%g['id'])
+    check(len(g['options'])>=(2 if g['required'] else 1) and len({o['id'] for o in g['options']})==len(g['options']),'group %s: distinct options, two or more when the answer is required'%g['id'])
     for o in g['options']:
         for l in ('nl','en','de'): check(o['label'].get(l),'option %s/%s has a %s label'%(g['id'],o['id'],l))
 # no template keeps its own category list any more — a category missing from one never rendered
@@ -59,7 +76,7 @@ n=db.execute('select count(*) from menu_items').fetchone()[0]; check(n==49,'seed
 for f in sorted(glob.glob('migrations/*.sql')): db.executescript(open(f,encoding='utf-8').read())   # idempotent
 check(db.execute('select count(*) from menu_items').fetchone()[0]==49,'seed idempotent')
 check(db.execute("select price_cents,vat_rate,orderable from menu_items where id='pizza-margherita'").fetchone()==(1250,9,1),'D1 Margherita row: the takeaway price')
-check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==0,'nothing on the card is excluded from online ordering')
+check(db.execute("select count(*) from menu_items where orderable=0").fetchone()[0]==9,'only the 8 sauces and the roll are not orderable on their own')
 check(db.execute("select value from settings where key='standard_wait_min'").fetchone()[0]=='45','settings seeded')
 check(db.execute("select value from settings where key='strip_contact_after_days'").fetchone()[0]=='0','retention = never (Q15 = b)')
 db.execute("insert into orders(id,public_ref,lang,subtotal_cents,vat_low_cents,vat_high_cents,total_cents,pickup_eta_min) values('o1','ABCD','nl',1250,103,0,1250,45)")
@@ -69,11 +86,12 @@ check(db.execute("select line_note from order_items where order_id='o1'").fetcho
 n_opt=db.execute("select count(*) from item_options").fetchone()[0]
 want=sum(len(g['options']) for i in menu for g in (i.get('options') or []))
 check(n_opt==want,'every option is a row in D1 (%d, want %d)'%(n_opt,want))
-check(db.execute("select count(distinct item_id) from item_options").fetchone()[0]==7,'7 dishes carry choices in D1')
+check(db.execute("select count(distinct item_id) from item_options").fetchone()[0]==23,'23 products carry choices in D1 (7 nasi/bami, 3 fries, 7 snacks, 6 appetizers)')
 r=db.execute("select group_nl,label_nl,required,source,price_cents from item_options where item_id='indo-sajoer-lodeh' and option_id='nasi'").fetchone()
 check(r==('Nasi goreng of bami goreng?','Nasi goreng',1,'menu',0),'a choice row carries its question, its answer, its source and a zero surcharge (got %r)'%(r,))
 check(db.execute("select count(*) from item_options where item_id='pizza-margherita'").fetchone()[0]==0,'a dish with no choice has no rows')
-check(db.execute("select count(*) from item_options where price_cents<>0").fetchone()[0]==0,'no option costs money today — Q14 decides whether any ever does')
+check({r[0] for r in db.execute("select distinct group_id from item_options where price_cents<>0")}=={'saus1','saus2','broodje'},'only sauces and the roll cost money (msg 143)')
+check(db.execute("select price_cents from item_options where item_id='friet-normaal' and group_id='saus2' and option_id='oorlog'").fetchone()==(125,),'D1 carries the sauce surcharge on the portion')
 check([x[0] for x in db.execute("select option_id from item_options where item_id='indo-beef-rendang' order by option_pos")]==['nasi','bami'],'option order survives the seed (the card says Nasi first)')
 # --- Part Two columns are present BEFORE the schema freezes (PR #76, P2) ---
 cols={r[1] for r in db.execute("pragma table_info(menu_items)")}
