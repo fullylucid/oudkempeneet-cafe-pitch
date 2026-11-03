@@ -16,6 +16,9 @@ const URL = 'file://' + path.resolve('ordering/site/index.html');
 const menu = JSON.parse(fs.readFileSync('data/menu.json', 'utf8')).items;
 const { tally } = require('../src/tally.js');
 const by = {}; menu.forEach(m => by[m.id] = m);
+const sellable = menu.filter(m => m.orderable);   // sauces and the roll are choices on a product, not items (msg 143)
+// what one portion costs with the FIRST answer to every question — the page picks the same below
+const unitFirst = m => m.price_cents + (m.options || []).reduce((a, g) => a + (g.options[0].price_cents || 0), 0);
 let n = 0; const fails = [];
 const ok = (c, m) => { n++; if (!c) fails.push(m); };
 const cents = s => parseInt(String(s).replace(/[^\d]/g, ''), 10);   // "€ 481,95" → 48195
@@ -33,7 +36,10 @@ const cents = s => parseInt(String(s).replace(/[^\d]/g, ''), 10);   // "€ 481,
     ok(shown.length === menu.length && menu.every(m => shown.includes(m.id)),
       `every dish in data/menu.json is on the page (${shown.length} shown, ${menu.length} in the data)`);
 
-    for (const m of menu) {
+    const off = await page.evaluate(() => [...document.querySelectorAll('.item.off')].map(d => [d.dataset.id, d.querySelector('.ctl button').disabled]));
+    ok(off.length === menu.length - sellable.length && off.every(([, dis]) => dis), `sauces and the roll show but cannot be added on their own (${JSON.stringify(off)})`);
+
+    for (const m of sellable) {
       await page.locator(`.item[data-id="${m.id}"] .ctl button`).first().click();
       for (const g of m.options || [])
         await page.locator(`.line[data-id="${m.id}"] .opt select[data-g="${g.id}"]`).first().selectOption(g.options[0].id);
@@ -48,12 +54,15 @@ const cents = s => parseInt(String(s).replace(/[^\d]/g, ''), 10);   // "€ 481,
       cart: JSON.parse(localStorage.getItem('ok-cart') || '[]') }));
     const r = tally(got.cart, by);   // the cart the page saved, through the one totals function
     got.t = { ok: r.ok, error: r.error || null, total: r.total, vat9: r.vat9 };
-    const sum = menu.reduce((a, m) => a + m.price_cents, 0);
+    const sum = sellable.reduce((a, m) => a + unitFirst(m), 0);
     const vat9 = Math.round(sum * 9 / 109);
-    ok(got.lines === menu.length, `one line per dish (got ${got.lines})`);
+    ok(got.lines === sellable.length, `one line per dish (got ${got.lines})`);
+    ok(sum > sellable.reduce((a, m) => a + m.price_cents, 0), 'the chosen sauces and rolls cost money on top of the dishes');
     ok(cents(got.tot) === sum, `the cart total is the sum of price_cents: want ${sum}, page shows "${got.tot}"`);
     ok(got.vat.length === 1 && /9/.test(got.vat[0]) && cents(got.vat[0].replace(/^[^€]*/, '')) === vat9,
       `one VAT row, 9%, equal to round(${sum} * 9 / 109) = ${vat9} (got ${JSON.stringify(got.vat)})`);
+    const fl = await page.evaluate(() => (document.querySelector('.line[data-id="friet-normaal"] .sub') || {}).textContent);
+    ok(cents(fl) === unitFirst(by['friet-normaal']), `the fries line shows its own price with both sauces: want ${unitFirst(by['friet-normaal'])}, got "${fl}"`);
     ok(got.t.ok && got.t.total === sum && got.t.vat9 === vat9, `the cart the page saved passes src/tally.js with the same total and VAT (got ${JSON.stringify(got.t)})`);
     ok(!/keuze|choice/i.test(got.msg), `every choice answered — no missing-choice message (got "${got.msg}")`);
     await page.close();

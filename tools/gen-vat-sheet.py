@@ -27,14 +27,16 @@ out=['<h1>Afhaalbestellen — btw-tarief en afhaallijst</h1><p class="sub">Oud-K
 def default_vat(i): return 9 if i['kind']=='food' or i['cat'] in ('hot','soft') else 21
 NUM=['geen','één','twee','drie','vier','vijf','zes','zeven','acht','negen','tien']
 def num(n): return NUM[n] if n<len(NUM) else str(n)
-nfix=sum(1 for i in items if i['vat_rate']!=default_vat(i)); off=[i for i in items if not i['orderable']]
+nfix=sum(1 for i in items if i['vat_rate']!=default_vat(i)); off=[i for i in items if not i['orderable'] and i['orderable_note'] not in ('sauce','roll')]
+asopt=[i for i in items if i['orderable_note'] in ('sauce','roll')]   # sold only as a priced choice on a product (msg 143)
 drinks=any(i['kind']=='drink' for i in items)
 rates='9% eten en alcoholvrij, 21% alcohol' if drinks else '9%: alles op deze lijst is eten'
 fixs=(' %s met <span class="fix">correctie</span> gemarkeerd: daar wijkt het tarief af van de categorie.'%(('Eén regel is' if nfix==1 else '%s regels zijn'%num(nfix).capitalize())) if nfix else '')
 offs=(' Al uitgesloten: %s.'%', '.join(e(i['name']['nl']) for i in off) if off else '')
+opts=(' <span class="no">alleen als keuze</span>: %s worden niet los verkocht maar bij een product gekozen, en tegen deze prijs en het tarief van dat product bij die regel opgeteld.'%', '.join(e(i['name']['nl']) for i in asopt) if asopt else '')
 out.append('''<div class="box"><p><b>Wat u doet.</b> Twee kolommen per regel. <b>btw</b>: het tarief dat wij voor dit artikel zullen rekenen (%s).%s Klopt het niet? Streep door en schrijf het juiste tarief ernaast.
-<b>afhalen</b>: voorgevinkt = online te bestellen voor afhalen. Wilt u een artikel <i>niet</i> online aanbieden, zet dan een kruis in het vakje ernaast.%s</p>
-<p>Prijzen zijn de afhaalprijzen inclusief btw; ze veranderen hier niet. Onderteken onderaan en geef het blad terug via Zach. Zonder dit blad gaat de live betaalkoppeling niet aan.</p></div>'''%(rates,fixs,offs))
+<b>afhalen</b>: voorgevinkt = online te bestellen voor afhalen. Wilt u een artikel <i>niet</i> online aanbieden, zet dan een kruis in het vakje ernaast.%s%s</p>
+<p>Prijzen zijn de afhaalprijzen inclusief btw; ze veranderen hier niet. Onderteken onderaan en geef het blad terug via Zach. Zonder dit blad gaat de live betaalkoppeling niet aan.</p></div>'''%(rates,fixs,offs,opts))
 order=[c['id'] for c in d['cats']]
 for cat in order:
     rows=[i for i in items if i['cat']==cat]
@@ -42,7 +44,7 @@ for cat in order:
     out.append('<h2>%s</h2><table><tr><th style="width:52%%">Artikel</th><th style="width:14%%;text-align:right">Prijs</th><th style="width:14%%;text-align:center">btw</th><th style="width:20%%;text-align:center">afhalen · níet</th></tr>'%e(CAT[cat]))
     for i in rows:
         fix=' <span class="fix">correctie</span>' if i['vat_rate']!=default_vat(i) else ''
-        no=' <span class="no">%s</span>'%e('tap' if i['orderable_note']=='draught' else 'reservering') if not i['orderable'] else ''
+        no=' <span class="no">%s</span>'%e({'draught':'tap','sauce':'alleen als keuze','roll':'alleen als keuze'}.get(i['orderable_note'],'reservering')) if not i['orderable'] else ''
         out.append('<tr><td>%s%s</td><td class="p">%s</td><td class="c">%d%%%s</td><td class="c"><span class="bx%s"></span> &nbsp;·&nbsp; <span class="bx"></span></td></tr>'%(e(i['name']['nl']),no,eur(i['price_cents']),i['vat_rate'],fix,'' if i['orderable'] else ' on'))
     out.append('</table>')
 out.append('<div class="sign"><div>Naam</div><div>Functie (eigenaar / boekhouder)</div><div>Handtekening en datum</div></div>')

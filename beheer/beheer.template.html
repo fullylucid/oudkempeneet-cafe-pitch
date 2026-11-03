@@ -324,8 +324,10 @@ function optionsEditor(id,m){ var gs=m.options||[];
           '<span class="inh">'+esc(T('inherit',{r:m.vat_rate}))+'</span></div>'; }).join('')+
       '</div>'; }).join('')+
     '<p class="note warn" data-optwarn'+(anyPriced(id)?'':' hidden')+'>'+esc(T('optWarn'))+'</p>'; }
-function optPrice(id,gid,oid){ var e=(DRAFT.edits[id]||{}).optPrices||{}; return e[gid+'/'+oid]||0; }
-function anyPriced(id){ var e=(DRAFT.edits[id]||{}).optPrices||{}; return Object.keys(e).some(function(k){ return e[k]>0; }); }
+/* an edit wins; otherwise the price the menu already charges (sauces cost money, msg 143) */
+function optPrice(id,gid,oid){ var e=(DRAFT.edits[id]||{}).optPrices||{}; if(e[gid+'/'+oid]!=null) return e[gid+'/'+oid];
+  var m=BY[id]||{}, g=(m.options||[]).find(function(x){return x.id===gid;}), o=g&&g.options.find(function(x){return x.id===oid;}); return (o&&o.price_cents)||0; }
+function anyPriced(id){ var m=BY[id]||{}; return (m.options||[]).some(function(g){ return g.options.some(function(o){ return optPrice(id,g.id,o.id)>0; }); }); }
 function wireOptions(box,id){ box.querySelectorAll('.grp .opt').forEach(function(row){
   var gid=row.closest('.grp').dataset.g, oid=row.dataset.o, inp=row.querySelector('input');
   inp.addEventListener('change',function(){ var c=cents(inp.value);
