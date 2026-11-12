@@ -163,3 +163,45 @@ python3 tests/test_menu.py && node tests/tally.test.js
 condition 6). The page inlines it at build time; the Worker requires it. Change it in one place.
 The built page is a sandbox until step 4: it shows the payload the till would receive and never
 calls an API. Previews go to the STUDIO's Cloudflare account, never the client's.
+
+## Ordering Worker (bestellen.) — deploy, secrets, go-live
+
+```
+worker:    oudkempen-bestellen           (ordering/worker/wrangler.toml; assets = ordering/site)
+test URL:  https://oudkempen-bestellen.dave-f36.workers.dev   (robots: Disallow until the custom domain)
+live host: bestellen.oudkempeneetcafe.nl  (custom domain — attached on Schyler's go, see below)
+D1:        oudkempen-bestellen  b52c8305-806a-4cee-99cf-aa62f424476e  (migrations/ applied 2026-11-12: 0001, 0002 — FROZEN from here on)
+secrets:   SEAL_KEY (wraps the MultiSafepay key at rest), SETUP_TOKEN (the go-live link)
+email:     Cloudflare Email Routing send binding, from bestellen@oudkempeneetcafe.nl to the café inbox (must be a VERIFIED destination)
+cron:      */5 — reconcile pending orders, retry unsent alerts
+```
+
+Deploy (from `ordering/worker/`, after `python3 tools/build-bestellen.py` at the root):
+
+    set -a; . ~/.config/shmorganism/secrets.env; set +a
+    CLOUDFLARE_API_TOKEN="$DAVE_CF_TOKEN" CLOUDFLARE_ACCOUNT_ID="$DAVE_CF_ACCOUNT" npx -y wrangler@4 deploy
+
+Never from a push (gate cond. 2): Workers Builds is not connected and must not be for this Worker.
+Rollback = `wrangler rollback` (versions are retained). A menu change after today = a NEW migration
+file (`wrangler d1 migrations apply oudkempen-bestellen --remote`); never edit 0001/0002 again.
+
+**Where the MultiSafepay key lives.** Not in Workers Secrets and not in the repo: it is pasted on the
+go-live page, checked against MultiSafepay (which also tells test from live), sealed with `SEAL_KEY`
+(AES-GCM) and kept in D1 `settings.msp_key_sealed`. Rotating `SEAL_KEY` orphans the sealed copy —
+paste the key again. `settings.msp_mode` says which platform the Worker talks to.
+
+**Go-live page.** `https://<host>/golive?t=<SETUP_TOKEN>` until `GOLIVE_UNTIL` (wrangler.toml vars) or
+until `wrangler secret delete SETUP_TOKEN`. It shows six steps that turn green from real state, and
+takes the key, a test alert and a €0,01 test order. Tokens are handed over privately, never in the
+Telegram group.
+
+**Opening to customers (Schyler's go, recorded with a handle), in this order:**
+1. Steps 2–5 green on the go-live page (inbox verified, LIVE key, one paid test).
+2. Add to wrangler.toml: `routes = [{ pattern = "bestellen.oudkempeneetcafe.nl", custom_domain = true }]` and deploy.
+   Step 6 turns green on the first request to that host.
+3. On www: `_redirects` with `/bestellen https://bestellen.oudkempeneetcafe.nl 302` and `/order …` (Q28),
+   deploy the www Worker per the top of this file, verify the internal-paths 404 list.
+4. `curl https://bestellen.oudkempeneetcafe.nl/api/health` → `mode: live`; robots now allows `/`.
+5. Hand merritt the handles for the cafe-home patch.
+
+Nothing in `ordering/worker/` is ever published on www: `.assetsignore` excludes `ordering/` and `*.toml`.

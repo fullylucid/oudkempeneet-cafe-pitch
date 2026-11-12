@@ -1,0 +1,46 @@
+# The ordering Worker: bestellen.oudkempeneetcafe.nl — page + API on one origin (ruling Q5 = b).
+# Deploys with DAVE_CF_TOKEN / DAVE_CF_ACCOUNT from ordering/worker/ (see DEPLOY.md, "Ordering Worker").
+# This file sits OUTSIDE the asset directory on purpose: wrangler publishes everything under
+# [assets].directory, and a config file on a public origin is a map for an attacker.
+name = "oudkempen-bestellen"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+# No custom domain here yet. bestellen.oudkempeneetcafe.nl is attached on Schyler's go
+# (DEPLOY.md, "Opening to customers"); until then the Worker answers on workers.dev only.
+
+[assets]
+directory = "../site"
+binding = "ASSETS"
+not_found_handling = "404-page"
+# Everything the Worker must answer itself. Anything else is a static asset from ../site.
+run_worker_first = ["/api/*", "/golive", "/golive/*", "/klaar/*", "/geannuleerd/*", "/robots.txt"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "oudkempen-bestellen"
+database_id = "b52c8305-806a-4cee-99cf-aa62f424476e"
+migrations_dir = "../../migrations"
+
+# Order alerts go out through Cloudflare Email Routing (the zone already runs it) to a VERIFIED
+# destination address. No allow-list here: the destination is the `alert_to` setting in D1, and
+# Cloudflare refuses any address its owner has not verified.
+[[send_email]]
+name = "EMAIL"
+
+[triggers]
+crons = ["*/5 * * * *"]   # reconcile: pending orders older than 20 min, unsent alerts (gate cond. 7)
+
+[vars]
+CAFE_NAME = "Oud-Kempen Eetcafé"
+CAFE_PHONE = "+31 6 22 33 44 69"
+CAFE_ADDRESS = "Buurtweg 5, 4696 RT Stavenisse"
+MAIL_FROM = "bestellen@oudkempeneetcafe.nl"
+# The go-live page (/golive?t=<SETUP_TOKEN>) is temporary by construction: after this instant it
+# answers 404 whatever the token says. Move the date only for a planned session.
+GOLIVE_UNTIL = "2026-11-14T08:00:00Z"
+
+# Secrets (wrangler secret put, never in this file, never in the repo):
+#   SEAL_KEY     32 random bytes, hex. Wraps the MultiSafepay key at rest (AES-GCM); only the Worker holds it.
+#   SETUP_TOKEN  the go-live link's token. Delete it to close the page early.

@@ -1,0 +1,6 @@
+{
+  "name": "oudkempen-bestellen-worker",
+  "private": true,
+  "type": "module",
+  "description": "Node treats ordering/worker/src/*.js as ES modules because of this file; wrangler bundles them the same way. src/tally.js at the repo root stays CommonJS and is imported as such."
+}
