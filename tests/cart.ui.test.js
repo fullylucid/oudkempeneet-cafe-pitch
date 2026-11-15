@@ -35,8 +35,14 @@ async function openPage(browser, opts) { const page = await browser.newPage(opts
 
 async function fill(page, count) {                     // put `count` different dishes in the cart
   const adds = await page.locator('.add:not([disabled])').all();
-  for (let i = 0; i < count; i++) await adds[i].click();
+  for (let i = 0; i < count; i++) { await adds[i].click(); await answer(page); }
   await page.waitForTimeout(200);
+}
+// a dish with a question opens the choice sheet on +; take the first answer to each and confirm
+async function answer(page) {
+  if (!await page.evaluate(() => document.getElementById('pick').classList.contains('on'))) return;
+  await page.evaluate(() => document.querySelectorAll('#pick-g .pg[data-req]').forEach(f => { const r = f.querySelector('input'); r.checked = true; r.dispatchEvent(new Event('change')); }));
+  await page.locator('#pick-ok').click();
 }
 const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
 
@@ -113,28 +119,39 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
     const page = await openPage(browser, { viewport: { width: 1366, height: 768 } });
     page.on('pageerror', e => errors.push('choices: ' + e));
     await page.goto(URL); await page.waitForTimeout(400);
-    for (const id of ['m-indo-3', 'm-main-1', 'm-start-0']) await page.locator(`.item[data-id="${id}"] .add`).click();
-    await page.waitForTimeout(250);
-    const before = await page.evaluate(() => ({
-      sajoer: [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select option')].map(o => o.value),
-      steak: [...document.querySelectorAll('.line[data-id="m-main-1"] .opt select option')].map(o => o.value),
+    // Dave (msg 147): the question comes the moment the dish is pressed, in a sheet, not in the cart
+    await page.locator('.item[data-id="m-indo-3"] .add').click(); await page.waitForTimeout(150);
+    const sheet = await page.evaluate(() => ({ on: document.getElementById('pick').classList.contains('on'),
+      title: document.getElementById('pick-t').textContent, answers: [...document.querySelectorAll('#pick-g input')].map(i => i.value),
+      wait: document.getElementById('pick-ok').disabled, lines: document.querySelectorAll('.line').length }));
+    ok(sheet.on && sheet.lines === 0 && sheet.wait, 'pressing Sajoer Lodeh opens its question; nothing is in the cart and Toevoegen waits (got ' + JSON.stringify(sheet) + ')');
+    ok(sheet.title === 'Sajoer Lodeh' && sheet.answers.join(',') === 'bami,nasi', 'the sheet offers bami or nasi (got ' + sheet.answers + ')');
+    await page.locator('#pick-g input[value="nasi"]').check(); await page.waitForTimeout(100);
+    ok(await page.evaluate(() => !document.getElementById('pick-ok').disabled), 'an answer releases Toevoegen');
+    await page.locator('#pick-ok').click(); await page.waitForTimeout(150);
+    await page.locator('.item[data-id="m-main-1"] .add').click(); await page.waitForTimeout(150);
+    const steak = await page.evaluate(() => [...document.querySelectorAll('#pick-g input')].map(i => i.value));
+    ok(steak.join(',') === 'rood,medium,doorbakken', 'Biefstuk asks how it should be cooked (got ' + steak + ')');
+    await page.locator('#pick-g input[value="medium"]').check(); await page.locator('#pick-ok').click(); await page.waitForTimeout(150);
+    await page.locator('.item[data-id="m-start-0"] .add').click(); await page.waitForTimeout(150);
+    const after = await page.evaluate(() => ({
+      sajoer: document.querySelector('.line[data-id="m-indo-3"] .opt select').value,
+      steak: document.querySelector('.line[data-id="m-main-1"] .opt select').value,
       soup: document.querySelectorAll('.line[data-id="m-start-0"] .opt').length,
+      sheet: document.getElementById('pick').classList.contains('on'),
       flagged: document.querySelectorAll('.opt select.need').length,
-      msg: document.getElementById('msg').textContent,
-      pay: document.getElementById('pay').disabled,
-      total: !!document.querySelector('.tot') }));
-    ok(before.sajoer.join(',') === ',bami,nasi', 'Sajoer Lodeh offers bami or nasi under the cart line (got ' + before.sajoer + ')');
-    ok(before.steak.join(',') === ',rood,medium,doorbakken', 'Biefstuk asks how it should be cooked (got ' + before.steak + ')');
-    ok(before.soup === 0, 'a dish with no choices gets no dropdown');
-    ok(before.pay && before.flagged === 2, 'checkout is blocked and both open choices are flagged');
-    ok(/Sajoer Lodeh/.test(before.msg) && /Biefstuk/.test(before.msg), 'the message names the dishes still to choose (got "' + before.msg + '")');
-    ok(before.total, 'the total is shown while a choice is still open');
-    await page.selectOption('.line[data-id="m-indo-3"] .opt select', 'nasi');
-    await page.selectOption('.line[data-id="m-main-1"] .opt select', 'medium');
-    await page.waitForTimeout(200);
-    const after = await page.evaluate(() => ({ pay: document.getElementById('pay').disabled, msg: document.getElementById('msg').textContent,
-      flagged: document.querySelectorAll('.opt select.need').length }));
-    ok(!after.pay && after.flagged === 0 && after.msg === '', 'answering every choice releases the checkout');
+      msg: document.getElementById('msg').textContent, pay: document.getElementById('pay').disabled, total: !!document.querySelector('.tot') }));
+    ok(after.sajoer === 'nasi' && after.steak === 'medium', 'the answers from the sheet sit on the cart lines, still changeable (got ' + JSON.stringify(after) + ')');
+    ok(after.soup === 0 && !after.sheet, 'a dish with no choices gets no sheet and no dropdown');
+    ok(!after.pay && after.flagged === 0 && after.msg === '' && after.total, 'nothing left to answer: checkout is open (got ' + JSON.stringify(after) + ')');
+    // the back door stays shut: a cart saved unanswered (before the sheet) is flagged, named, and blocks checkout
+    await page.evaluate(() => { const c = JSON.parse(localStorage.getItem('ok-cart')); c.find(l => l.id === 'm-main-1').opts = {}; localStorage.setItem('ok-cart', JSON.stringify(c)); });
+    await page.reload(); await page.waitForTimeout(500);
+    const legacy = await page.evaluate(() => ({ flagged: document.querySelectorAll('.opt select.need').length, msg: document.getElementById('msg').textContent, pay: document.getElementById('pay').disabled }));
+    ok(legacy.pay && legacy.flagged === 1 && /Biefstuk/.test(legacy.msg) && !/Sajoer/.test(legacy.msg), 'an unanswered line from an older cart is flagged, blocks checkout and is named (got ' + JSON.stringify(legacy) + ')');
+    await page.selectOption('.line[data-id="m-main-1"] .opt select', 'medium'); await page.waitForTimeout(200);
+    const released = await page.evaluate(() => ({ pay: document.getElementById('pay').disabled, msg: document.getElementById('msg').textContent, flagged: document.querySelectorAll('.opt select.need').length }));
+    ok(!released.pay && released.flagged === 0 && released.msg === '', 'answering on the line releases the checkout');
     // the choice reaches the payload and the ticket, in the order's language
     await page.fill('#f-name', 'Test'); await page.fill('#f-email', 't@example.com'); await page.fill('#f-phone', '0612345678');
     await page.locator('#pay').click(); await page.waitForTimeout(300);
@@ -168,7 +185,11 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
     await page.goto(URL); await page.waitForTimeout(400);
     const add = '.item[data-id="m-indo-3"] .ctl';                    // Sajoer Lodeh — bami or nasi
     await page.locator(add + ' button').click(); await page.waitForTimeout(150);
-    await page.locator(add + ' .qty button:last-child').click(); await page.waitForTimeout(250);
+    await page.locator('#pick-g input[value="bami"]').check(); await page.locator('#pick-ok').click(); await page.waitForTimeout(150);
+    await page.locator(add + ' .qty button:last-child').click(); await page.waitForTimeout(150);
+    ok(await page.evaluate(() => document.getElementById('pick').classList.contains('on') && document.querySelectorAll('.line').length === 1),
+      'the second portion asks its own question before it lands');
+    await page.locator('#pick-g input[value="nasi"]').check(); await page.locator('#pick-ok').click(); await page.waitForTimeout(250);
     const two = await page.evaluate(() => ({
       lines: document.querySelectorAll('.line[data-id="m-indo-3"]').length,
       selects: document.querySelectorAll('.line[data-id="m-indo-3"] .opt select').length,
@@ -178,13 +199,10 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
     ok(two.lines === 2 && two.selects === 2, 'two portions of a dish with a choice become two lines, each with its own dropdown');
     ok(two.keys[0] !== two.keys[1], 'the two lines are addressed by distinct keys');
     ok(two.menuCount === '2', 'the menu card still counts both portions (got ' + two.menuCount + ')');
-    ok(two.pay, 'both unanswered choices block checkout');
+    ok(!two.pay, 'both answered in their sheets, checkout open');
     if (two.selects < 2) { ok(false, 'only ' + two.selects + ' dropdown(s) for two portions — the rest of this block cannot run'); await page.close(); }
     else {
-    // answer them differently — the whole point
-    const sel = page.locator('.line[data-id="m-indo-3"] .opt select');
-    await sel.nth(0).selectOption('bami'); await sel.nth(1).selectOption('nasi');
-    await page.waitForTimeout(200);
+    // answered differently — the whole point
     const answered = await page.evaluate(() => ({
       values: [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select')].map(s => s.value),
       pay: document.getElementById('pay').disabled }));
@@ -198,10 +216,13 @@ const onScreen = 'r => r.top >= -1 && r.bottom <= innerHeight + 1';
     await page.locator('#modal-x').click(); await page.waitForTimeout(150);
     // the + on a line adds another portion beside it; the x removes THAT line, not the last
     await page.locator('.line[data-id="m-indo-3"] .qty button:last-child').first().click(); await page.waitForTimeout(200);
-    ok(await page.evaluate(() => document.querySelectorAll('.line[data-id="m-indo-3"]').length) === 3, '+ on a line adds another portion');
+    ok(await page.evaluate(() => document.getElementById('pick').classList.contains('on')), '+ on a line asks the question for the new portion');
+    await page.locator('#pick-g input[value="bami"]').check(); await page.locator('#pick-ok').click(); await page.waitForTimeout(200);
+    const three = await page.evaluate(() => [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select')].map(s => s.value));
+    ok(three.join(',') === 'bami,bami,nasi', '+ on a line adds the answered portion right beside it (got ' + JSON.stringify(three) + ')');
     await page.locator('.line[data-id="m-indo-3"] .qty button:first-child').first().click(); await page.waitForTimeout(200);
     const left = await page.evaluate(() => [...document.querySelectorAll('.line[data-id="m-indo-3"] .opt select')].map(s => s.value));
-    ok(left.length === 2 && left[0] === '' && left[1] === 'nasi',
+    ok(left.length === 2 && left[0] === 'bami' && left[1] === 'nasi',
       'x removes the line it sits on, leaving the others untouched (got ' + JSON.stringify(left) + ')');
     // a dish with nothing to ask still uses one line with a quantity
     await page.locator('.item[data-id="m-start-0"] .ctl button').click(); await page.waitForTimeout(150);

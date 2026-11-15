@@ -39,12 +39,56 @@ const cents = s => parseInt(String(s).replace(/[^\d]/g, ''), 10);   // "€ 481,
     const off = await page.evaluate(() => [...document.querySelectorAll('.item.off')].map(d => [d.dataset.id, d.querySelector('.ctl button').disabled]));
     ok(off.length === menu.length - sellable.length && off.every(([, dis]) => dis), `sauces and the roll show but cannot be added on their own (${JSON.stringify(off)})`);
 
+    // Dave (msg 147): the question comes when you press the dish, not at checkout. The first dish
+    // with a question proves the sheet's contract before the whole card goes through it.
+    const asked = sellable.find(m => (m.options || []).length);
+    const plain = sellable.find(m => !(m.options || []).length);
+    const lines = () => page.evaluate(() => document.querySelectorAll('.line').length);
+    const sheetOn = () => page.evaluate(() => document.getElementById('pick').classList.contains('on'));
+    await page.locator(`.item[data-id="${plain.id}"] .ctl button`).first().click(); await page.waitForTimeout(100);
+    ok(!await sheetOn() && await lines() === 1, `a dish without a question goes straight into the cart (${plain.id})`);
+    await page.locator(`.item[data-id="${asked.id}"] .ctl button`).first().click(); await page.waitForTimeout(100);
+    ok(await sheetOn() && await lines() === 1, `pressing + on ${asked.id} opens the question and adds nothing yet`);
+    const groups = await page.evaluate(() => [...document.querySelectorAll('#pick-g .pg')].map(f => f.dataset.g));
+    ok(JSON.stringify(groups) === JSON.stringify(asked.options.map(g => g.id)), `the sheet asks every group of ${asked.id} (${groups})`);
+    const req = asked.options.filter(g => g.required !== false).length;
+    ok(await page.evaluate(() => document.getElementById('pick-ok').disabled) === (req > 0), `Toevoegen is ${req ? 'disabled until the required answers' : 'enabled when every question is optional'}`);
+    await page.locator('#pick-x').click(); await page.waitForTimeout(100);
+    ok(!await sheetOn() && await lines() === 1, 'cancel closes the sheet and adds nothing');
+    // fries: the second sauce (same list, optional) stays folded until a first sauce is chosen
+    const fries = sellable.find(m => (m.options || []).length >= 2 && m.options[1].required === false
+      && m.options[0].options.map(o => o.id).join() === m.options[1].options.map(o => o.id).join());
+    if (fries) {
+      await page.locator(`.item[data-id="${fries.id}"] .ctl button`).first().click(); await page.waitForTimeout(100);
+      const hid = () => page.evaluate(() => [...document.querySelectorAll('#pick-g .pg.hid')].map(f => f.dataset.g));
+      ok((await hid()).join() === fries.options[1].id, `${fries.id}: only the second sauce is folded at first (hidden: ${await hid()})`);
+      ok(!await page.evaluate(() => document.getElementById('pick-ok').disabled), 'both sauces are optional, so Toevoegen is open with none');
+      await page.locator(`#pick-g .pg[data-g="${fries.options[0].id}"] input[value="${fries.options[0].options[0].id}"]`).check(); await page.waitForTimeout(100);
+      ok((await hid()).length === 0, 'choosing a first sauce unfolds the second');
+      await page.locator(`#pick-g .pg[data-g="${fries.options[1].id}"] input[value="${fries.options[1].options[1].id}"]`).check(); await page.waitForTimeout(100);
+      await page.locator(`#pick-g .pg[data-g="${fries.options[0].id}"] input[value=""]`).check(); await page.waitForTimeout(100);
+      const back = await page.evaluate(() => ({ hid: document.querySelectorAll('#pick-g .pg.hid').length, label: document.getElementById('pick-ok').textContent }));
+      ok(back.hid === 1 && cents(back.label) === fries.price_cents, `taking the first sauce away folds and clears the second; the price is the dish again (got ${JSON.stringify(back)})`);
+      await page.locator('#pick-x').click(); await page.waitForTimeout(100);
+    } else ok(false, 'the card has no dish with two optional sauce groups — the fold rule is untested');
+    await page.locator(`.item[data-id="${plain.id}"] .ctl button`).last().click(); await page.waitForTimeout(100);   // +1 of the plain dish: a qty, not a sheet
+    ok(!await sheetOn() && await lines() === 1 && await page.evaluate(() => document.querySelector('.line .qty span').textContent) === '2', 'a second plain portion is a quantity, no sheet');
+    await page.locator(`.item[data-id="${plain.id}"] .ctl button`).first().click(); await page.waitForTimeout(100);   // back to 1
+
+    const pick = async m => {
+      for (const g of m.options || []) await page.locator(`#pick-g .pg[data-g="${g.id}"] input[value="${g.options[0].id}"]`).check();
+      const label = await page.locator('#pick-ok').textContent();
+      ok(cents(label) === unitFirst(m), `${m.id}: the button carries the price with the answers: want ${unitFirst(m)}, got "${label}"`);
+      await page.locator('#pick-ok').click();
+    };
     for (const m of sellable) {
+      if (m === plain) continue;                                   // already in
       await page.locator(`.item[data-id="${m.id}"] .ctl button`).first().click();
-      for (const g of m.options || [])
-        await page.locator(`.line[data-id="${m.id}"] .opt select[data-g="${g.id}"]`).first().selectOption(g.options[0].id);
+      if (m.options && m.options.length) await pick(m);
     }
     await page.waitForTimeout(300);
+    const onLine = await page.evaluate(id => [...document.querySelectorAll(`.line[data-id="${id}"] .opt select`)].map(s => s.value), asked.id);
+    ok(JSON.stringify(onLine) === JSON.stringify(asked.options.map(g => g.options[0].id)), `the cart line of ${asked.id} shows the answers and can still change them (${onLine})`);
 
     const got = await page.evaluate(() => ({
       lines: document.querySelectorAll('.line').length,
