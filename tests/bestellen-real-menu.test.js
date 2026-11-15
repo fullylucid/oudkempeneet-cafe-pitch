@@ -109,7 +109,26 @@ const cents = s => parseInt(String(s).replace(/[^\d]/g, ''), 10);   // "€ 481,
     ok(cents(fl) === unitFirst(by['friet-normaal']), `the fries line shows its own price with both sauces: want ${unitFirst(by['friet-normaal'])}, got "${fl}"`);
     ok(got.t.ok && got.t.total === sum && got.t.vat9 === vat9, `the cart the page saved passes src/tally.js with the same total and VAT (got ${JSON.stringify(got.t)})`);
     ok(!/keuze|choice/i.test(got.msg), `every choice answered — no missing-choice message (got "${got.msg}")`);
+    // focus after Toevoegen lands on the dish's new control, not on <body> (the re-render replaced the +)
+    await page.locator(`.item[data-id="${asked.id}"] .ctl button`).last().click(); await pick(asked);
+    await page.waitForTimeout(100);
+    const focused = await page.evaluate(id => { const a = document.activeElement; return a && a.closest('.item') ? a.closest('.item').dataset.id : a && a.tagName; }, asked.id);
+    ok(focused === asked.id, `after Toevoegen the focus is back on the dish's control (got ${focused})`);
     await page.close();
+
+    // the gate's two HOLDs (PR #25): the sheet must not overflow its own box, and sauce names must not break mid-word
+    for (const vp of [{ width: 375, height: 667 }, { width: 390, height: 844 }, { width: 1366, height: 900 }]) {
+      const p2 = await browser.newPage({ viewport: vp }); await p2.goto(URL); await p2.waitForTimeout(400);
+      await p2.locator(`.item[data-id="${fries.id}"] .ctl button`).first().click(); await p2.waitForTimeout(300);
+      const m2 = await p2.evaluate(() => { const box = document.querySelector('#pick .box');
+        const broken = [...document.querySelectorAll('#pick-g .pg:not(.hid) label span')].filter(sp => sp.getClientRects().length > 1 && !/\s/.test(sp.textContent)).map(sp => sp.textContent);
+        return { w: box.scrollWidth - box.clientWidth, h: box.scrollHeight - box.clientHeight, broken,
+          okOn: (() => { const r = document.getElementById('pick-ok').getBoundingClientRect(); return r.bottom <= innerHeight + 1 && r.top >= 0; })() }; });
+      ok(m2.w === 0, `${vp.width}: the sheet has no sideways overflow (got ${m2.w}px)`);
+      ok(m2.broken.length === 0, `${vp.width}: no single-word answer breaks across lines (got ${JSON.stringify(m2.broken)})`);
+      ok(m2.okOn, `${vp.width}: Toevoegen is on screen as soon as the sheet opens`);
+      await p2.close();
+    }
   } catch (e) { fails.push('crashed: ' + e.message); }
   finally { await browser.close(); }
   ok(errors.length === 0, 'no console or page errors: ' + errors.join(' | '));

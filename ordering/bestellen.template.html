@@ -165,7 +165,7 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .modal h2{font-size:18px;margin-bottom:8px}.modal pre{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:10px;overflow:auto;border-radius:3px}
 .modal .cl{margin-top:12px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:3px;background:transparent;cursor:pointer}
 /* the dish's question — asked the moment it is added (Dave, msg 147), not in the cart */
-.pick .box{max-width:440px;padding:20px 22px}.pick h2{font-family:var(--serif);font-size:21px;margin-bottom:2px}.pick .sub{font-size:13px;color:var(--ink-dim);margin:0 0 12px}
+.pick .box{max-width:440px}   /* keeps the modal's 22px/24px padding: the sticky row below undoes exactly that */.pick h2{font-family:var(--serif);font-size:21px;margin-bottom:2px}.pick .sub{font-size:13px;color:var(--ink-dim);margin:0 0 12px}
 .pg{margin:0 0 12px;min-width:0}.pg.hid{display:none}.pg .lg{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-3);margin-bottom:6px}
 .pg .ans{display:grid;grid-template-columns:1fr;gap:6px}.pg.wide .ans{grid-template-columns:1fr 1fr}   /* a long list (the sauces) two to a row, so the sheet stays short */
 .pg label{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 10px;border:1px solid var(--line);border-radius:3px;background:#fff;cursor:pointer;font-size:15px;min-width:0}
@@ -174,6 +174,7 @@ body.dragging,body.dragging *{-webkit-user-select:none!important;user-select:non
 .pick .row{display:flex;gap:10px;position:sticky;bottom:-22px;margin:4px -24px -22px;padding:10px 24px 22px;background:var(--paper)}   /* the buttons never leave the screen while the list scrolls */
 .pick .row .cl{margin-top:0;flex:0 0 auto}.pick .row .pay{margin-top:0;flex:1}.pick .pay[disabled]{opacity:.45;cursor:not-allowed}
 @media(max-width:700px){.pick{align-items:flex-end;padding:0}.pick .box{border-radius:10px 10px 0 0;max-height:90vh;padding-bottom:calc(22px + env(safe-area-inset-bottom))}.pg.wide label{padding:0 8px;font-size:14px}}
+@media(max-width:400px){.pg.wide .ans{grid-template-columns:1fr}}   /* narrow phones: two columns cut "Knoflooksaus" in half */
 footer{padding:30px 22px 40px;text-align:center;font-size:13px;color:var(--ink-dim);position:relative;z-index:1}footer a{text-decoration:none}
 header.mhead{position:relative;z-index:1}   /* contains the art; .shop must NOT join it — a
    stacking context here trapped the phone drawer (z-index:70) inside a z-index:1 box, so the dim
@@ -435,6 +436,7 @@ function openPick(m,done){ var g=document.getElementById('pick-g'); pickM=m; pic
       '</div></div>'; }).join('');
   g.querySelectorAll('input').forEach(function(r){ r.addEventListener('change',pickSync); });
   pickSync(); document.getElementById('pick').classList.add('on'); document.body.style.overflow='hidden';
+  var box=document.querySelector('#pick .box'); box.style.pointerEvents='none'; setTimeout(function(){ box.style.pointerEvents=''; },250);   /* a double-tap on + must not answer the question */
   var first=g.querySelector('input'); if(first) first.focus(); }
 function pickOpts(){ var o={}; document.querySelectorAll('#pick-g .pg').forEach(function(f){ var c=f.querySelector('input:checked'); if(c&&c.value) o[f.dataset.g]=c.value; }); return o; }
 /* "tweede saus" repeats the sauce list: a second, optional group with the same answers as the one
@@ -449,7 +451,9 @@ function pickSync(){ if(!pickM) return; var o=pickOpts(), ok=document.getElement
 function closePick(){ var s=document.getElementById('pick'); if(!pickM) return; pickM=null; pickDone=null; s.classList.remove('on');
   document.body.style.overflow=document.getElementById('cart').classList.contains('open')?'hidden':'';
   if(pickBack&&document.contains(pickBack)) pickBack.focus(); pickBack=null; }
-document.getElementById('pick-ok').addEventListener('click',function(){ if(this.disabled) return; var d=pickDone, o=pickOpts(); closePick(); if(d) d(o); });
+document.getElementById('pick-ok').addEventListener('click',function(){ if(this.disabled) return; var d=pickDone, o=pickOpts(), m=pickM, row=pickBack&&pickBack.closest?pickBack.closest('.line'):null, key=row&&row.dataset.key;
+  closePick(); if(d) d(o);   /* the re-render replaces the + that opened us: focus the new one (the line's, or the card's) */
+  var b=key?document.querySelector('.line[data-key="'+key+'"] .qty button:last-child'):document.querySelector('.item[data-id="'+m.id+'"] .ctl button:last-child'); if(b) b.focus(); });
 document.getElementById('pick-x').addEventListener('click',closePick);
 document.getElementById('pick').addEventListener('click',function(e){ if(e.target===this) closePick(); });
 /* mobile drawer */
@@ -466,7 +470,7 @@ document.getElementById('bar-btn').addEventListener('click',function(){ drawer(t
 document.getElementById('cart-x').addEventListener('click',function(){ drawer(false); });
 document.getElementById('dim').addEventListener('click',function(){ drawer(false); });
 /* language */
-function applyLang(l){ lang=l; document.documentElement.lang=l; try{localStorage.setItem('ok-lang',l);}catch(e){}
+function applyLang(l){ closePick(); lang=l; document.documentElement.lang=l; try{localStorage.setItem('ok-lang',l);}catch(e){}
   document.title=T('title');
   document.querySelectorAll('[data-i18n]').forEach(function(el){ var k=el.getAttribute('data-i18n'); if(UI[l][k]!=null) el.textContent=UI[l][k]; });
   document.querySelectorAll('[data-i18n-aria]').forEach(function(el){ el.setAttribute('aria-label',T(el.getAttribute('data-i18n-aria'))); });
