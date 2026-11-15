@@ -127,6 +127,13 @@ const cents = s => parseInt(String(s).replace(/[^\d]/g, ''), 10);   // "€ 481,
       ok(m2.w === 0, `${vp.width}: the sheet has no sideways overflow (got ${m2.w}px)`);
       ok(m2.broken.length === 0, `${vp.width}: no single-word answer breaks across lines (got ${JSON.stringify(m2.broken)})`);
       ok(m2.okOn, `${vp.width}: Toevoegen is on screen as soon as the sheet opens`);
+      await p2.locator('#pick-x').click(); await p2.waitForTimeout(100);
+      // a double-tap on + opens the sheet and leaves it open, untouched (the second tap lands on the open sheet)
+      const plus = p2.locator(`.item[data-id="${fries.id}"] .ctl button`).first(); await plus.scrollIntoViewIfNeeded();
+      const bb = await plus.boundingBox(); await p2.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2); await p2.waitForTimeout(90); await p2.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2);
+      await p2.waitForTimeout(300);
+      const dt = await p2.evaluate(() => ({ on: document.getElementById('pick').classList.contains('on'), picked: [...document.querySelectorAll('#pick-g input:checked')].map(i => i.value).join(), lines: document.querySelectorAll('.line').length }));
+      ok(dt.on && dt.picked === ',' && dt.lines === 0, `${vp.width}: a double-tap on + leaves the sheet open with nothing chosen and nothing added (got ${JSON.stringify(dt)})`);
       await p2.close();
     }
   } catch (e) { fails.push('crashed: ' + e.message); }
