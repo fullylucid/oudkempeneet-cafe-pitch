@@ -141,6 +141,13 @@ function post(p,b){ return fetch(p,{method:'POST',headers:{'content-type':'appli
 function say(id,ok,msg){ var r=document.getElementById(id); if(r){ r.className='res '+(ok?'ok':'bad'); r.textContent=msg; } }
 function installKey(){ var k=document.getElementById('k').value; say('r-key',true,'Checking with MultiSafepay…'); post('/golive/key',{key:k}).then(function(j){ if(j.ok){ document.getElementById('k').value=''; say('r-key',true,'Installed: '+j.hint+' on the '+j.mode.toUpperCase()+' platform. Methods: '+(j.gateways.length?j.gateways.join(', '):'none enabled yet')); } else say('r-key',false,j.error); refresh(); }); }
 function testAlert(other){ var to=other?document.getElementById('alt').value:''; say('r-alert',true,'Sending…'); post('/golive/test-alert',to?{to:to}:{}).then(function(j){ say('r-alert',j.ok,j.ok?'Sent to '+j.to+'. Check the inbox (and spam) — if it is there, this step is done.':(j.error+(j.hint?' — '+j.hint:''))); refresh(); }); }
-function testOrder(){ say('r-test',true,'Creating the order…'); post('/golive/test-order').then(function(j){ if(j.ok){ say('r-test',true,'Order '+j.public_ref+' created — the payment page opened in a new tab. Pay it; this line turns green when MultiSafepay confirms.'); window.open(j.payment_url,'_blank'); } else say('r-test',false,j.error); refresh(); }); }
+/* the payment page is a LINK, not window.open after a fetch: Safari and most popup blockers swallow
+   that, the line claimed a tab had opened, and every retry created another order (5 on 11-16) */
+var testBusy=false;
+function testOrder(){ if(testBusy) return; testBusy=true; say('r-test',true,'Creating the order…'); post('/golive/test-order').then(function(j){ testBusy=false;
+  if(j.ok){ var r=document.getElementById('r-test'); r.className='res ok'; r.textContent='Order '+j.public_ref+' created. ';
+    var a=document.createElement('a'); a.href=j.payment_url; a.target='_blank'; a.rel='noopener'; a.textContent='Open the payment page (€0,01)'; a.style.fontWeight='600'; r.appendChild(a);
+    r.appendChild(document.createTextNode(' — pay it there; this line turns green when MultiSafepay confirms.')); }
+  else say('r-test',false,j.error); refresh(); }, function(){ testBusy=false; say('r-test',false,'Network error — try again.'); }); }
 refresh(); setInterval(refresh,5000);
 </script></body></html>`;
