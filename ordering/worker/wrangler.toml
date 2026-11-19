@@ -39,7 +39,7 @@ CAFE_ADDRESS = "Buurtweg 5, 4696 RT Stavenisse"
 MAIL_FROM = "bestellen@oudkempeneetcafe.nl"
 # The go-live page (/golive?t=<SETUP_TOKEN>) is temporary by construction: after this instant it
 # answers 404 whatever the token says. Move the date only for a planned session.
-GOLIVE_UNTIL = "2026-11-18T08:00:00Z"
+GOLIVE_UNTIL = "2026-11-24T08:00:00Z"
 
 # Secrets (wrangler secret put, never in this file, never in the repo):
 #   SEAL_KEY     32 random bytes, hex. Wraps the MultiSafepay key at rest (AES-GCM); only the Worker holds it.
