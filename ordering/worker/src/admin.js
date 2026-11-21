@@ -7,15 +7,21 @@
 // opened with a button (a POST), never by the GET alone, because mail scanners follow links and
 // would spend a one-time token before its owner sees it.
 //
+// Roles: an `owner` may do everything; `staff` may change calendar days and read, nothing else
+// (CAN below — every new screen adds its actions there, and an action missing from it is owner-only).
+//
 // Every write needs (1) a live session cookie, (2) an Origin header equal to this origin and
 // (3) a JSON body — a form on another site can satisfy none of the three. Every write is logged.
 import { loadSettings, loadSchedule, dropScheduleCache } from './db.js';
-import { hex2, timingSafeEqual } from './seal.js';
+import { hex2 } from './seal.js';
 import { sendMail } from './mail.js';
 import { json, CAFE_INBOX } from './orders.js';
 import { amsDate, addDays, validYmd, dayHours, orderingState, hhmm, mins, wdOf } from './hours.js';
+import { parseFondue, FONDUE_ITEM } from './fondue.js';
 
 const COOKIE = '__Secure-beheer';
+const CAN = { staff: ['hours_days'] };
+export function can(me, action) { return !!me && (me.role === 'owner' || (CAN[me.role] || []).includes(action)); }
 const LINK_MIN = 15, SESSION_DAYS = 30, LINKS_PER_HOUR = 5, LINKS_PER_HOUR_ALL = 30, MAX_RANGE_DAYS = 92;
 const nowIso = () => new Date().toISOString();
 const plusMin = m => new Date(Date.now() + m * 60000).toISOString();
@@ -72,14 +78,19 @@ export async function admin(request, env, p, ctx) {
     await audit(env, me.email, 'logout');
     return j({ ok: true }, 200, { 'set-cookie': COOKIE + '=; Path=/beheer; HttpOnly; Secure; SameSite=Lax; Max-Age=0' });
   }
-  if (p === '/beheer/api/me' && m === 'GET') return j({ email: me.email, role: me.role, cafe: env.CAFE_NAME || '', session_until: me.expires_at });
+  if (p === '/beheer/logout-all' && m === 'POST') {   // a lost phone, a shared tablet: every session of this address ends, this one included
+    const r = await env.DB.prepare('update staff_sessions set revoked_at=? where email=? and revoked_at is null').bind(nowIso(), me.email).run();
+    await audit(env, me.email, 'logout_all', { sessions: r.meta && r.meta.changes });
+    return j({ ok: true }, 200, { 'set-cookie': COOKIE + '=; Path=/beheer; HttpOnly; Secure; SameSite=Lax; Max-Age=0' });
+  }
+  if (p === '/beheer/api/me' && m === 'GET') return j({ email: me.email, role: me.role, can: { hours_week: can(me, 'hours_week'), hours_days: can(me, 'hours_days') }, cafe: env.CAFE_NAME || '', session_until: me.expires_at });
   if (p === '/beheer/api/hours' && m === 'GET') return j(await hoursForStaff(env));
   if (p === '/beheer/api/log' && m === 'GET') return j({ rows: (await env.DB.prepare('select at,who,action,detail from audit_log order by id desc limit 100').all()).results });
   if (m !== 'PUT') return notFound();
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== 'object') return j({ error: 'bad_json' }, 400);
-  if (p === '/beheer/api/hours/week') return saveWeek(env, me, body);
-  if (p === '/beheer/api/hours/days') return saveDays(env, me, body);
+  if (p === '/beheer/api/hours/week') return can(me, 'hours_week') ? saveWeek(env, me, body) : j({ error: 'role' }, 403);
+  if (p === '/beheer/api/hours/days') return can(me, 'hours_days') ? saveDays(env, me, body) : j({ error: 'role' }, 403);
   return notFound();
 }
 
@@ -140,12 +151,25 @@ async function enter(request, env) {
 }
 
 // ---- opening hours
+// Paid fondue reservations from today on: the guests a closed day would stand up. The mark of a
+// fondue order is its single server-written line (fondue.js isFondue), never the note alone.
+export async function paidFondue(env, today) {
+  const rows = (await env.DB.prepare("select o.id,o.public_ref,o.order_note,o.customer_name,o.customer_email,(select count(*) from order_items x where x.order_id=o.id) n from orders o join order_items i on i.order_id=o.id and i.item_id=? where o.status='paid' and o.created_at>?").bind(FONDUE_ITEM, new Date(Date.now() - 400 * 86400000).toISOString()).all()).results;
+  const out = [];
+  for (const r of rows) { const f = r.n === 1 ? parseFondue(r, [{ item_id: FONDUE_ITEM }]) : null; if (f && f.date >= today) out.push({ date: f.date, time: f.time, guests: f.guests, name: r.customer_name || '', email: r.customer_email || '', ref: r.public_ref }); }
+  return out.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+}
+// Pure: which of those reservations a calendar change would break — the day closes, or its new hours leave the table's time outside them.
+export function hitBy(v, reservations) {
+  if (v.mode === 'normal') return [];
+  return reservations.filter(r => v.dates.includes(r.date) && (v.mode === 'closed' || mins(r.time) < v.open || mins(r.time) >= v.close));
+}
 const noteOf = r => ({ nl: r.note_nl || '', en: r.note_en || '', de: r.note_de || '' });
 async function hoursForStaff(env) {
   const settings = await loadSettings(env), sched = await loadSchedule(env, true), today = amsDate();
   const ex = (await env.DB.prepare('select date,closed,open_min,close_min,note_nl,note_en,note_de,updated_at,updated_by from hours_exceptions where date>=? order by date').bind(addDays(today, -62)).all()).results;
   const offset = parseInt(settings.last_orders_offset_min, 10) || 30;
-  return { today, last_orders_offset_min: offset, state: orderingState(offset, null, sched),
+  return { today, last_orders_offset_min: offset, state: orderingState(offset, null, sched), reservations: await paidFondue(env, today),
     week: sched.week.map((w, wd) => ({ wd, closed: w.closed, open: hhmm(w.open), close: hhmm(w.close) })),
     exceptions: ex.map(r => ({ date: r.date, closed: !!r.closed, open: r.closed ? null : hhmm(r.open_min), close: r.closed ? null : hhmm(r.close_min), note: noteOf(r), updated_at: r.updated_at, updated_by: r.updated_by })) };
 }
@@ -168,7 +192,8 @@ export function validateDays(body, today) {
   if (!validYmd(from) || !validYmd(to) || to < from) return { error: 'dates' };
   if (to < today) return { error: 'past' };
   if (to > addDays(today, 800)) return { error: 'dates' };
-  const dates = []; for (let d = from; d <= to; d = addDays(d, 1)) { if (dates.length >= MAX_RANGE_DAYS) return { error: 'range' }; if (d >= today) dates.push(d); }
+  // start at today: a range that began last year must not walk the loop through every day since (gate, #35)
+  const dates = []; for (let d = from < today ? today : from; d <= to; d = addDays(d, 1)) { if (dates.length >= MAX_RANGE_DAYS) return { error: 'range' }; dates.push(d); }
   if (!['normal', 'closed', 'times'].includes(mode)) return { error: 'mode' };
   let o = null, c = null;
   if (mode === 'times') { o = mins(body.open); c = mins(body.close); if (o === null || c === null || o >= c || o > 1439) return { error: 'times' }; }
@@ -185,6 +210,9 @@ async function saveWeek(env, me, body) {
 }
 async function saveDays(env, me, body) {
   const v = validateDays(body, amsDate()); if (!v.ok) return j(v, 400);
+  // a guest has paid for a table on one of these dates: say so, and change nothing until staff confirm
+  const hit = hitBy(v, await paidFondue(env, amsDate()));
+  if (hit.length && body.confirm !== true) return j({ error: 'reservations', reservations: hit }, 409);
   const now = nowIso();
   const st = v.mode === 'normal'
     ? v.dates.map(d => env.DB.prepare('delete from hours_exceptions where date=?').bind(d))
@@ -192,7 +220,7 @@ async function saveDays(env, me, body) {
         .bind(d, v.mode === 'closed' ? 1 : 0, v.open, v.close, v.note.nl || null, v.note.en || null, v.note.de || null, now, me.email));
   await env.DB.batch(st);
   dropScheduleCache();
-  await audit(env, me.email, v.mode === 'normal' ? 'hours_day_clear' : 'hours_day', { from: v.dates[0], to: v.dates[v.dates.length - 1], mode: v.mode, open: v.open === null ? null : hhmm(v.open), close: v.close === null ? null : hhmm(v.close), note: v.note.nl });
+  await audit(env, me.email, v.mode === 'normal' ? 'hours_day_clear' : 'hours_day', { from: v.dates[0], to: v.dates[v.dates.length - 1], mode: v.mode, open: v.open === null ? null : hhmm(v.open), close: v.close === null ? null : hhmm(v.close), note: v.note.nl, ...(hit.length ? { reservations: hit.map(r => r.ref) } : {}) });
   return j({ ok: true, ...(await hoursForStaff(env)) });
 }
 

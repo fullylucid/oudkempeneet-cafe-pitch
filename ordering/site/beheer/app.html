@@ -45,6 +45,7 @@
       <form id="week">
         <div id="weekrows" class="weekrows"></div>
         <p class="hint" id="offs"></p>
+        <p class="hint" id="weekowner" data-t="r.owner" hidden>Alleen de eigenaar kan de vaste tijden wijzigen.</p>
         <button class="primary" type="submit" data-t="h.week.save">Vaste tijden opslaan</button>
       </form>
     </div>
@@ -55,6 +56,7 @@
       <h2 data-t="g.title">Logboek</h2>
       <p class="hint" data-t="g.hint">Elke wijziging in het beheer: wie, wanneer en wat.</p>
       <table class="log"><tbody id="logrows"></tbody></table>
+      <p class="hint logall"><button type="button" id="logout-all" data-t="g.all">Overal uitloggen</button> <span data-t="g.all.hint">Beëindigt elke sessie van uw adres, op elk apparaat. Handig bij een verloren telefoon.</span></p>
     </div>
   </section>
 </main>
@@ -83,10 +85,15 @@
         <label><span>Deutsch</span><input type="text" id="d-de" maxlength="140" placeholder="Wegen Urlaub geschlossen"></label>
       </details>
     </div>
+    <div id="d-res" class="resbox" hidden>
+      <h3 data-t="r.title">Betaalde fonduereserveringen</h3>
+      <ul id="d-reslist"></ul>
+      <p id="d-warn" class="err" role="alert" data-t="r.warn" hidden>Let op: voor deze dag(en) heeft een gast al betaald. Neem contact op met de gast en betaal terug in MultiSafepay voordat u sluit.</p>
+    </div>
     <p id="d-err" class="err" role="alert" hidden></p>
     <div class="actions">
       <button type="button" class="quiet" id="d-cancel" data-t="d.cancel">Annuleren</button>
-      <button type="submit" class="primary" data-t="d.save">Opslaan</button>
+      <button type="submit" class="primary" id="d-save" data-t="d.save">Opslaan</button>
     </div>
   </form>
 </dialog>
