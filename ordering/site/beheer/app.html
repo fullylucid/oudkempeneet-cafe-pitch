@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Beheer · Oud-Kempen Eetcafé</title>
+<link rel="stylesheet" href="/beheer/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="eyebrow">Oud-Kempen Eetcafé</span><strong data-t="a.title">Beheer</strong></div>
+  <nav id="tabs" aria-label="Beheer">
+    <button type="button" data-tab="hours" data-t="t.hours" aria-current="page">Openingstijden</button>
+    <button type="button" data-tab="log" data-t="t.log">Logboek</button>
+  </nav>
+  <div class="who"><span id="me"></span>
+    <button type="button" class="quiet" id="langbtn">English</button>
+    <button type="button" class="quiet" id="logout" data-t="a.logout">Uitloggen</button></div>
+</header>
+
+<main>
+  <p id="state" class="state" role="status"></p>
+  <p id="flash" class="flash" role="status" hidden></p>
+
+  <section id="p-hours">
+    <div class="panel">
+      <h2 data-t="h.cal">Kalender</h2>
+      <p class="hint" data-t="h.cal.hint">Tik op een dag om het café die dag te sluiten of andere tijden te geven. Voor een vakantie kiest u een begin- en einddatum.</p>
+      <div class="calbar">
+        <button type="button" id="prev" aria-label="Vorige maand">‹</button>
+        <h3 id="month"></h3>
+        <button type="button" id="next" aria-label="Volgende maand">›</button>
+        <button type="button" class="quiet" id="tod" data-t="h.today">Vandaag</button>
+      </div>
+      <div id="cal" class="cal" role="grid"></div>
+      <p class="legend"><span class="k k-open"></span><span data-t="h.l.open">Normale tijden</span><span class="k k-diff"></span><span data-t="h.l.diff">Andere tijden</span><span class="k k-shut"></span><span data-t="h.l.shut">Gesloten</span></p>
+      <h3 data-t="h.up">Komende afwijkingen</h3>
+      <ul id="upcoming" class="upcoming"></ul>
+    </div>
+
+    <div class="panel">
+      <h2 data-t="h.week">Vaste openingstijden</h2>
+      <p class="hint" data-t="h.week.hint">Deze tijden gelden elke week, tenzij de kalender voor een dag iets anders zegt.</p>
+      <form id="week">
+        <div id="weekrows" class="weekrows"></div>
+        <p class="hint" id="offs"></p>
+        <button class="primary" type="submit" data-t="h.week.save">Vaste tijden opslaan</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="p-log" hidden>
+    <div class="panel">
+      <h2 data-t="g.title">Logboek</h2>
+      <p class="hint" data-t="g.hint">Elke wijziging in het beheer: wie, wanneer en wat.</p>
+      <table class="log"><tbody id="logrows"></tbody></table>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <form id="day" method="dialog">
+    <h2 id="d-title"></h2>
+    <p id="d-normal" class="hint"></p>
+    <div class="row2">
+      <label><span data-t="d.from">Van</span><input type="date" id="d-from" required></label>
+      <label><span data-t="d.to">Tot en met</span><input type="date" id="d-to" required></label>
+    </div>
+    <fieldset>
+      <label class="opt"><input type="radio" name="mode" value="closed"><span data-t="d.closed">Gesloten</span></label>
+      <label class="opt"><input type="radio" name="mode" value="times"><span data-t="d.times">Andere tijden</span></label>
+      <div class="row2" id="d-timesrow">
+        <label><span data-t="d.open">Open</span><input type="time" id="d-open" step="300"></label>
+        <label><span data-t="d.close">Dicht</span><input type="time" id="d-close" step="300"></label>
+      </div>
+      <label class="opt"><input type="radio" name="mode" value="normal"><span data-t="d.normal">Normale tijden (afwijking weghalen)</span></label>
+    </fieldset>
+    <div id="d-notes">
+      <label><span data-t="d.note">Toelichting voor gasten (mag leeg blijven)</span><input type="text" id="d-nl" maxlength="140" placeholder="Gesloten wegens vakantie"></label>
+      <details><summary data-t="d.more">Engels en Duits</summary>
+        <label><span>English</span><input type="text" id="d-en" maxlength="140" placeholder="Closed for holidays"></label>
+        <label><span>Deutsch</span><input type="text" id="d-de" maxlength="140" placeholder="Wegen Urlaub geschlossen"></label>
+      </details>
+    </div>
+    <p id="d-err" class="err" role="alert" hidden></p>
+    <div class="actions">
+      <button type="button" class="quiet" id="d-cancel" data-t="d.cancel">Annuleren</button>
+      <button type="submit" class="primary" data-t="d.save">Opslaan</button>
+    </div>
+  </form>
+</dialog>
+<script src="/beheer/app.js"></script>
+</body>
+</html>

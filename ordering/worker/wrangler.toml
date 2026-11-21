@@ -16,7 +16,8 @@ directory = "../site"
 binding = "ASSETS"
 not_found_handling = "404-page"
 # Everything the Worker must answer itself. Anything else is a static asset from ../site.
-run_worker_first = ["/api/*", "/golive", "/golive/*", "/klaar/*", "/geannuleerd/*", "/robots.txt"]
+# /beheer is the staff side: the Worker decides who sees what, so no file under it is ever served directly.
+run_worker_first = ["/api/*", "/golive", "/golive/*", "/klaar/*", "/geannuleerd/*", "/robots.txt", "/beheer", "/beheer/*"]
 
 [[d1_databases]]
 binding = "DB"

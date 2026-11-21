@@ -2,7 +2,7 @@
 // The browser is never trusted (proposal §4): prices come from D1, totals from src/tally.js (the
 // ONE totals function, gate cond. 6), status from MultiSafepay's own Get-order (gate cond. 4).
 import tallyMod from '../../../src/tally.js';
-import { loadMenu, loadSettings, setSetting, getMsp, nameIn, optionsText } from './db.js';
+import { loadMenu, loadSettings, loadSchedule, setSetting, getMsp, nameIn, optionsText } from './db.js';
 import { orderingState, readyAt } from './hours.js';
 import { newOrderId, newPublicRef, ORDER_ID_RE } from './ids.js';
 import { api, buildOrder, verifyAuth, mapStatus } from './msp.js';
@@ -21,7 +21,7 @@ export async function createOrder(request, env) {
   if (!body || typeof body !== 'object') return json({ error: 'bad_json' }, 400);
   const lang = ['nl', 'en', 'de'].includes(body.lang) ? body.lang : 'nl';
   const settings = await loadSettings(env);
-  const st = orderingState(parseInt(settings.last_orders_offset_min, 10) || 30);
+  const st = orderingState(parseInt(settings.last_orders_offset_min, 10) || 30, null, await loadSchedule(env));
   if (!st.open) return json({ error: 'closed' }, 409);
   const msp = await getMsp(env, settings);
   if (!msp) return json({ error: 'no_psp' }, 503);

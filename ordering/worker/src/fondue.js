@@ -6,15 +6,15 @@
 // It rides on the orders table as it stands (the schema is frozen): one line "Kaasfondue" with
 // qty = guests, and an order_note that starts with FONDUE_TAG and carries date, time and guests.
 // Dave's rules, from his own card: at least 2 people, at least 1 day ahead.
-import { loadSettings, getMsp } from './db.js';
-import { openMinsFor } from './hours.js';
+import { loadSettings, loadSchedule, getMsp } from './db.js';
+import { dayHours } from './hours.js';
 import { newOrderId, newPublicRef } from './ids.js';
 import { insertOrder, startPayment, json } from './orders.js';
 
 export const FONDUE_TAG = 'KAASFONDUE-RESERVERING';
 export const FONDUE_PRICE_CENTS = 2595;          // per person, the price on the card and on the form
 const MIN_GUESTS = 2, MAX_GUESTS = 19;           // 19 × € 25,95 stays under the € 500 order cap; larger groups call
-const CLOSE_M = 21 * 60, MAX_DAYS_AHEAD = 365;
+const MAX_DAYS_AHEAD = 365;
 const NAME = { nl: 'Kaasfondue (reservering, p.p.)', en: 'Cheese fondue (reservation, p.p.)', de: 'Käsefondue (Reservierung, p.P.)' };
 const ALLOWED_ORIGINS = ['https://www.oudkempeneetcafe.nl', 'https://oudkempeneetcafe.nl'];
 const str = (v, max) => typeof v === 'string' ? v.trim().slice(0, max) : '';
@@ -38,7 +38,7 @@ function addDays(iso, n) { const d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(
 export function dateNl(iso) { return new Intl.DateTimeFormat('nl-NL', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso + 'T12:00:00Z')); }
 
 // Pure: what the browser sent → a reservation, or the reason it is refused. The browser is never the guard.
-export function validateFondue(body, now) {
+export function validateFondue(body, now, sched) {
   if (!body || typeof body !== 'object') return { error: 'bad_json' };
   const name = str(body.name, 80), email = str(body.email, 120), date = str(body.date, 10), time = str(body.time, 5);
   if (!name || !email) return { error: 'fields' };
@@ -51,8 +51,9 @@ export function validateFondue(body, now) {
   if (date < addDays(today, 1)) return { error: 'too_soon' };                     // at least 1 day ahead, Amsterdam calendar
   if (date > addDays(today, MAX_DAYS_AHEAD)) return { error: 'date' };
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return { error: 'time' };
-  const mins = +time.slice(0, 2) * 60 + +time.slice(3), wd = new Date(date + 'T12:00:00Z').getUTCDay();
-  if (mins < openMinsFor(wd) || mins >= CLOSE_M) return { error: 'time' };        // inside the café's opening hours that day
+  const mins = +time.slice(0, 2) * 60 + +time.slice(3), h = dayHours(sched, date);
+  if (h.closed) return { error: 'date', reason: 'closed' };                       // the café's own calendar (/beheer) says closed that day
+  if (mins < h.open || mins >= h.close) return { error: 'time' };                 // inside the café's opening hours that day
   const lang = ['nl', 'en', 'de'].includes(body.lang) ? body.lang : 'nl';
   return { ok: true, name, email, guests, date, time, lang, note: str(body.note, 400).replace(/\s+/g, ' ') };
 }
@@ -63,7 +64,7 @@ export function cors(request) {
 export async function createFondue(request, env) {
   const h = cors(request);
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: h });
-  const v = validateFondue(await request.json().catch(() => null));
+  const v = validateFondue(await request.json().catch(() => null), null, await loadSchedule(env));
   if (!v.ok) return json({ error: v.error }, 400, h);
   const settings = await loadSettings(env), msp = await getMsp(env, settings);
   if (!msp) return json({ error: 'no_psp' }, 503, h);

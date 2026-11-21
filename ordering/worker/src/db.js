@@ -1,6 +1,7 @@
 // D1 access. D1 is the menu's truth from the first seed onward (gate cond. 8): the Worker never
 // reads data/menu.json. The cart page inlines the same menu at build time; both come from one seed.
 import { seal, unseal } from './seal.js';
+import { DEFAULT_SCHED, amsDate, addDays } from './hours.js';
 
 const L = ['nl', 'en', 'de'];
 let menuCache = null;   // per isolate, 60 s — a menu edit shows within a minute, a burst of orders reads D1 once
@@ -20,6 +21,26 @@ export async function loadMenu(env, force) {
   menuCache = { at: Date.now(), by };
   return by;
 }
+// The café's opening hours (0003): the weekly rule and the calendar exceptions from yesterday on.
+// 60 s per isolate, like the menu. Any failure — the tables not there yet, a D1 error — falls back
+// to the hours the site has always shown, never to "closed".
+let schedCache = null;
+export async function loadSchedule(env, force) {
+  if (!force && schedCache && Date.now() - schedCache.at < 60000) return schedCache.v;
+  let v = DEFAULT_SCHED;
+  try {
+    const wk = (await env.DB.prepare('select wd,closed,open_min,close_min from hours_week').all()).results;
+    const ex = (await env.DB.prepare('select date,closed,open_min,close_min,note_nl,note_en,note_de from hours_exceptions where date>=? order by date').bind(addDays(amsDate(), -1)).all()).results;
+    if (wk.length === 7) {
+      const week = []; for (const r of wk) week[r.wd] = { closed: !!r.closed, open: r.open_min, close: r.close_min };
+      const exs = {}; for (const r of ex) exs[r.date] = { closed: !!r.closed, open: r.open_min, close: r.close_min, note: (r.note_nl || r.note_en || r.note_de) ? { nl: r.note_nl || '', en: r.note_en || '', de: r.note_de || '' } : null };
+      v = { week, ex: exs };
+    }
+  } catch (e) { console.error('loadSchedule', String(e && e.message || e)); v = DEFAULT_SCHED; }
+  schedCache = { at: Date.now(), v };
+  return v;
+}
+export function dropScheduleCache() { schedCache = null; }
 export async function loadSettings(env) {
   const rows = (await env.DB.prepare('select key,value from settings').all()).results;
   const s = {}; for (const r of rows) s[r.key] = r.value; return s;
