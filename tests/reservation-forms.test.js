@@ -36,6 +36,7 @@ async function submit(browser, service, mode) {
     if (!f) return null;
     f.querySelectorAll('input,textarea,select').forEach(e => {
       if (e.name === '_honey' || e.type === 'hidden' || e.type === 'submit') return;
+      if (e.name === 'fondue') return;   // the paid path has its own block below
       if (e.type === 'checkbox') { e.checked = true; }
       else if (e.type === 'date') e.value = '2026-12-24';
       else if (e.type === 'time') e.value = '18:30';
@@ -91,6 +92,37 @@ async function submit(browser, service, mode) {
   await p.waitForTimeout(600);
   ok(trapped.length === 0, `the honeypot stops a filled trap from sending (sent ${trapped.length})`);
   await p.close();
+
+  // ---- kaasfondue: paid up front. The request must NOT reach the inbox; it goes to the ordering
+  // system, and the guest is sent to the payment page it answers with.
+  async function fondue(reply, guests) {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    const mail = [], pay = []; let went = null;
+    await page.route('**://formsubmit.co/**', r => { mail.push(1); return r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":"true"}' }); });
+    await page.route('**://bestellen.oudkempeneetcafe.nl/api/fondue', r => { pay.push(JSON.parse(r.request().postData() || '{}'));
+      return r.fulfill({ status: reply.status, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(reply.body) }); });
+    await page.route('**://payv2.multisafepay.com/**', r => { went = r.request().url(); return r.fulfill({ status: 200, contentType: 'text/html', body: '<h1>pay</h1>' }); });
+    await page.goto(URL); await page.waitForTimeout(500);
+    const tomorrow = await page.evaluate(g => {
+      const f = document.querySelector('form.res-form[data-service="table"]'), set = (n, v) => { const e = f.querySelector(`[name="${n}"]`); e.value = v; e.dispatchEvent(new Event('change', { bubbles: true })); };
+      const d = new Date(); d.setDate(d.getDate() + 3); const iso = d.toISOString().slice(0, 10);
+      const c = f.querySelector('[name="fondue"]'); c.checked = true; c.dispatchEvent(new Event('change', { bubbles: true }));
+      set('name', 'QA Gast'); set('email', 'qa@example.invalid'); set('guests', String(g)); set('date', iso); set('time', '18:30');
+      f.querySelector('[type=submit],button').click(); return iso; }, guests);
+    await page.waitForTimeout(900);
+    const msg = await page.evaluate(() => { const nd = document.querySelector('form.res-form[data-service="table"] .form-status'); return nd ? nd.textContent.trim() : null; }).catch(() => null);
+    await page.close();
+    return { mail, pay, went, msg, tomorrow };
+  }
+  const paid = await fondue({ status: 200, body: { id: 'x', public_ref: 'K7MP', payment_url: 'https://payv2.multisafepay.com/connect/test/' } }, 4);
+  ok(paid.mail.length === 0, `fondue: nothing is mailed to the café before payment (sent ${paid.mail.length})`);
+  ok(paid.pay.length === 1 && paid.pay[0].guests === 4 && paid.pay[0].date === paid.tomorrow && paid.pay[0].time === '18:30' && paid.pay[0].name === 'QA Gast' && paid.pay[0].lang === 'nl',
+    `fondue: the reservation goes to the ordering system with its details (got ${JSON.stringify(paid.pay)})`);
+  ok(/payv2\.multisafepay\.com\/connect\/test/.test(paid.went || ''), `fondue: the guest is taken to the payment page (went to ${paid.went})`);
+  const down = await fondue({ status: 503, body: { error: 'no_psp' } }, 2);
+  ok(down.mail.length === 0 && !down.went && /mis|wrong|schief/i.test(down.msg || ''), `fondue: a payment-system failure is reported, never mailed as a booking (got ${JSON.stringify(down.msg)})`);
+  const big = await fondue({ status: 200, body: {} }, 25);
+  ok(big.pay.length === 0 && big.mail.length === 0 && /bel ons/i.test(big.msg || ''), `fondue: more than 19 guests are asked to call (got ${JSON.stringify(big.msg)})`);
 
   await browser.close();
   if (fails.length) { console.error(`tests/reservation-forms.test.js: ${fails.length} of ${n} checks FAILED`);

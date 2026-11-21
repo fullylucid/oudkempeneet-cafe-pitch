@@ -68,6 +68,29 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
   const mime = mail.buildMime({ from: 'bestellen@oudkempeneetcafe.nl', fromName: 'Oud-Kempen Eetcafé', to: 'a@b.nl', subject: 'Afhaalbestelling K7MP — € 4,50', text: 'héllo' });
   ok(/^From: =\?UTF-8\?B\?.+\?= <bestellen@oudkempeneetcafe.nl>\r\n/.test(mime) && /Subject: =\?UTF-8\?B\?/.test(mime) && /Content-Transfer-Encoding: base64/.test(mime) && mime.includes(btoa(unescape(encodeURIComponent('héllo')))), 'MIME: UTF-8 encoded words, base64 body');
 
+  // ---- kaasfondue reservation, paid up front (Dave, 2026-11-21)
+  const fondue = await import('../ordering/worker/src/fondue.js');
+  const now = new Date('2026-11-21T18:00:00Z'), base = { name: 'Jan de Vries', email: 'j@example.com', guests: 4, date: '2026-11-25', time: '18:30', lang: 'en', note: 'raam  graag' };
+  const v = fondue.validateFondue(base, now);
+  ok(v.ok && v.guests === 4 && v.date === '2026-11-25' && v.lang === 'en' && v.note === 'raam graag', 'a valid fondue reservation passes');
+  ok(fondue.validateFondue({ ...base, guests: 1 }, now).error === 'guests_min' && fondue.validateFondue({ ...base, guests: 20 }, now).error === 'guests_max' && fondue.validateFondue({ ...base, guests: 2.5 }, now).error === 'guests_min', 'fondue: 2 to 19 whole guests');
+  ok(fondue.validateFondue({ ...base, date: '2026-11-21' }, now).error === 'too_soon' && fondue.validateFondue({ ...base, date: '2026-11-22' }, now).ok, 'fondue: today is refused, tomorrow is allowed (1 day ahead)');
+  ok(fondue.validateFondue({ ...base, date: '2026-11-22' }, new Date('2026-11-21T23:30:00Z')).error === 'too_soon', 'fondue: "tomorrow" follows the Amsterdam calendar (00:30 there is already the 22nd)');
+  ok(fondue.validateFondue({ ...base, date: '2026-02-30' }, now).error === 'date' && fondue.validateFondue({ ...base, date: '2028-01-01' }, now).error === 'date', 'fondue: impossible and far-off dates are refused');
+  ok(fondue.validateFondue({ ...base, time: '14:00' }, now).error === 'time' && fondue.validateFondue({ ...base, date: '2026-11-28', time: '13:00' }, now).ok && fondue.validateFondue({ ...base, time: '21:00' }, now).error === 'time', 'fondue: the time must fall inside that day\'s opening hours');
+  ok(fondue.validateFondue({ ...base, email: 'nope' }, now).error === 'email' && fondue.validateFondue({ ...base, name: '' }, now).error === 'fields' && fondue.validateFondue(null, now).error === 'bad_json', 'fondue: name and a real email are required');
+  const fo = { public_ref: 'K7MP', lang: 'nl', total_cents: 4 * 2595, vat_low_cents: Math.round(4 * 2595 * 9 / 109), vat_high_cents: 0, customer_name: 'Jan de Vries', customer_email: 'j@example.com', created_at: '2026-11-21T18:00:00Z', pickup_eta_min: 0,
+    order_note: fondue.FONDUE_TAG + ' 2026-11-25 18:30 · 4 personen · opmerking: raam graag' };
+  const pf = fondue.parseFondue(fo);
+  ok(fondue.isFondue(fo) && pf.date === '2026-11-25' && pf.time === '18:30' && pf.guests === 4 && pf.note === 'raam graag' && !fondue.isFondue(o2) && fondue.parseFondue(o2) === null, 'the order note round-trips; a takeaway order is not a fondue');
+  const ft = mail.alertText({}, fo, [{ qty: 4, unit_price_cents: 2595, options_cents: 0, name_snapshot: 'Kaasfondue' }], { method: 'IDEAL', transaction_id: '99' });
+  ok(/VOORUIT BETAALD  K7MP/.test(ft) && /woensdag 25 november 2026/.test(ft) && /Tijd: 18:30/.test(ft) && /Aantal personen: 4/.test(ft) && /€ 103,80/.test(ft) && /raam graag/.test(ft) && /transactie 99/.test(ft) && !/AFHAALBESTELLING|Klaar om/.test(ft), 'the café\'s mail reads as a paid reservation, not a takeaway ticket');
+  ok(/^Kaasfondue BETAALD — 2026-11-25 18:30 — 4 pers\./.test(mail.alertSubject(fo)) && /^Afhaalbestelling/.test(mail.alertSubject(o2)), 'subjects tell the two apart');
+  const fb = msp.buildOrder({ order: { ...fo, id: 'B'.repeat(24) }, items: [{ item_id: 'fondue-reservering', qty: 4, unit_price_cents: 2595, options_cents: 0, vat_rate: 9, name_snapshot: 'Kaasfondue' }], origin: 'https://bestellen.oudkempeneetcafe.nl', settings: {}, ip: '1.2.3.4' });
+  ok(fb.amount === 10380 && /kaasfondue reservering K7MP/.test(fb.description) && fb.shopping_cart.items[0].quantity === 4 && /afhalen K7MP/.test(b.description), 'MultiSafepay is asked for guests × price, described as a reservation');
+  const cz = fondue.cors(new Request('https://x/api/fondue', { headers: { origin: 'https://www.oudkempeneetcafe.nl' } })), cx = fondue.cors(new Request('https://x/api/fondue', { headers: { origin: 'https://evil.example' } }));
+  ok(cz['access-control-allow-origin'] === 'https://www.oudkempeneetcafe.nl' && !cx['access-control-allow-origin'], 'only the café\'s own site may call the endpoint from a browser');
+
   console.log(fails.length ? `tests/worker.test.js: FAIL ${fails.length}/${n}\n  - ` + fails.join('\n  - ') : `tests/worker.test.js: ${n} checks passed`);
   process.exit(fails.length ? 1 : 0);
 })();

@@ -3,6 +3,14 @@
 // endpoint and shows "paid" only when D1 says so. In the order's language; the cart is cleared only
 // on a confirmed payment.
 import { ORDER_ID_RE } from './ids.js';
+import { parseFondue } from './fondue.js';
+const WWW = 'https://www.oudkempeneetcafe.nl/';
+// A paid fondue reservation lands on the same page with its own words: a date, not a pickup time.
+const TF = {
+  nl: { paid: 'Betaald. Uw kaasfondue is gereserveerd!', ref: 'Uw reserveringsnummer', when: 'Wij verwachten u op', guests: 'personen', keep: 'Bewaar dit nummer. Het betaalde bedrag wordt aan tafel verrekend.', again: 'Terug naar de website' },
+  en: { paid: 'Paid. Your cheese fondue is reserved!', ref: 'Your reservation number', when: 'We expect you on', guests: 'guests', keep: 'Keep this number. The amount you paid is settled at the table.', again: 'Back to the website' },
+  de: { paid: 'Bezahlt. Ihr Käsefondue ist reserviert!', ref: 'Ihre Reservierungsnummer', when: 'Wir erwarten Sie am', guests: 'Personen', keep: 'Bewahren Sie diese Nummer auf. Der bezahlte Betrag wird am Tisch verrechnet.', again: 'Zurück zur Website' },
+};
 const T = {
   nl: { title: 'Uw bestelling', checking: 'Een ogenblik, we controleren uw betaling…', paid: 'Betaald. Bedankt!', ref: 'Uw bestelnummer', ready: 'Klaar om ongeveer', pickup: 'Afhalen bij', keep: 'Noteer het nummer of maak een schermafbeelding; u heeft het nodig bij het afhalen.', failed: 'De betaling is niet gelukt.', expired: 'De betaallink is verlopen.', cancelled: 'De betaling is geannuleerd.', again: 'Terug naar de kaart — uw bestelling staat nog klaar', slow: 'De bank laat nog op zich wachten. Blijf op deze pagina of bel ons: ', notfound: 'Deze bestelling is niet gevonden.' },
   en: { title: 'Your order', checking: 'One moment, we are checking your payment…', paid: 'Paid. Thank you!', ref: 'Your order number', ready: 'Ready at about', pickup: 'Pick up at', keep: 'Note the number or take a screenshot; you will need it at pickup.', failed: 'The payment did not go through.', expired: 'The payment link has expired.', cancelled: 'The payment was cancelled.', again: 'Back to the menu — your order is still there', slow: 'The bank is taking a while. Stay on this page or call us: ', notfound: 'This order was not found.' },
@@ -20,19 +28,22 @@ function shell(lang, body) {
 }
 export async function klaar(env, id) {
   if (!ORDER_ID_RE.test(id)) return shell('nl', `<div class="card bad"><h1>${T.nl.notfound}</h1></div>`);
-  const o = await env.DB.prepare('select lang from orders where id=?').bind(id).first();
-  const lang = (o && T[o.lang]) ? o.lang : 'nl', t = T[lang];
+  const o = await env.DB.prepare('select lang, order_note from orders where id=?').bind(id).first();
+  const lang = (o && T[o.lang]) ? o.lang : 'nl', f = o ? parseFondue(o) : null, t = f ? { ...T[lang], ...TF[lang] } : T[lang];
   if (!o) return shell(lang, `<div class="card bad"><h1>${esc(t.notfound)}</h1><p><a href="/">${esc(t.again)}</a></p></div>`);
+  const when = f ? new Intl.DateTimeFormat({ nl: 'nl-NL', en: 'en-GB', de: 'de-DE' }[lang], { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(f.date + 'T12:00:00Z')) + ', ' + f.time : '';
   const phone = env.CAFE_PHONE || '', addr = env.CAFE_ADDRESS || '';
   return shell(lang, `<div class="card" id="c"><h1 id="h"><span class="spin"></span>${esc(t.checking)}</h1><div id="b"></div></div>
 <script>
-var T=${JSON.stringify(t)},ID=${JSON.stringify(id)},PHONE=${JSON.stringify(phone)},ADDR=${JSON.stringify(addr)},n=0;
+var T=${JSON.stringify(t)},ID=${JSON.stringify(id)},PHONE=${JSON.stringify(phone)},ADDR=${JSON.stringify(addr)},F=${JSON.stringify(f ? { when, guests: f.guests } : null)},HOME=${JSON.stringify(f ? WWW : '/')},n=0;
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
 function show(st,d){var c=document.getElementById('c'),h=document.getElementById('h'),b=document.getElementById('b');
+ if(st==='paid'&&F){c.className='card';h.textContent=T.paid;
+  b.innerHTML='<div class="lbl">'+esc(T.ref)+'</div><div class="ref">'+esc(d.public_ref)+'</div><p>'+esc(T.when)+' <b>'+esc(F.when)+'</b> · '+esc(F.guests)+' '+esc(T.guests)+'</p><p class="dim">Oud-Kempen Eetcafé, '+esc(ADDR)+' · <a href="tel:'+esc(PHONE.replace(/\\s/g,''))+'">'+esc(PHONE)+'</a></p><p class="dim">'+esc(T.keep)+'</p><p><a href="'+HOME+'">'+esc(T.again)+'</a></p>';return true;}
  if(st==='paid'){c.className='card';h.textContent=T.paid;
   b.innerHTML='<div class="lbl">'+esc(T.ref)+'</div><div class="ref">'+esc(d.public_ref)+'</div><p>'+esc(T.ready)+' <b>'+esc(d.ready_at)+'</b></p><p class="dim">'+esc(T.pickup)+' Oud-Kempen Eetcafé, '+esc(ADDR)+' · <a href="tel:'+esc(PHONE.replace(/\\s/g,''))+'">'+esc(PHONE)+'</a></p><p class="dim">'+esc(T.keep)+'</p>';
   try{localStorage.removeItem('ok-cart');['f-note','f-name','f-email','f-phone'].forEach(function(k){sessionStorage.removeItem('ok-'+k);});}catch(e){} return true;}
- if(st==='failed'||st==='expired'||st==='cancelled'){c.className='card bad';h.textContent=T[st]||T.failed;b.innerHTML='<p><a href="/">'+esc(T.again)+'</a></p>';return true;}
+ if(st==='failed'||st==='expired'||st==='cancelled'){c.className='card bad';h.textContent=T[st]||T.failed;b.innerHTML='<p><a href="'+HOME+'">'+esc(T.again)+'</a></p>';return true;}
  if(n>40){h.innerHTML='<span class="spin"></span>'+esc(T.slow)+'<a href="tel:'+esc(PHONE.replace(/\\s/g,''))+'">'+esc(PHONE)+'</a>';}
  return false;}
 function poll(){n++;fetch('/api/orders/'+ID,{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){if(!show(d.status,d))setTimeout(poll,3000);}).catch(function(){setTimeout(poll,4000);});}
@@ -40,7 +51,7 @@ poll();
 </script>`);
 }
 export async function geannuleerd(env, id) {
-  const o = ORDER_ID_RE.test(id) ? await env.DB.prepare('select lang from orders where id=?').bind(id).first() : null;
-  const lang = (o && T[o.lang]) ? o.lang : 'nl', t = T[lang];
-  return shell(lang, `<div class="card bad"><h1>${esc(t.cancelled)}</h1><p><a href="/">${esc(t.again)}</a></p></div>`);
+  const o = ORDER_ID_RE.test(id) ? await env.DB.prepare('select lang, order_note from orders where id=?').bind(id).first() : null;
+  const lang = (o && T[o.lang]) ? o.lang : 'nl', f = o ? parseFondue(o) : null, t = f ? { ...T[lang], ...TF[lang] } : T[lang];
+  return shell(lang, `<div class="card bad"><h1>${esc(t.cancelled)}</h1><p><a href="${f ? WWW : '/'}">${esc(t.again)}</a></p></div>`);
 }
