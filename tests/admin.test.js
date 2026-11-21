@@ -68,6 +68,34 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
   ok(admin.validateDays({ from: '2026-12-24', mode: 'normal' }, T).ok, 'back to normal');
   ok(admin.validateDays({ from: '2026-12-24', mode: 'closed', note: { nl: 'x'.repeat(500) } }, T).note.nl.length === 140, 'a note is cut at 140 characters');
 
+  // ---- review of #35, point 6: the range starts at today, however long ago `from` was
+  v = admin.validateDays({ from: '2020-01-01', to: '2026-11-22', mode: 'closed' }, T); ok(v.ok && v.dates.length === 2 && v.dates[0] === T, 'a range from 2020 to tomorrow writes two days, not "range too long"');
+
+  // ---- review point 1: closing a date that holds a paid fondue reservation
+  const RES = [{ date: '2026-12-10', time: '18:00', guests: 4, name: 'Jan', ref: 'K7MP' }, { date: '2026-12-12', time: '13:00', guests: 2, name: 'Els', ref: 'D5JT' }];
+  const dv = b => admin.validateDays(b, T);
+  ok(admin.hitBy(dv({ from: '2026-12-10', mode: 'closed' }), RES).map(r => r.ref).join() === 'K7MP', 'closing 10 Dec hits the reservation on it');
+  ok(admin.hitBy(dv({ from: '2026-12-09', to: '2026-12-13', mode: 'closed' }), RES).length === 2, 'a range hits every reservation inside it');
+  ok(admin.hitBy(dv({ from: '2026-12-11', mode: 'closed' }), RES).length === 0, 'closing a day without one hits none');
+  ok(admin.hitBy(dv({ from: '2026-12-10', mode: 'times', open: '12:00', close: '17:00' }), RES).length === 1, 'new hours that end before the table\'s time hit it');
+  ok(admin.hitBy(dv({ from: '2026-12-10', mode: 'times', open: '17:00', close: '23:00' }), RES).length === 0 && admin.hitBy(dv({ from: '2026-12-10', mode: 'times', open: '12:00', close: '18:00' }), RES).length === 1, 'new hours that still contain it do not; closing AT the table\'s time does');
+  ok(admin.hitBy(dv({ from: '2026-12-10', mode: 'normal' }), RES).length === 0, 'going back to normal hours never warns');
+  const srcA = fs.readFileSync('ordering/worker/src/admin.js', 'utf8');
+  ok(/hit\.length && body\.confirm !== true\) return j\(\{ error: 'reservations'/.test(srcA), 'the save is refused with the guests named until staff confirm with the boolean true');
+
+  // ---- review point 2: role is enforced
+  ok(admin.can({ role: 'owner' }, 'hours_week') && admin.can({ role: 'owner' }, 'anything_new'), 'an owner may do everything');
+  ok(admin.can({ role: 'staff' }, 'hours_days') && !admin.can({ role: 'staff' }, 'hours_week') && !admin.can({ role: 'staff' }, 'anything_new'), 'staff: calendar days only; an action nobody listed is owner-only');
+  ok(!admin.can(null, 'hours_days') && !admin.can({ role: 'nobody' }, 'hours_days') && !admin.can({}, 'hours_days'), 'no session, unknown role: nothing');
+  ok(/can\(me, 'hours_week'\) \? saveWeek/.test(srcA) && /can\(me, 'hours_days'\) \? saveDays/.test(srcA), 'both write routes ask can() before they run');
+  // ---- review point 4: log out everywhere
+  ok(/\/beheer\/logout-all/.test(srcA) && /update staff_sessions set revoked_at=\? where email=\? and revoked_at is null/.test(srcA), 'logout-all revokes every live session of the address');
+  // ---- review point 5: the ordering page reads the café's hours and prints a staff note as text
+  const tpl = fs.readFileSync('ordering/bestellen.template.html', 'utf8'), built = fs.readFileSync('ordering/site/index.html', 'utf8');
+  ok(/fetch\('\/api\/hours'/.test(tpl) && /fetch\('\/api\/hours'/.test(built), 'the ordering page asks /api/hours (template and built page)');
+  ok(/t\.innerHTML=txt\.split\(' · '\)\.map\(function\(x\)\{ return '<span class="seg">'\+esc\(x\)/.test(tpl), 'the status line, which may carry a staff note, is escaped before it is set');
+  ok(/Date\.now\(\)-HRS_AT>180000\) return null/.test(tpl), 'hours older than three minutes fall back to the built-in engine');
+
   // ---- fondue reservations follow the same calendar
   const base = { name: 'Jan', email: 'j@example.com', guests: 2, date: '2026-12-25', time: '18:00' }, now = at('2026-11-21T12:00:00Z');
   ok(fondue.validateFondue(base, now).ok, 'no schedule: 25 Dec 18:00 is a normal Friday');

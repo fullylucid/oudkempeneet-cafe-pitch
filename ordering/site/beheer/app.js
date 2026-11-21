@@ -10,7 +10,8 @@
       'd.from': 'Van', 'd.to': 'Tot en met', 'd.closed': 'Gesloten', 'd.times': 'Andere tijden', 'd.open': 'Open', 'd.close': 'Dicht', 'd.normal': 'Normale tijden (afwijking weghalen)',
       'd.note': 'Toelichting voor gasten (mag leeg blijven)', 'd.more': 'Engels en Duits', 'd.cancel': 'Annuleren', 'd.save': 'Opslaan', 'd.usual': 'Normaal op deze dag: {h}', 'edit': 'Wijzigen',
       'g.title': 'Logboek', 'g.hint': 'Elke wijziging in het beheer: wie, wanneer en wat.', 'g.none': 'Nog geen wijzigingen.',
-      'g.login': 'Ingelogd', 'g.logout': 'Uitgelogd', 'g.hours_week': 'Vaste tijden gewijzigd', 'g.hours_day': 'Kalender gewijzigd', 'g.hours_day_clear': 'Afwijking weggehaald',
+      'g.login': 'Ingelogd', 'g.logout': 'Uitgelogd', 'g.logout_all': 'Overal uitgelogd', 'g.all': 'Overal uitloggen', 'g.all.hint': 'Beëindigt elke sessie van uw adres, op elk apparaat. Handig bij een verloren telefoon.',
+      'r.one': '{n} fondue', 'r.title': 'Betaalde fonduereserveringen', 'r.line': '{t} · {g} personen · {n} · {e} · {r}', 'r.warn': 'Let op: voor deze dag(en) heeft een gast al betaald. Neem contact op met de gast en betaal terug in MultiSafepay voordat u sluit.', 'r.force': 'Toch opslaan', 'r.owner': 'Alleen de eigenaar kan de vaste tijden wijzigen.', 'e.role': 'Daar heeft u geen rechten voor.', 'e.reservations': 'Er zijn betaalde reserveringen op deze dag(en).', 'g.hours_week': 'Vaste tijden gewijzigd', 'g.hours_day': 'Kalender gewijzigd', 'g.hours_day_clear': 'Afwijking weggehaald',
       's.open': 'Het café is nu open tot {c}. Online bestellen kan tot {l}.', 's.today': 'Nu gesloten. Vandaag open vanaf {t}.', 's.tomorrow': 'Nu gesloten. Morgen open vanaf {t}.', 's.later': 'Nu gesloten. Weer open op {d} vanaf {t}.', 's.never': 'Er staat de komende twee maanden geen open dag in de kalender.',
       'f.saved': 'Opgeslagen. Gasten zien dit binnen een minuut.', 'e.times': 'De openingstijd moet voor de sluitingstijd liggen.', 'e.dates': 'Controleer de datums: de einddatum moet op of na de begindatum liggen.', 'e.past': 'Deze dag is al voorbij.', 'e.range': 'Maximaal drie maanden in één keer.',
       'e.all_closed': 'Elke dag staat op gesloten. Gebruik de kalender voor een vakantie.', 'e.mode': 'Kies gesloten, andere tijden of normale tijden.', 'e.net': 'Dat lukte niet. Controleer de verbinding en probeer het opnieuw.', 'other': 'English' },
@@ -22,7 +23,8 @@
       'd.from': 'From', 'd.to': 'Up to and including', 'd.closed': 'Closed', 'd.times': 'Different hours', 'd.open': 'Open', 'd.close': 'Close', 'd.normal': 'Usual hours (remove the change)',
       'd.note': 'Note for guests (may stay empty)', 'd.more': 'English and German', 'd.cancel': 'Cancel', 'd.save': 'Save', 'd.usual': 'Usually on this day: {h}', 'edit': 'Change',
       'g.title': 'Change log', 'g.hint': 'Every change made here: who, when and what.', 'g.none': 'No changes yet.',
-      'g.login': 'Logged in', 'g.logout': 'Logged out', 'g.hours_week': 'Usual hours changed', 'g.hours_day': 'Calendar changed', 'g.hours_day_clear': 'Change removed',
+      'g.login': 'Logged in', 'g.logout': 'Logged out', 'g.logout_all': 'Logged out everywhere', 'g.all': 'Log out everywhere', 'g.all.hint': 'Ends every session of your address, on every device. Useful after a lost phone.',
+      'r.one': '{n} fondue', 'r.title': 'Paid fondue reservations', 'r.line': '{t} · {g} guests · {n} · {e} · {r}', 'r.warn': 'Careful: a guest has already paid for a table on these dates. Contact the guest and refund in MultiSafepay before you close.', 'r.force': 'Save anyway', 'r.owner': 'Only the owner can change the usual hours.', 'e.role': 'You do not have the rights for that.', 'e.reservations': 'There are paid reservations on these dates.', 'g.hours_week': 'Usual hours changed', 'g.hours_day': 'Calendar changed', 'g.hours_day_clear': 'Change removed',
       's.open': 'The café is open now until {c}. Online ordering until {l}.', 's.today': 'Closed now. Opens today at {t}.', 's.tomorrow': 'Closed now. Opens tomorrow at {t}.', 's.later': 'Closed now. Opens again on {d} at {t}.', 's.never': 'The calendar has no open day in the next two months.',
       'f.saved': 'Saved. Guests see this within a minute.', 'e.times': 'The opening time must be before the closing time.', 'e.dates': 'Check the dates: the last date must be on or after the first.', 'e.past': 'This day has already passed.', 'e.range': 'At most three months at a time.',
       'e.all_closed': 'Every day is set to closed. Use the calendar for a holiday.', 'e.mode': 'Choose closed, different hours or usual hours.', 'e.net': 'That did not work. Check the connection and try again.', 'other': 'Nederlands' }
@@ -43,13 +45,13 @@
   function shortDate(ymd) { return new Intl.DateTimeFormat(loc(), { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' }).format(D(ymd)); }
   function dayName(n, style) { return new Intl.DateTimeFormat(loc(), { timeZone: 'UTC', weekday: style || 'long' }).format(D(addDays('2026-11-15', n))); }   // 2026-11-15 is a Sunday
 
-  var H = null, EX = {}, view = null;   // view = first day of the month on screen
+  var H = null, EX = {}, RES = {}, ME = { can: {} }, view = null;   // view = first day of the month on screen
   function api(method, path, body) {
     return fetch(path, { method: method, credentials: 'same-origin', headers: body ? { 'content-type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined })
       .then(function (r) { if (r.status === 401) { location.replace('/beheer'); throw new Error('login'); } return r.json().then(function (j) { return { ok: r.ok, j: j }; }); });
   }
   function usual(ymd) { var w = H.week[wd(ymd)]; return w.closed ? null : w.open + '–' + w.close; }
-  function take(j) { H = j; EX = {}; j.exceptions.forEach(function (e) { EX[e.date] = e; }); if (!view) view = j.today.slice(0, 8) + '01'; paintAll(); }
+  function take(j) { H = j; EX = {}; RES = {}; j.exceptions.forEach(function (e) { EX[e.date] = e; }); (j.reservations || []).forEach(function (r) { (RES[r.date] = RES[r.date] || []).push(r); }); if (!view) view = j.today.slice(0, 8) + '01'; paintAll(); }
   function flash(k) { var f = $('flash'); f.textContent = t(k); f.hidden = false; clearTimeout(flash.t); flash.t = setTimeout(function () { f.hidden = true; }, 5000); }
 
   function paintState() {
@@ -75,6 +77,7 @@
       if (o) { hrs.appendChild(el('span', 'o', o)); hrs.appendChild(el('span', 'sep', '–')); hrs.appendChild(el('span', 'c', cl)); }
       else { hrs.appendChild(el('span', 'full', t('shut'))); hrs.appendChild(el('span', 'short', t('shut.s'))); }
       b.appendChild(hrs);
+      if (RES[d]) b.appendChild(el('span', 'res', t('r.one', { n: RES[d].length })));
       var note = ex && ex.note && (ex.note[lang] || ex.note.nl); if (note) b.appendChild(el('span', 'note', note));
       b.setAttribute('aria-label', longDate(d) + ': ' + (ex ? (ex.closed ? t('shut') : ex.open + '–' + ex.close) : (u || t('shut'))));
       cal.appendChild(b);
@@ -107,6 +110,8 @@
       row.appendChild(o); row.appendChild(el('span', 'dash', '–')); row.appendChild(c); row.appendChild(lab); box.appendChild(row);
     });
     $('offs').textContent = t('h.offs', { n: H.last_orders_offset_min });
+    var mayWeek = !!ME.can.hours_week; $('week').querySelector('button[type=submit]').hidden = !mayWeek; $('weekowner').hidden = mayWeek;
+    box.querySelectorAll('input').forEach(function (i) { i.disabled = !mayWeek; });
   }
   function paintText() {
     document.documentElement.lang = lang;
@@ -118,7 +123,14 @@
   // ---- the day dialog
   var dlg = $('dlg');
   function mode() { var r = document.querySelector('input[name=mode]:checked'); return r ? r.value : ''; }
-  function syncDlg() { var m = mode(); $('d-timesrow').hidden = m !== 'times'; $('d-notes').hidden = m === 'normal' || !m; }
+  var force = false;
+  function resIn(from, to) { var out = []; Object.keys(RES).sort().forEach(function (d) { if (d >= from && d <= to) out = out.concat(RES[d]); }); return out; }
+  function paintRes(list, warn) {
+    var box = $('d-res'), ul = $('d-reslist'); ul.textContent = ''; box.hidden = !list.length; $('d-warn').hidden = !warn;
+    list.forEach(function (r) { ul.appendChild(el('li', null, shortDate(r.date) + ' · ' + t('r.line', { t: r.time, g: r.guests, n: r.name || '–', e: r.email || '–', r: r.ref }))); });
+  }
+  function unforce() { force = false; $('d-save').textContent = t('d.save'); $('d-warn').hidden = true; }
+  function syncDlg() { var m = mode(); $('d-timesrow').hidden = m !== 'times'; $('d-notes').hidden = m === 'normal' || !m; unforce(); paintRes(resIn($('d-from').value, $('d-to').value || $('d-from').value), false); }
   function openDay(from, to) {
     var ex = EX[from], u = usual(from);
     $('d-title').textContent = from === to ? longDate(from) : shortDate(from) + ' – ' + shortDate(to);
@@ -131,12 +143,15 @@
     $('d-err').hidden = true; syncDlg(); dlg.showModal();
   }
   document.querySelectorAll('input[name=mode]').forEach(function (r) { r.addEventListener('change', syncDlg); });
-  $('d-from').addEventListener('change', function () { if ($('d-to').value < $('d-from').value) $('d-to').value = $('d-from').value; });
+  $('d-from').addEventListener('change', function () { if ($('d-to').value < $('d-from').value) $('d-to').value = $('d-from').value; syncDlg(); });
+  $('d-to').addEventListener('change', syncDlg);
+  ['d-open', 'd-close'].forEach(function (id) { $(id).addEventListener('change', unforce); });
   $('d-cancel').addEventListener('click', function () { dlg.close(); });
   $('day').addEventListener('submit', function (ev) {
     ev.preventDefault(); var err = $('d-err'); err.hidden = true;
-    var body = { from: $('d-from').value, to: $('d-to').value, mode: mode(), open: $('d-open').value, close: $('d-close').value, note: { nl: $('d-nl').value, en: $('d-en').value, de: $('d-de').value } };
+    var body = { from: $('d-from').value, to: $('d-to').value, mode: mode(), open: $('d-open').value, close: $('d-close').value, note: { nl: $('d-nl').value, en: $('d-en').value, de: $('d-de').value }, confirm: force };
     api('PUT', '/beheer/api/hours/days', body).then(function (r) {
+      if (!r.ok && r.j.error === 'reservations') { paintRes(r.j.reservations, true); force = true; $('d-save').textContent = t('r.force'); return; }   // the server names the guests; a second, deliberate press saves
       if (!r.ok) { err.textContent = t('e.' + (r.j.error || 'net')); err.hidden = false; return; }
       dlg.close(); take(r.j); flash('f.saved');
     }).catch(function () { err.textContent = t('e.net'); err.hidden = false; });
@@ -162,7 +177,7 @@
       var tb = $('logrows'); tb.textContent = '';
       if (!r.j.rows.length) { var tr0 = el('tr'); tr0.appendChild(el('td', 'none', t('g.none'))); tb.appendChild(tr0); return; }
       r.j.rows.forEach(function (x) {
-        var tr = el('tr'), detail = ''; try { var d = JSON.parse(x.detail || 'null'); if (Array.isArray(d)) detail = d.join('  '); else if (d) detail = (d.from === d.to ? d.from : d.from + ' – ' + d.to) + (d.mode === 'closed' ? ' · ' + t('shut') : d.mode === 'times' ? ' · ' + d.open + '–' + d.close : '') + (d.note ? ' · ' + d.note : ''); } catch (e) {}
+        var tr = el('tr'), detail = ''; try { var d = JSON.parse(x.detail || 'null'); if (Array.isArray(d)) detail = d.join('  '); else if (d && d.sessions !== undefined) detail = String(d.sessions); else if (d) detail = (d.from === d.to ? d.from : d.from + ' – ' + d.to) + (d.mode === 'closed' ? ' · ' + t('shut') : d.mode === 'times' ? ' · ' + d.open + '–' + d.close : '') + (d.note ? ' · ' + d.note : ''); } catch (e) {}
         tr.appendChild(el('td', 'at', new Intl.DateTimeFormat(loc(), { timeZone: 'Europe/Amsterdam', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(x.at))));
         tr.appendChild(el('td', 'act', t('g.' + x.action))); tr.appendChild(el('td', 'det', detail)); tr.appendChild(el('td', 'who', x.who)); tb.appendChild(tr);
       });
@@ -176,9 +191,9 @@
     });
   });
   $('langbtn').addEventListener('click', function () { lang = lang === 'nl' ? 'en' : 'nl'; try { localStorage.setItem('beheer.lang', lang); } catch (e) {} paintAll(); if (!$('p-log').hidden) loadLog(); });
+  $('logout-all').addEventListener('click', function () { api('POST', '/beheer/logout-all', {}).then(function () { location.replace('/beheer'); }).catch(function () {}); });
   $('logout').addEventListener('click', function () { api('POST', '/beheer/logout', {}).then(function () { location.replace('/beheer'); }).catch(function () {}); });
 
   paintText();
-  api('GET', '/beheer/api/me').then(function (r) { $('me').textContent = r.j.email; }).catch(function () {});
-  api('GET', '/beheer/api/hours').then(function (r) { take(r.j); }).catch(function () { flash('e.net'); });
+  api('GET', '/beheer/api/me').then(function (r) { ME = r.j; $('me').textContent = r.j.email; return api('GET', '/beheer/api/hours'); }).then(function (r) { take(r.j); }).catch(function () { flash('e.net'); });
 })();

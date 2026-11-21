@@ -226,11 +226,21 @@ Cloudflare (Email → Email Routing → Destination addresses), then
 To lock someone out at once: set `disabled_at` on their `staff` row (their sessions stop on the
 next request).
 
+**Roles.** `owner` may do everything. `staff` may change calendar days and read; the weekly rule
+is owner-only (`CAN` in `admin.js` — an action not listed there is owner-only, so a new screen is
+closed to staff until someone decides otherwise). "Overal uitloggen" (Logboek tab) ends every
+session of the address that pressed it.
+
+**Paid fondue reservations.** Closing a date, or giving it hours that exclude a paid table's time,
+is refused (409) with the guests named until staff press "Toch opslaan". Closing does not refund
+or mail anyone: staff contact the guest and refund in the MultiSafepay dashboard.
+
 **Opening hours.** `hours_week` is the weekly rule, `hours_exceptions` the calendar (closed days,
 other hours, a note for guests in nl/en/de). The order guard and the fondue reservation check read
 them (60 s cache); if the tables cannot be read the Worker falls back to the hours in
-`hours.js` (`DEFAULT_SCHED`), never to "closed". `GET /api/hours` is the public read for the
-website and the ordering page.
+`hours.js` (`DEFAULT_SCHED`), never to "closed". `GET /api/hours` is the public read: the ordering page asks it every
+minute (built-in hours as fallback); the notes in it are staff free text, so whatever shows them
+sets them as TEXT, never as HTML.
 
 **Deploy order — migration first.** 0003 only adds tables; the old Worker ignores them, the new
 Worker needs them for /beheer (ordering itself falls back and keeps working either way).
