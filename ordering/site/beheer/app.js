@@ -11,7 +11,7 @@
       'd.note': 'Toelichting voor gasten (mag leeg blijven)', 'd.more': 'Engels en Duits', 'd.cancel': 'Annuleren', 'd.save': 'Opslaan', 'd.usual': 'Normaal op deze dag: {h}', 'edit': 'Wijzigen',
       'g.title': 'Logboek', 'g.hint': 'Elke wijziging in het beheer: wie, wanneer en wat.', 'g.none': 'Nog geen wijzigingen.',
       'g.login': 'Ingelogd', 'g.logout': 'Uitgelogd', 'g.logout_all': 'Overal uitgelogd', 'g.all': 'Overal uitloggen', 'g.all.hint': 'Beëindigt elke sessie van uw adres, op elk apparaat. Handig bij een verloren telefoon.',
-      'r.one': '{n} fondue', 'r.title': 'Betaalde fonduereserveringen', 'r.line': '{t} · {g} personen · {n} · {e} · {r}', 'r.warn': 'Let op: voor deze dag(en) heeft een gast al betaald. Neem contact op met de gast en betaal terug in MultiSafepay voordat u sluit.', 'r.force': 'Toch opslaan', 'r.owner': 'Alleen de eigenaar kan de vaste tijden wijzigen.', 'e.role': 'Daar heeft u geen rechten voor.', 'e.reservations': 'Er zijn betaalde reserveringen op deze dag(en).', 'g.hours_week': 'Vaste tijden gewijzigd', 'g.hours_day': 'Kalender gewijzigd', 'g.hours_day_clear': 'Afwijking weggehaald',
+      'r.one': '{n} fondue', 'r.title': 'Betaalde fonduereserveringen', 'r.line': '{t} · {g} personen · {n} · {e} · {r}', 'r.warn': 'Let op: voor deze dag(en) heeft een gast al betaald. Neem contact op met de gast en betaal terug in MultiSafepay voordat u sluit.', 'r.force': 'Toch opslaan', 'r.warn.week': 'Let op: met deze vaste tijden valt een betaalde reservering buiten de openingstijden. Neem contact op met de gast en betaal terug in MultiSafepay voordat u opslaat.', 'r.owner': 'Alleen de eigenaar kan de vaste tijden wijzigen.', 'e.role': 'Daar heeft u geen rechten voor.', 'e.reservations': 'Er zijn betaalde reserveringen op deze dag(en).', 'g.hours_week': 'Vaste tijden gewijzigd', 'g.hours_day': 'Kalender gewijzigd', 'g.hours_day_clear': 'Afwijking weggehaald',
       's.open': 'Online bestellen is nu open tot {l}. Het café sluit om {c}.', 's.today': 'Online bestellen is nu dicht. Vandaag weer vanaf {t}.', 's.tomorrow': 'Online bestellen is nu dicht. Morgen weer vanaf {t}.', 's.later': 'Online bestellen is nu dicht. Weer op {d} vanaf {t}.', 's.never': 'Er staat de komende twee maanden geen open dag in de kalender.',
       'f.saved': 'Opgeslagen. Gasten zien dit binnen een minuut.', 'e.times': 'De openingstijd moet voor de sluitingstijd liggen.', 'e.dates': 'Controleer de datums: de einddatum moet op of na de begindatum liggen.', 'e.past': 'Deze dag is al voorbij.', 'e.range': 'Maximaal drie maanden in één keer.',
       'e.all_closed': 'Elke dag staat op gesloten. Gebruik de kalender voor een vakantie.', 'e.mode': 'Kies gesloten, andere tijden of normale tijden.', 'e.net': 'Dat lukte niet. Controleer de verbinding en probeer het opnieuw.', 'other': 'English' },
@@ -24,7 +24,7 @@
       'd.note': 'Note for guests (may stay empty)', 'd.more': 'English and German', 'd.cancel': 'Cancel', 'd.save': 'Save', 'd.usual': 'Usually on this day: {h}', 'edit': 'Change',
       'g.title': 'Change log', 'g.hint': 'Every change made here: who, when and what.', 'g.none': 'No changes yet.',
       'g.login': 'Logged in', 'g.logout': 'Logged out', 'g.logout_all': 'Logged out everywhere', 'g.all': 'Log out everywhere', 'g.all.hint': 'Ends every session of your address, on every device. Useful after a lost phone.',
-      'r.one': '{n} fondue', 'r.title': 'Paid fondue reservations', 'r.line': '{t} · {g} guests · {n} · {e} · {r}', 'r.warn': 'Careful: a guest has already paid for a table on these dates. Contact the guest and refund in MultiSafepay before you close.', 'r.force': 'Save anyway', 'r.owner': 'Only the owner can change the usual hours.', 'e.role': 'You do not have the rights for that.', 'e.reservations': 'There are paid reservations on these dates.', 'g.hours_week': 'Usual hours changed', 'g.hours_day': 'Calendar changed', 'g.hours_day_clear': 'Change removed',
+      'r.one': '{n} fondue', 'r.title': 'Paid fondue reservations', 'r.line': '{t} · {g} guests · {n} · {e} · {r}', 'r.warn': 'Careful: a guest has already paid for a table on these dates. Contact the guest and refund in MultiSafepay before you close.', 'r.force': 'Save anyway', 'r.warn.week': 'Careful: with these usual hours a paid reservation falls outside opening time. Contact the guest and refund in MultiSafepay before you save.', 'r.owner': 'Only the owner can change the usual hours.', 'e.role': 'You do not have the rights for that.', 'e.reservations': 'There are paid reservations on these dates.', 'g.hours_week': 'Usual hours changed', 'g.hours_day': 'Calendar changed', 'g.hours_day_clear': 'Change removed',
       's.open': 'Online ordering is open now until {l}. The café closes at {c}.', 's.today': 'Online ordering is closed now. Today from {t}.', 's.tomorrow': 'Online ordering is closed now. Tomorrow from {t}.', 's.later': 'Online ordering is closed now. Again on {d} from {t}.', 's.never': 'The calendar has no open day in the next two months.',
       'f.saved': 'Saved. Guests see this within a minute.', 'e.times': 'The opening time must be before the closing time.', 'e.dates': 'Check the dates: the last date must be on or after the first.', 'e.past': 'This day has already passed.', 'e.range': 'At most three months at a time.',
       'e.all_closed': 'Every day is set to closed. Use the calendar for a holiday.', 'e.mode': 'Choose closed, different hours or usual hours.', 'e.net': 'That did not work. Check the connection and try again.', 'other': 'Nederlands' }
@@ -162,12 +162,19 @@
   $('tod').addEventListener('click', function () { view = H.today.slice(0, 8) + '01'; paintCal(); });
 
   // ---- the weekly rule
+  var wforce = false;
+  function wunforce() { wforce = false; $('w-res').hidden = true; $('w-save').textContent = t('h.week.save'); }
+  $('weekrows').addEventListener('change', wunforce);   // any edit takes the confirmation back
   $('week').addEventListener('submit', function (ev) {
     ev.preventDefault(); var week = [];
     document.querySelectorAll('#weekrows .wrow').forEach(function (row) { week[+row.getAttribute('data-wd')] = { closed: row.querySelector('.wx').checked, open: row.querySelector('.wo').value, close: row.querySelector('.wc').value }; });
     var btn = ev.target.querySelector('button[type=submit]'); btn.disabled = true;
-    api('PUT', '/beheer/api/hours/week', { week: week }).then(function (r) {
-      btn.disabled = false; if (!r.ok) { flash('e.' + (r.j.error || 'net')); return; } take(r.j); flash('f.saved');
+    api('PUT', '/beheer/api/hours/week', { week: week, confirm: wforce }).then(function (r) {
+      btn.disabled = false;
+      if (!r.ok && r.j.error === 'reservations') {   // the server names the guests; a second, deliberate press saves
+        var ul = $('w-reslist'); ul.textContent = ''; r.j.reservations.forEach(function (x) { ul.appendChild(el('li', null, shortDate(x.date) + ' · ' + t('r.line', { t: x.time, g: x.guests, n: x.name || '–', e: x.email || '–', r: x.ref }))); });
+        $('w-res').hidden = false; wforce = true; $('w-save').textContent = t('r.force'); return; }
+      if (!r.ok) { flash('e.' + (r.j.error || 'net')); return; } wunforce(); take(r.j); flash('f.saved');
     }).catch(function () { btn.disabled = false; flash('e.net'); });
   });
 

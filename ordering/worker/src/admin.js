@@ -151,14 +151,19 @@ async function enter(request, env) {
 }
 
 // ---- opening hours
-// Paid fondue reservations from today on: the guests a closed day would stand up. The mark of a
+// Paid fondue reservations from today on: the guests a closed day would stand up. A reservation the
+// café has refunded in full is no longer one (merritt, review of #36): MultiSafepay's refund total is
+// written to the order whenever its status is fetched (orders.js, after a notification). The mark of a
 // fondue order is its single server-written line (fondue.js isFondue), never the note alone.
 export async function paidFondue(env, today) {
-  const rows = (await env.DB.prepare("select o.id,o.public_ref,o.order_note,o.customer_name,o.customer_email,(select count(*) from order_items x where x.order_id=o.id) n from orders o join order_items i on i.order_id=o.id and i.item_id=? where o.status='paid' and o.created_at>?").bind(FONDUE_ITEM, new Date(Date.now() - 400 * 86400000).toISOString()).all()).results;
+  const rows = (await env.DB.prepare("select o.id,o.public_ref,o.order_note,o.customer_name,o.customer_email,(select count(*) from order_items x where x.order_id=o.id) n from orders o join order_items i on i.order_id=o.id and i.item_id=? where o.status='paid' and o.msp_refund_cents<o.total_cents and o.created_at>?").bind(FONDUE_ITEM, new Date(Date.now() - 400 * 86400000).toISOString()).all()).results;
   const out = [];
   for (const r of rows) { const f = r.n === 1 ? parseFondue(r, [{ item_id: FONDUE_ITEM }]) : null; if (f && f.date >= today) out.push({ date: f.date, time: f.time, guests: f.guests, name: r.customer_name || '', email: r.customer_email || '', ref: r.public_ref }); }
   return out.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
 }
+// Pure: is this table inside the café's hours under a schedule? The warnings below are for reservations
+// a change NEWLY breaks: one staff already overrode must not nag at every later save.
+export function fineUnder(sched, r) { const h = dayHours(sched, r.date), t = mins(r.time); return !h.closed && t >= h.open && t < h.close; }
 // Pure: which of those reservations a calendar change would break — the day closes, or its new hours leave the table's time outside them.
 export function hitBy(v, reservations) {
   if (v.mode === 'normal') return [];
@@ -201,17 +206,25 @@ export function validateDays(body, today) {
   for (const l of ['nl', 'en', 'de']) note[l] = typeof n[l] === 'string' ? n[l].replace(/\s+/g, ' ').trim().slice(0, 140) : '';
   return { ok: true, dates, mode, open: o, close: c, note };
 }
+// Pure: which reservations a new weekly rule would break. A date with its own calendar entry keeps
+// that entry whatever the week says, so it is not affected.
+export function hitByWeek(week, reservations, exDates) {
+  return reservations.filter(r => { if (exDates.includes(r.date)) return false; const w = week[wdOf(r.date)]; return w.closed || mins(r.time) < w.open || mins(r.time) >= w.close; });
+}
 async function saveWeek(env, me, body) {
   const v = validateWeek(body); if (!v.ok) return j(v, 400);
+  const today = amsDate(), exDates = (await env.DB.prepare('select date from hours_exceptions where date>=?').bind(today).all()).results.map(r => r.date);
+  const cur = await loadSchedule(env, true), hit = hitByWeek(v.week, await paidFondue(env, today), exDates).filter(r => fineUnder(cur, r));
+  if (hit.length && body.confirm !== true) return j({ error: 'reservations', reservations: hit }, 409);   // same rule as the calendar (merritt, review of #36)
   await env.DB.batch(v.week.map(r => env.DB.prepare('insert into hours_week(wd,closed,open_min,close_min) values(?,?,?,?) on conflict(wd) do update set closed=excluded.closed, open_min=excluded.open_min, close_min=excluded.close_min').bind(r.wd, r.closed ? 1 : 0, r.open, r.close)));
   dropScheduleCache();
-  await audit(env, me.email, 'hours_week', v.week.map(r => r.closed ? 'x' : hhmm(r.open) + '-' + hhmm(r.close)));
+  await audit(env, me.email, 'hours_week', v.week.map(r => r.closed ? 'x' : hhmm(r.open) + '-' + hhmm(r.close)).concat(hit.length ? ['fondue: ' + hit.map(r => r.ref).join(' ')] : []));
   return j({ ok: true, ...(await hoursForStaff(env)) });
 }
 async function saveDays(env, me, body) {
   const v = validateDays(body, amsDate()); if (!v.ok) return j(v, 400);
   // a guest has paid for a table on one of these dates: say so, and change nothing until staff confirm
-  const hit = hitBy(v, await paidFondue(env, amsDate()));
+  const cur = await loadSchedule(env, true), hit = hitBy(v, await paidFondue(env, amsDate())).filter(r => fineUnder(cur, r));
   if (hit.length && body.confirm !== true) return j({ error: 'reservations', reservations: hit }, 409);
   const now = nowIso();
   const st = v.mode === 'normal'

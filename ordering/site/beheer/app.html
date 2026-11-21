@@ -45,8 +45,13 @@
       <form id="week">
         <div id="weekrows" class="weekrows"></div>
         <p class="hint" id="offs"></p>
+        <div id="w-res" class="resbox" hidden>
+          <h3 data-t="r.title">Betaalde fonduereserveringen</h3>
+          <ul id="w-reslist"></ul>
+          <p class="err" role="alert" data-t="r.warn.week">Let op: met deze vaste tijden valt een betaalde reservering buiten de openingstijden. Neem contact op met de gast en betaal terug in MultiSafepay voordat u opslaat.</p>
+        </div>
         <p class="hint" id="weekowner" data-t="r.owner" hidden>Alleen de eigenaar kan de vaste tijden wijzigen.</p>
-        <button class="primary" type="submit" data-t="h.week.save">Vaste tijden opslaan</button>
+        <button class="primary" type="submit" id="w-save" data-t="h.week.save">Vaste tijden opslaan</button>
       </form>
     </div>
   </section>
