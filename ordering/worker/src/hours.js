@@ -6,6 +6,11 @@
 const W = (o, c) => ({ closed: false, open: o, close: c });
 export const DEFAULT_SCHED = { week: [W(750, 1260), W(900, 1260), W(900, 1260), W(900, 1260), W(900, 1260), W(750, 1260), W(750, 1260)], ex: {} };   // index = weekday, 0 = Sunday
 export function openMinsFor(wd) { return DEFAULT_SCHED.week[wd].open; }
+// Takeaway ordering starts at 17:00 every day (Dave, 2026-11-21: "5pm standard for now"). The café
+// itself opens earlier: a day's `open` stays the café's opening time (table and fondue reservations
+// use it); ordering starts at whichever is later. It becomes a /beheer setting with the settings screen.
+export const ORDER_FROM_M = 17 * 60;
+export function orderFrom(open) { return Math.max(open, ORDER_FROM_M); }
 export function nowAms(date) {
   const d = date || new Date();
   const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Amsterdam', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(d);
@@ -28,13 +33,13 @@ export function dayHours(sched, ymd) {
 export function orderingState(offsetMin, date, sched) {
   const n = nowAms(date), h = dayHours(sched, n.ymd);
   if (!h.closed) {
-    const last = h.close - (offsetMin | 0);
-    if (n.m >= h.open && n.m < last) return { open: true, last, close: h.close };
-    if (n.m < h.open && h.open < last) return { open: false, when: 'today', at: h.open, date: n.ymd };
+    const last = h.close - (offsetMin | 0), from = orderFrom(h.open);
+    if (n.m >= from && n.m < last) return { open: true, last, close: h.close };
+    if (n.m < from && from < last) return { open: false, when: 'today', at: from, date: n.ymd };
   }
   for (let i = 1; i <= 60; i++) {
     const ymd = addDays(n.ymd, i), d = dayHours(sched, ymd);
-    if (!d.closed && d.open < d.close - (offsetMin | 0)) return { open: false, when: i === 1 ? 'tomorrow' : 'later', at: d.open, date: ymd };
+    if (!d.closed && orderFrom(d.open) < d.close - (offsetMin | 0)) return { open: false, when: i === 1 ? 'tomorrow' : 'later', at: orderFrom(d.open), date: ymd };
   }
   return { open: false, when: 'later', at: null, date: null };
 }

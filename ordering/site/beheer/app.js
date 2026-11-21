@@ -6,26 +6,26 @@
       'h.cal': 'Kalender', 'h.cal.hint': 'Tik op een dag om het café die dag te sluiten of andere tijden te geven. Voor een vakantie kiest u een begin- en einddatum.',
       'h.today': 'Vandaag', 'h.l.open': 'Normale tijden', 'h.l.diff': 'Andere tijden', 'h.l.shut': 'Gesloten', 'h.up': 'Komende afwijkingen', 'h.up.none': 'Geen afwijkingen gepland.',
       'h.week': 'Vaste openingstijden', 'h.week.hint': 'Deze tijden gelden elke week, tenzij de kalender voor een dag iets anders zegt.', 'h.week.save': 'Vaste tijden opslaan',
-      'h.offs': 'Online bestellen sluit {n} minuten voor sluitingstijd.', 'w.closed': 'Gesloten', 'w.open': 'Open', 'w.close': 'Dicht', 'shut': 'Gesloten', 'shut.s': 'Dicht',
+      'h.offs': 'Online bestellen kan vanaf {f} en sluit {n} minuten voor sluitingstijd.', 'w.closed': 'Gesloten', 'w.open': 'Open', 'w.close': 'Dicht', 'shut': 'Gesloten', 'shut.s': 'Dicht',
       'd.from': 'Van', 'd.to': 'Tot en met', 'd.closed': 'Gesloten', 'd.times': 'Andere tijden', 'd.open': 'Open', 'd.close': 'Dicht', 'd.normal': 'Normale tijden (afwijking weghalen)',
       'd.note': 'Toelichting voor gasten (mag leeg blijven)', 'd.more': 'Engels en Duits', 'd.cancel': 'Annuleren', 'd.save': 'Opslaan', 'd.usual': 'Normaal op deze dag: {h}', 'edit': 'Wijzigen',
       'g.title': 'Logboek', 'g.hint': 'Elke wijziging in het beheer: wie, wanneer en wat.', 'g.none': 'Nog geen wijzigingen.',
       'g.login': 'Ingelogd', 'g.logout': 'Uitgelogd', 'g.logout_all': 'Overal uitgelogd', 'g.all': 'Overal uitloggen', 'g.all.hint': 'Beëindigt elke sessie van uw adres, op elk apparaat. Handig bij een verloren telefoon.',
       'r.one': '{n} fondue', 'r.title': 'Betaalde fonduereserveringen', 'r.line': '{t} · {g} personen · {n} · {e} · {r}', 'r.warn': 'Let op: voor deze dag(en) heeft een gast al betaald. Neem contact op met de gast en betaal terug in MultiSafepay voordat u sluit.', 'r.force': 'Toch opslaan', 'r.owner': 'Alleen de eigenaar kan de vaste tijden wijzigen.', 'e.role': 'Daar heeft u geen rechten voor.', 'e.reservations': 'Er zijn betaalde reserveringen op deze dag(en).', 'g.hours_week': 'Vaste tijden gewijzigd', 'g.hours_day': 'Kalender gewijzigd', 'g.hours_day_clear': 'Afwijking weggehaald',
-      's.open': 'Het café is nu open tot {c}. Online bestellen kan tot {l}.', 's.today': 'Nu gesloten. Vandaag open vanaf {t}.', 's.tomorrow': 'Nu gesloten. Morgen open vanaf {t}.', 's.later': 'Nu gesloten. Weer open op {d} vanaf {t}.', 's.never': 'Er staat de komende twee maanden geen open dag in de kalender.',
+      's.open': 'Online bestellen is nu open tot {l}. Het café sluit om {c}.', 's.today': 'Online bestellen is nu dicht. Vandaag weer vanaf {t}.', 's.tomorrow': 'Online bestellen is nu dicht. Morgen weer vanaf {t}.', 's.later': 'Online bestellen is nu dicht. Weer op {d} vanaf {t}.', 's.never': 'Er staat de komende twee maanden geen open dag in de kalender.',
       'f.saved': 'Opgeslagen. Gasten zien dit binnen een minuut.', 'e.times': 'De openingstijd moet voor de sluitingstijd liggen.', 'e.dates': 'Controleer de datums: de einddatum moet op of na de begindatum liggen.', 'e.past': 'Deze dag is al voorbij.', 'e.range': 'Maximaal drie maanden in één keer.',
       'e.all_closed': 'Elke dag staat op gesloten. Gebruik de kalender voor een vakantie.', 'e.mode': 'Kies gesloten, andere tijden of normale tijden.', 'e.net': 'Dat lukte niet. Controleer de verbinding en probeer het opnieuw.', 'other': 'English' },
     en: { 'a.title': 'Back office', 'a.logout': 'Log out', 't.hours': 'Opening hours', 't.log': 'Change log',
       'h.cal': 'Calendar', 'h.cal.hint': 'Tap a day to close the café that day or give it different hours. For a holiday, choose a first and a last date.',
       'h.today': 'Today', 'h.l.open': 'Usual hours', 'h.l.diff': 'Different hours', 'h.l.shut': 'Closed', 'h.up': 'Coming changes', 'h.up.none': 'Nothing planned.',
       'h.week': 'Usual opening hours', 'h.week.hint': 'These hours apply every week, unless the calendar says something else for a day.', 'h.week.save': 'Save usual hours',
-      'h.offs': 'Online ordering stops {n} minutes before closing time.', 'w.closed': 'Closed', 'w.open': 'Open', 'w.close': 'Close', 'shut': 'Closed', 'shut.s': 'Shut',
+      'h.offs': 'Online ordering starts at {f} and stops {n} minutes before closing time.', 'w.closed': 'Closed', 'w.open': 'Open', 'w.close': 'Close', 'shut': 'Closed', 'shut.s': 'Shut',
       'd.from': 'From', 'd.to': 'Up to and including', 'd.closed': 'Closed', 'd.times': 'Different hours', 'd.open': 'Open', 'd.close': 'Close', 'd.normal': 'Usual hours (remove the change)',
       'd.note': 'Note for guests (may stay empty)', 'd.more': 'English and German', 'd.cancel': 'Cancel', 'd.save': 'Save', 'd.usual': 'Usually on this day: {h}', 'edit': 'Change',
       'g.title': 'Change log', 'g.hint': 'Every change made here: who, when and what.', 'g.none': 'No changes yet.',
       'g.login': 'Logged in', 'g.logout': 'Logged out', 'g.logout_all': 'Logged out everywhere', 'g.all': 'Log out everywhere', 'g.all.hint': 'Ends every session of your address, on every device. Useful after a lost phone.',
       'r.one': '{n} fondue', 'r.title': 'Paid fondue reservations', 'r.line': '{t} · {g} guests · {n} · {e} · {r}', 'r.warn': 'Careful: a guest has already paid for a table on these dates. Contact the guest and refund in MultiSafepay before you close.', 'r.force': 'Save anyway', 'r.owner': 'Only the owner can change the usual hours.', 'e.role': 'You do not have the rights for that.', 'e.reservations': 'There are paid reservations on these dates.', 'g.hours_week': 'Usual hours changed', 'g.hours_day': 'Calendar changed', 'g.hours_day_clear': 'Change removed',
-      's.open': 'The café is open now until {c}. Online ordering until {l}.', 's.today': 'Closed now. Opens today at {t}.', 's.tomorrow': 'Closed now. Opens tomorrow at {t}.', 's.later': 'Closed now. Opens again on {d} at {t}.', 's.never': 'The calendar has no open day in the next two months.',
+      's.open': 'Online ordering is open now until {l}. The café closes at {c}.', 's.today': 'Online ordering is closed now. Today from {t}.', 's.tomorrow': 'Online ordering is closed now. Tomorrow from {t}.', 's.later': 'Online ordering is closed now. Again on {d} from {t}.', 's.never': 'The calendar has no open day in the next two months.',
       'f.saved': 'Saved. Guests see this within a minute.', 'e.times': 'The opening time must be before the closing time.', 'e.dates': 'Check the dates: the last date must be on or after the first.', 'e.past': 'This day has already passed.', 'e.range': 'At most three months at a time.',
       'e.all_closed': 'Every day is set to closed. Use the calendar for a holiday.', 'e.mode': 'Choose closed, different hours or usual hours.', 'e.net': 'That did not work. Check the connection and try again.', 'other': 'Nederlands' }
   };
@@ -109,7 +109,7 @@
       lab.appendChild(cb); lab.appendChild(el('span', null, t('w.closed')));
       row.appendChild(o); row.appendChild(el('span', 'dash', '–')); row.appendChild(c); row.appendChild(lab); box.appendChild(row);
     });
-    $('offs').textContent = t('h.offs', { n: H.last_orders_offset_min });
+    $('offs').textContent = t('h.offs', { n: H.last_orders_offset_min, f: H.orders_from });
     var mayWeek = !!ME.can.hours_week; $('week').querySelector('button[type=submit]').hidden = !mayWeek; $('weekowner').hidden = mayWeek;
     box.querySelectorAll('input').forEach(function (i) { i.disabled = !mayWeek; });
   }

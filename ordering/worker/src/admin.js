@@ -16,7 +16,7 @@ import { loadSettings, loadSchedule, dropScheduleCache } from './db.js';
 import { hex2 } from './seal.js';
 import { sendMail } from './mail.js';
 import { json, CAFE_INBOX } from './orders.js';
-import { amsDate, addDays, validYmd, dayHours, orderingState, hhmm, mins, wdOf } from './hours.js';
+import { amsDate, addDays, validYmd, dayHours, orderingState, hhmm, mins, wdOf, ORDER_FROM_M } from './hours.js';
 import { parseFondue, FONDUE_ITEM } from './fondue.js';
 
 const COOKIE = '__Secure-beheer';
@@ -169,7 +169,7 @@ async function hoursForStaff(env) {
   const settings = await loadSettings(env), sched = await loadSchedule(env, true), today = amsDate();
   const ex = (await env.DB.prepare('select date,closed,open_min,close_min,note_nl,note_en,note_de,updated_at,updated_by from hours_exceptions where date>=? order by date').bind(addDays(today, -62)).all()).results;
   const offset = parseInt(settings.last_orders_offset_min, 10) || 30;
-  return { today, last_orders_offset_min: offset, state: orderingState(offset, null, sched), reservations: await paidFondue(env, today),
+  return { today, last_orders_offset_min: offset, orders_from: hhmm(ORDER_FROM_M), state: orderingState(offset, null, sched), reservations: await paidFondue(env, today),
     week: sched.week.map((w, wd) => ({ wd, closed: w.closed, open: hhmm(w.open), close: hhmm(w.close) })),
     exceptions: ex.map(r => ({ date: r.date, closed: !!r.closed, open: r.closed ? null : hhmm(r.open_min), close: r.closed ? null : hhmm(r.close_min), note: noteOf(r), updated_at: r.updated_at, updated_by: r.updated_by })) };
 }
@@ -231,7 +231,7 @@ export async function publicHours(env) {
   for (let i = 0; i < 14; i++) { const d = addDays(today, i), h = dayHours(sched, d); days.push({ date: d, wd: wdOf(d), closed: !!h.closed, open: h.closed ? null : hhmm(h.open), close: h.closed ? null : hhmm(h.close), exception: !!h.exception, note: h.note || null }); }
   const exceptions = Object.keys(sched.ex).filter(d => d >= today).sort().map(d => { const e = sched.ex[d]; return { date: d, closed: e.closed, open: e.closed ? null : hhmm(e.open), close: e.closed ? null : hhmm(e.close), note: e.note }; });
   const st = orderingState(offset, null, sched);
-  return json({ tz: 'Europe/Amsterdam', today, last_orders_offset_min: offset,
+  return json({ tz: 'Europe/Amsterdam', today, last_orders_offset_min: offset, orders_from: hhmm(ORDER_FROM_M),
     ordering: st.open ? { open: true, last: hhmm(st.last) } : { open: false, when: st.when, at: st.at === null ? null : hhmm(st.at), date: st.date },
     week: sched.week.map((w, wd) => ({ wd, closed: w.closed, open: hhmm(w.open), close: hhmm(w.close) })), days, exceptions },
     200, { 'cache-control': 'public, max-age=60', 'access-control-allow-origin': '*' });
