@@ -242,6 +242,12 @@ them (60 s cache); if the tables cannot be read the Worker falls back to the hou
 minute (built-in hours as fallback); the notes in it are staff free text, so whatever shows them
 sets them as TEXT, never as HTML.
 
+**Takeaway ordering starts at 17:00** (Dave, 2026-11-21), whatever time the café opens:
+`ORDER_FROM_M` in `hours.js`, mirrored in the ordering page's fallback engine. Table and fondue
+reservations follow the café's opening time, not this. It was hotfixed live on 2026-11-21 from
+branch `hotfix/orders-from-17-live` (the pre-back-office code, Worker version 8c6b15ce); main carries
+the same rule, so deploying main keeps it.
+
 **Deploy order — migration first.** 0003 only adds tables; the old Worker ignores them, the new
 Worker needs them for /beheer (ordering itself falls back and keeps working either way).
 

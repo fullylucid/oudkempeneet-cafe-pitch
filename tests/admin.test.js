@@ -13,16 +13,20 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
 
   // ---- no schedule given = the hours the site has always shown
   ok(JSON.stringify(D.week.map(w => [w.open, w.close])) === JSON.stringify([[750, 1260], [900, 1260], [900, 1260], [900, 1260], [900, 1260], [750, 1260], [750, 1260]]), 'default week: Mon–Thu 15:00, Fri–Sun 12:30, close 21:00');
-  ok(hours.orderingState(30, at('2026-11-16T15:00:00Z')).open && hours.orderingState(30, at('2026-11-16T15:00:00Z'), D).last === 1230, 'no schedule and the default schedule agree: Monday 16:00 open, last orders 20:30');
+  ok(hours.orderingState(30, at('2026-11-16T16:00:00Z')).open && hours.orderingState(30, at('2026-11-16T16:00:00Z'), D).last === 1230, 'no schedule and the default schedule agree: Monday 17:00 open, last orders 20:30');
+  ok(!hours.orderingState(30, at('2026-11-16T15:00:00Z'), D).open && hours.orderingState(30, at('2026-11-16T15:00:00Z'), D).at === 1020 && hours.ORDER_FROM_M === 1020, 'ordering starts at 17:00 (Dave, 2026-11-21): Monday 16:00 the café is open, ordering opens today at 17:00');
   ok(hours.dayHours(null, '2026-11-21').open === 750 && hours.dayHours(null, '2026-11-23').open === 900, 'Saturday 12:30, Monday 15:00');
 
   // ---- a calendar exception beats the weekly rule
   const S = { week: D.week, ex: { '2026-12-25': { closed: true, note: { nl: 'Kerst', en: '', de: '' } }, '2026-12-26': { closed: true }, '2026-12-24': { closed: false, open: 720, close: 1020 } } };
   ok(hours.dayHours(S, '2026-12-25').closed && hours.dayHours(S, '2026-12-25').exception && hours.dayHours(S, '2026-12-25').note.nl === 'Kerst', '25 Dec: closed, flagged as an exception, with its note');
   ok(hours.dayHours(S, '2026-12-24').open === 720 && hours.dayHours(S, '2026-12-24').close === 1020, '24 Dec: 12:00–17:00');
-  ok(hours.orderingState(30, at('2026-12-24T15:00:00Z'), S).open && hours.orderingState(30, at('2026-12-24T15:00:00Z'), S).last === 990, '24 Dec 16:00: open, last orders 16:30 (30 min before the day\'s own close)');
-  const eve = hours.orderingState(30, at('2026-12-24T16:00:00Z'), S);
-  ok(!eve.open && eve.when === 'later' && eve.date === '2026-12-27' && eve.at === 750, '24 Dec 17:00: closed; next opening skips the 25th and 26th to Sunday the 27th at 12:30');
+  const eve16 = hours.orderingState(30, at('2026-12-24T15:00:00Z'), S);
+  ok(!eve16.open && eve16.date === '2026-12-27' && eve16.at === 1020, '24 Dec 16:00, café open 12:00–17:00: the day ends before ordering could start, so no ordering that day; next is Sunday the 27th at 17:00 (25th and 26th closed)');
+  const L = { week: D.week, ex: { '2026-12-24': { closed: false, open: 720, close: 1140 } } }, eve18 = hours.orderingState(30, at('2026-12-24T17:00:00Z'), L);
+  ok(eve18.open && eve18.last === 1110 && !hours.orderingState(30, at('2026-12-24T17:45:00Z'), L).open, 'a day closing at 19:00: ordering 17:00 to 18:30 (30 min before that day\'s own close)');
+  const late = { week: D.week, ex: { '2026-12-24': { closed: false, open: 1080, close: 1260 } } };
+  ok(!hours.orderingState(30, at('2026-12-24T16:30:00Z'), late).open && hours.orderingState(30, at('2026-12-24T16:30:00Z'), late).at === 1080, 'a day the café opens at 18:00: ordering starts at 18:00, the later of the two');
   const xmas = hours.orderingState(30, at('2026-12-25T15:00:00Z'), S);
   ok(!xmas.open && xmas.date === '2026-12-27', '25 Dec 16:00, normally open: closed by the calendar');
   ok(hours.orderingState(30, at('2026-12-26T22:00:00Z'), S).when === 'tomorrow', '26 Dec 23:00: opens tomorrow');
