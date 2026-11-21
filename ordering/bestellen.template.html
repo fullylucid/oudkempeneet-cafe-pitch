@@ -190,7 +190,7 @@ header.mhead{position:relative;z-index:1}   /* contains the art; .shop must NOT 
     <div class="lang" role="group" aria-label="Taal" data-i18n-aria="a.lang"><button type="button" data-lang="nl" aria-pressed="true">NL</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="de" aria-pressed="false">DE</button></div>
   </div>
 </div></nav>
-<div class="sandbox" data-i18n="sb.banner">Voorbeeld — geen echte bestellingen, geen betaling</div>
+<div class="sandbox" id="sb" data-i18n="sb.banner" hidden>Voorbeeld — geen echte bestellingen, geen betaling</div>
 
 <header class="mhead">
   <img class="mhead-art" src="terrace-pastel.webp" alt="" aria-hidden="true" width="1200" height="653" decoding="async">
@@ -239,6 +239,10 @@ header.mhead{position:relative;z-index:1}   /* contains the art; .shop must NOT 
 
 <script>
 /*__TALLY__*/
+/* The "preview, no real orders" banner is true only where no order can be paid: a file:// copy, localhost,
+   the workers.dev name. On the café's own host orders are real and paid, so it stays hidden there
+   (it was shown on the live site from the opening on 2026-11-21 until this fix). */
+if(location.hostname!=='bestellen.oudkempeneetcafe.nl'){ var sbEl=document.getElementById('sb'); if(sbEl) sbEl.hidden=false; }
 var MENU=/*__MENU__*/[];
 var CATS=/*__CATS__*/{};
 var NOTES=/*__NOTES__*/{};
