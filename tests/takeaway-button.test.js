@@ -28,7 +28,7 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
       const page = await browser.newPage({ viewport: vp, hasTouch: vp.width < 800 });
       page.on('pageerror', e => errors.push(state + '/' + vp.width + ': ' + e));
       await page.goto(HOME); await page.waitForTimeout(400);
-      if (state !== 'soon') await page.evaluate(s => document.body.dataset.takeaway = s, state);
+      await page.evaluate(s => document.body.dataset.takeaway = s, state);   // every state is set explicitly; the shipped one is checked below
       await page.waitForTimeout(150);
       const m = await page.evaluate(() => {
         const a = document.querySelector('.hero-cta .ta'); if (!a) return null;
@@ -54,7 +54,7 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
     page.on('pageerror', e => errors.push('default: ' + e));
     await page.goto(HOME); await page.waitForTimeout(400);
     const start = await page.evaluate(() => document.body.dataset.takeaway);
-    ok(start === 'soon', `the page ships in the "soon" state (got ${start})`);
+    ok(start === 'new', `the page ships in the "new" state — ordering opened 2026-11-21 (got ${start})`);
     const nav = await page.evaluate(() => { const a = document.querySelector('.nav-links a[href="bestellen.html"]');
       return a ? a.textContent.trim() : null; });
     ok(nav === 'Afhalen', `the nav carries a takeaway link too (got ${nav})`);
@@ -68,8 +68,8 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
     }
     ok(/AFHALEN/i.test(labels.nl) && /TAKEAWAY/i.test(labels.en) && /ABHOLEN/i.test(labels.de),
       'the button is translated in all three languages (got ' + JSON.stringify(labels) + ')');
-    ok(/binnenkort/i.test(labels.nl) && /coming soon/i.test(labels.en) && /demn/i.test(labels.de),
-      'so is the "coming soon" suffix (got ' + JSON.stringify(labels) + ')');
+    ok(/nieuw/i.test(labels.nl) && /new/i.test(labels.en) && /neu/i.test(labels.de),
+      'so is the NEW flag (got ' + JSON.stringify(labels) + ')');
     await page.close();
     }
   }

@@ -6,6 +6,7 @@ name = "oudkempen-bestellen"
 main = "src/index.js"
 compatibility_date = "2026-08-01"
 workers_dev = true
+routes = [{ pattern = "bestellen.oudkempeneetcafe.nl", custom_domain = true }]   # step 6: opened 2026-11-21 on Schyler's go
 
 # No custom domain here yet. bestellen.oudkempeneetcafe.nl is attached on Schyler's go
 # (DEPLOY.md, "Opening to customers"); until then the Worker answers on workers.dev only.

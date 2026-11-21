@@ -1,0 +1,5 @@
+# www → the ordering app (Q28). bestellen.html stays in the repo for the tests; on www these
+# rules answer first. Workers static assets evaluate _redirects before serving any asset.
+/bestellen       https://bestellen.oudkempeneetcafe.nl 302
+/bestellen.html  https://bestellen.oudkempeneetcafe.nl 302
+/order           https://bestellen.oudkempeneetcafe.nl 302
