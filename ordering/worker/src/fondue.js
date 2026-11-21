@@ -19,9 +19,17 @@ const NAME = { nl: 'Kaasfondue (reservering, p.p.)', en: 'Cheese fondue (reserva
 const ALLOWED_ORIGINS = ['https://www.oudkempeneetcafe.nl', 'https://oudkempeneetcafe.nl'];
 const str = (v, max) => typeof v === 'string' ? v.trim().slice(0, max) : '';
 
-export function isFondue(order) { return !!order && String(order.order_note || '').startsWith(FONDUE_TAG); }
-// "KAASFONDUE-RESERVERING 2026-11-25 18:00 · 4 personen[ · opmerking: …]" → its parts
-export function parseFondue(order) {
+export const FONDUE_ITEM = 'fondue-reservering';
+// THE mark of a fondue reservation is the line this file writes: exactly one item whose item_id is
+// FONDUE_ITEM. No menu row carries that id and the takeaway path only accepts menu rows, so a
+// customer cannot produce it. The note's prefix proves NOTHING on its own — a takeaway note is the
+// customer's own text (merritt, Article-3 review of #32: a € 2,50 order read as a paid fondue).
+export function isFondue(order, items) { return !!order && Array.isArray(items) && items.length === 1 && items[0].item_id === FONDUE_ITEM; }
+// A customer's takeaway note may never begin with the tag (belt to the braces above).
+export function safeNote(note) { return /^\s*KAASFONDUE-RESERVERING/i.test(String(note || '')) ? 'Opmerking klant: ' + note : note; }
+// "KAASFONDUE-RESERVERING 2026-11-25 18:00 · 4 personen[ · opmerking: …]" → its parts, for a real fondue only
+export function parseFondue(order, items) {
+  if (!isFondue(order, items)) return null;
   const m = /^KAASFONDUE-RESERVERING (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}) · (\d+) personen(?: · opmerking: ([\s\S]*))?$/.exec(String(order && order.order_note || ''));
   return m ? { date: m[1], time: m[2], guests: +m[3], note: m[4] || '' } : null;
 }
@@ -59,13 +67,13 @@ export async function createFondue(request, env) {
   if (!v.ok) return json({ error: v.error }, 400, h);
   const settings = await loadSettings(env), msp = await getMsp(env, settings);
   if (!msp) return json({ error: 'no_psp' }, 503, h);
-  const price = parseInt(settings.fondue_price_cents, 10) || FONDUE_PRICE_CENTS, total = price * v.guests;
+  const price = FONDUE_PRICE_CENTS, total = price * v.guests;   // one price, the one printed on the form; no setting that could drift from the page
   const order = { id: newOrderId(), public_ref: newPublicRef(), status: 'pending', lang: v.lang,
     subtotal_cents: total, vat_low_cents: Math.round(total * 9 / 109), vat_high_cents: 0, total_cents: total,
     customer_name: v.name, customer_email: v.email, customer_phone: null,
     order_note: FONDUE_TAG + ' ' + v.date + ' ' + v.time + ' · ' + v.guests + ' personen' + (v.note ? ' · opmerking: ' + v.note : ''),
     pickup_eta_min: 0, created_at: new Date().toISOString() };
-  const items = [{ order_id: order.id, line: 1, item_id: 'fondue-reservering', qty: v.guests, unit_price_cents: price, vat_rate: 9,
+  const items = [{ order_id: order.id, line: 1, item_id: FONDUE_ITEM, qty: v.guests, unit_price_cents: price, vat_rate: 9,
     name_snapshot: NAME[v.lang], options_snapshot: v.date + ' ' + v.time, options_cents: 0, line_note: null }];
   await insertOrder(env, order, items);
   const r = await startPayment(request, env, settings, msp, order, items);
