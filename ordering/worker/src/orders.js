@@ -7,6 +7,7 @@ import { orderingState, readyAt } from './hours.js';
 import { newOrderId, newPublicRef, ORDER_ID_RE } from './ids.js';
 import { api, buildOrder, verifyAuth, mapStatus } from './msp.js';
 import { sendMail, alertText, alertSubject } from './mail.js';
+import { safeNote } from './fondue.js';
 const { tally } = tallyMod;
 
 export const json = (o, status = 200, headers = {}) => new Response(JSON.stringify(o), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...headers } });
@@ -37,7 +38,7 @@ export async function createOrder(request, env) {
 
   const order = { id: newOrderId(), public_ref: newPublicRef(), status: 'pending', lang,
     subtotal_cents: t.total, vat_low_cents: t.vat9, vat_high_cents: t.vat21, total_cents: t.total,
-    customer_name: name, customer_email: email, customer_phone: phone, order_note: str(body.order_note, 500) || null,
+    customer_name: name, customer_email: email, customer_phone: phone, order_note: safeNote(str(body.order_note, 500)) || null,
     pickup_eta_min: parseInt(settings.standard_wait_min, 10) || 45, created_at: nowIso() };
   const items = t.lines.map((l, i) => { const m = by[l.id], optCents = l.opts.reduce((a, o) => a + (o.price || 0), 0);
     return { order_id: order.id, line: i + 1, item_id: l.id, qty: l.qty, unit_price_cents: m.price_cents, vat_rate: l.vat,
@@ -106,7 +107,7 @@ export async function sendAlert(env, order, mspInfo) {
   const settings = await loadSettings(env);
   const to = settings.alert_to || CAFE_INBOX;
   try {
-    await sendMail(env, { to, subject: alertSubject(order), text: alertText(env, order, items, mspInfo) });
+    await sendMail(env, { to, subject: alertSubject(order, items), text: alertText(env, order, items, mspInfo) });
     await env.DB.prepare('update orders set alert_sent_at=?, alert_attempts=alert_attempts+1, updated_at=? where id=?').bind(nowIso(), nowIso(), order.id).run();
     await setSetting(env, 'alert_last_error', null);
     return true;

@@ -31,7 +31,7 @@ export async function sendMail(env, { to, subject, text }) {
 }
 // The ticket the café prints from its inbox. Dutch, plain text, everything on it (proposal §7).
 export function alertText(env, order, items, msp) {
-  const f = parseFondue(order);
+  const f = parseFondue(order, items);
   if (f) return [
     'KAASFONDUE-RESERVERING — VOORUIT BETAALD  ' + order.public_ref,
     '',
@@ -76,8 +76,8 @@ export function alertText(env, order, items, msp) {
     env.MAIL_FOOT || '',
   ].filter(x => x !== null && x !== undefined).join('\n');
 }
-export function alertSubject(order) {
-  const f = parseFondue(order);
+export function alertSubject(order, items) {
+  const f = parseFondue(order, items);
   if (f) return 'Kaasfondue BETAALD — ' + f.date + ' ' + f.time + ' — ' + f.guests + ' pers. — ' + (order.customer_name || '') + ' — ' + order.public_ref;
   return 'Afhaalbestelling ' + order.public_ref + ' — ' + eur(order.total_cents) + ' — klaar om ' + readyAt(order.created_at, order.pickup_eta_min);
 }

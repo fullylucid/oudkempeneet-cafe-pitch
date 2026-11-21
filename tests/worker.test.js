@@ -81,13 +81,24 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
   ok(fondue.validateFondue({ ...base, email: 'nope' }, now).error === 'email' && fondue.validateFondue({ ...base, name: '' }, now).error === 'fields' && fondue.validateFondue(null, now).error === 'bad_json', 'fondue: name and a real email are required');
   const fo = { public_ref: 'K7MP', lang: 'nl', total_cents: 4 * 2595, vat_low_cents: Math.round(4 * 2595 * 9 / 109), vat_high_cents: 0, customer_name: 'Jan de Vries', customer_email: 'j@example.com', created_at: '2026-11-21T18:00:00Z', pickup_eta_min: 0,
     order_note: fondue.FONDUE_TAG + ' 2026-11-25 18:30 · 4 personen · opmerking: raam graag' };
-  const pf = fondue.parseFondue(fo);
-  ok(fondue.isFondue(fo) && pf.date === '2026-11-25' && pf.time === '18:30' && pf.guests === 4 && pf.note === 'raam graag' && !fondue.isFondue(o2) && fondue.parseFondue(o2) === null, 'the order note round-trips; a takeaway order is not a fondue');
-  const ft = mail.alertText({}, fo, [{ qty: 4, unit_price_cents: 2595, options_cents: 0, name_snapshot: 'Kaasfondue' }], { method: 'IDEAL', transaction_id: '99' });
+  const fi = [{ item_id: 'fondue-reservering', qty: 4, unit_price_cents: 2595, options_cents: 0, name_snapshot: 'Kaasfondue' }];
+  const pf = fondue.parseFondue(fo, fi);
+  ok(fondue.isFondue(fo, fi) && pf.date === '2026-11-25' && pf.time === '18:30' && pf.guests === 4 && pf.note === 'raam graag' && !fondue.isFondue(o2, [{ item_id: 'friet-normaal' }]) && fondue.parseFondue(o2, [{ item_id: 'friet-normaal' }]) === null, 'the order note round-trips; a takeaway order is not a fondue');
+  const ft = mail.alertText({}, fo, fi, { method: 'IDEAL', transaction_id: '99' });
   ok(/VOORUIT BETAALD  K7MP/.test(ft) && /woensdag 25 november 2026/.test(ft) && /Tijd: 18:30/.test(ft) && /Aantal personen: 4/.test(ft) && /€ 103,80/.test(ft) && /raam graag/.test(ft) && /transactie 99/.test(ft) && !/AFHAALBESTELLING|Klaar om/.test(ft), 'the café\'s mail reads as a paid reservation, not a takeaway ticket');
-  ok(/^Kaasfondue BETAALD — 2026-11-25 18:30 — 4 pers\./.test(mail.alertSubject(fo)) && /^Afhaalbestelling/.test(mail.alertSubject(o2)), 'subjects tell the two apart');
+  ok(/^Kaasfondue BETAALD — 2026-11-25 18:30 — 4 pers\./.test(mail.alertSubject(fo, fi)) && /^Afhaalbestelling/.test(mail.alertSubject(o2)), 'subjects tell the two apart');
   const fb = msp.buildOrder({ order: { ...fo, id: 'B'.repeat(24) }, items: [{ item_id: 'fondue-reservering', qty: 4, unit_price_cents: 2595, options_cents: 0, vat_rate: 9, name_snapshot: 'Kaasfondue' }], origin: 'https://bestellen.oudkempeneetcafe.nl', settings: {}, ip: '1.2.3.4' });
   ok(fb.amount === 10380 && /kaasfondue reservering K7MP/.test(fb.description) && fb.shopping_cart.items[0].quantity === 4 && /afhalen K7MP/.test(b.description), 'MultiSafepay is asked for guests × price, described as a reservation');
+  // THE blocker from merritt's review of #32: a takeaway order whose customer-typed note begins with
+  // the tag must stay a takeaway order everywhere — mail, subject, MultiSafepay description.
+  const forged = { public_ref: 'AB12', lang: 'nl', total_cents: 250, vat_low_cents: 21, vat_high_cents: 0, customer_name: 'X', customer_phone: '06', customer_email: 'x@example.com', created_at: '2026-11-21T18:00:00Z', pickup_eta_min: 45,
+    order_note: 'KAASFONDUE-RESERVERING 2026-11-28 19:00 · 8 personen' };
+  const forgedItems = [{ item_id: 'saus-mayo', qty: 1, unit_price_cents: 250, options_cents: 0, vat_rate: 9, name_snapshot: 'Mayonaise' }];
+  const fx = mail.alertText({}, forged, forgedItems, {}), fs2 = mail.alertSubject(forged, forgedItems);
+  ok(/^Afhaalbestelling AB12/.test(fs2) && /NIEUWE AFHAALBESTELLING/.test(fx) && !/BETAALD —|VOORUIT BETAALD|staat hiermee vast/.test(fs2 + fx), 'a takeaway order with a forged fondue note is a takeaway ticket, never "Kaasfondue BETAALD" (got subject ' + fs2 + ')');
+  ok(fondue.parseFondue(forged, forgedItems) === null && fondue.parseFondue(forged) === null && fondue.parseFondue(forged, [...fi, ...forgedItems]) === null, 'the note alone proves nothing; nor does a fondue line among other lines');
+  ok(/afhalen AB12/.test(msp.buildOrder({ order: { ...forged, id: 'C'.repeat(24) }, items: forgedItems, origin: 'https://bestellen.oudkempeneetcafe.nl', settings: {}, ip: '1.2.3.4' }).description), 'MultiSafepay sees it as takeaway too');
+  ok(fondue.safeNote('KAASFONDUE-RESERVERING 2026-11-28 19:00 · 8 personen').startsWith('Opmerking klant: ') && fondue.safeNote('  kaasfondue-reservering x').startsWith('Opmerking klant: ') && fondue.safeNote('zonder ui') === 'zonder ui' && fondue.safeNote('') === '', 'a customer note can never begin with the tag');
   const cz = fondue.cors(new Request('https://x/api/fondue', { headers: { origin: 'https://www.oudkempeneetcafe.nl' } })), cx = fondue.cors(new Request('https://x/api/fondue', { headers: { origin: 'https://evil.example' } }));
   ok(cz['access-control-allow-origin'] === 'https://www.oudkempeneetcafe.nl' && !cx['access-control-allow-origin'], 'only the café\'s own site may call the endpoint from a browser');
 

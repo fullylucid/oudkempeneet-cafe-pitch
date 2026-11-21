@@ -29,7 +29,8 @@ function shell(lang, body) {
 export async function klaar(env, id) {
   if (!ORDER_ID_RE.test(id)) return shell('nl', `<div class="card bad"><h1>${T.nl.notfound}</h1></div>`);
   const o = await env.DB.prepare('select lang, order_note from orders where id=?').bind(id).first();
-  const lang = (o && T[o.lang]) ? o.lang : 'nl', f = o ? parseFondue(o) : null, t = f ? { ...T[lang], ...TF[lang] } : T[lang];
+  const its = o ? (await env.DB.prepare('select item_id from order_items where order_id=?').bind(id).all()).results : [];
+  const lang = (o && T[o.lang]) ? o.lang : 'nl', f = o ? parseFondue(o, its) : null, t = f ? { ...T[lang], ...TF[lang] } : T[lang];
   if (!o) return shell(lang, `<div class="card bad"><h1>${esc(t.notfound)}</h1><p><a href="/">${esc(t.again)}</a></p></div>`);
   const when = f ? new Intl.DateTimeFormat({ nl: 'nl-NL', en: 'en-GB', de: 'de-DE' }[lang], { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(f.date + 'T12:00:00Z')) + ', ' + f.time : '';
   const phone = env.CAFE_PHONE || '', addr = env.CAFE_ADDRESS || '';
@@ -52,6 +53,7 @@ poll();
 }
 export async function geannuleerd(env, id) {
   const o = ORDER_ID_RE.test(id) ? await env.DB.prepare('select lang, order_note from orders where id=?').bind(id).first() : null;
-  const lang = (o && T[o.lang]) ? o.lang : 'nl', f = o ? parseFondue(o) : null, t = f ? { ...T[lang], ...TF[lang] } : T[lang];
+  const its = o ? (await env.DB.prepare('select item_id from order_items where order_id=?').bind(id).all()).results : [];
+  const lang = (o && T[o.lang]) ? o.lang : 'nl', f = o ? parseFondue(o, its) : null, t = f ? { ...T[lang], ...TF[lang] } : T[lang];
   return shell(lang, `<div class="card bad"><h1>${esc(t.cancelled)}</h1><p><a href="${f ? WWW : '/'}">${esc(t.again)}</a></p></div>`);
 }

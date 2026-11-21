@@ -53,7 +53,7 @@ export function buildOrder({ order, items, origin, settings, ip }) {
     order_id: order.id,
     currency: 'EUR',
     amount: order.total_cents,
-    description: 'Oud-Kempen Eetcafé ' + (String(order.order_note || '').startsWith('KAASFONDUE-RESERVERING') ? 'kaasfondue reservering ' : 'afhalen ') + order.public_ref,
+    description: 'Oud-Kempen Eetcafé ' + (items.length === 1 && items[0].item_id === 'fondue-reservering' ? 'kaasfondue reservering ' : 'afhalen ') + order.public_ref,
     payment_options: {
       notification_url: origin + '/api/msp/notify',
       notification_method: 'POST',
