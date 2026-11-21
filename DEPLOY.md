@@ -205,3 +205,54 @@ Telegram group.
 5. Hand merritt the handles for the cafe-home patch.
 
 Nothing in `ordering/worker/` is ever published on www: `.assetsignore` excludes `ordering/` and `*.toml`.
+
+## Back office (/beheer) — staff login and opening hours
+
+The café's own admin lives on the ordering Worker at `bestellen.oudkempeneetcafe.nl/beheer`
+(source: `ordering/worker/src/admin.js`, pages in `ordering/site/beheer/`). Stage 1 is the login and
+the opening hours; the menu manager, orders and settings follow as their own PRs.
+
+**Login.** No passwords. A staff member types their address and gets a one-time link (15 minutes,
+single use, opened with a button so a mail scanner cannot spend it). Sessions last 30 days. The
+database holds only SHA-256 hashes of link tokens and session ids. Staff are the rows of table
+`staff`; while it is empty, the first login request makes the verified order inbox its owner
+(`settings.alert_to`, else the built-in café inbox; only once `alert_verified_at` is set). The mail goes
+through the same Email Routing binding as order alerts, so **a staff address must be a verified
+Email Routing destination** or its link is never delivered. To add someone: verify the address in
+Cloudflare (Email → Email Routing → Destination addresses), then
+
+    npx -y wrangler@4 d1 execute oudkempen-bestellen --remote --command "insert into staff(email,role) values('name@example.com','staff')"
+
+To lock someone out at once: set `disabled_at` on their `staff` row (their sessions stop on the
+next request).
+
+**Opening hours.** `hours_week` is the weekly rule, `hours_exceptions` the calendar (closed days,
+other hours, a note for guests in nl/en/de). The order guard and the fondue reservation check read
+them (60 s cache); if the tables cannot be read the Worker falls back to the hours in
+`hours.js` (`DEFAULT_SCHED`), never to "closed". `GET /api/hours` is the public read for the
+website and the ordering page.
+
+**Deploy order — migration first.** 0003 only adds tables; the old Worker ignores them, the new
+Worker needs them for /beheer (ordering itself falls back and keeps working either way).
+
+    cd ordering/worker
+    set -a; . ~/.config/shmorganism/secrets.env; set +a
+    export CLOUDFLARE_API_TOKEN="$DAVE_CF_TOKEN" CLOUDFLARE_ACCOUNT_ID="$DAVE_CF_ACCOUNT"
+    npx -y wrangler@4 d1 migrations apply oudkempen-bestellen --remote
+    npx -y wrangler@4 deploy
+
+**Verify after the deploy** (all on the real host):
+
+    B=https://bestellen.oudkempeneetcafe.nl
+    for p in /beheer/app /beheer/app.html /beheer/login.html /beheer/api/hours /beheer/api/log; do curl -s -o /dev/null -w "$p %{http_code}\n" $B$p; done   # 404 404 404 401 401
+    curl -s -o /dev/null -w "%{http_code}\n" -X PUT -H 'content-type: application/json' -d '{}' $B/beheer/api/hours/week                                    # 401
+    curl -s $B/api/hours | head -c 200                                                                                                                        # the week, as JSON
+    curl -s $B/api/health                                                                                                                                     # still mode:live
+
+**Before a deploy, run it locally** — the pure tests cannot see cookies, D1 or the mail binding:
+
+    node tests/admin.test.js
+    cd ordering/worker && npx -y wrangler@4 d1 migrations apply oudkempen-bestellen --local && npx -y wrangler@4 dev --local
+
+`wrangler dev` writes each mail to `.wrangler/tmp/email/…eml` (the login link is in it) and
+rewrites the request host to the route's hostname, so swap the host in the link for `localhost`.

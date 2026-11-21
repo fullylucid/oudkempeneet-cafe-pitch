@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Beheer · Oud-Kempen Eetcafé</title>
+<link rel="stylesheet" href="/beheer/app.css">
+</head>
+<body class="login">
+<main class="card">
+  <p class="eyebrow">Oud-Kempen Eetcafé</p>
+  <h1 data-t="l.title">Beheer</h1>
+
+  <form id="ask" hidden>
+    <p data-t="l.intro">Vul uw e-mailadres in. U krijgt een link waarmee u inlogt; een wachtwoord is niet nodig.</p>
+    <label for="email" data-t="l.email">E-mailadres</label>
+    <input id="email" type="email" autocomplete="email" inputmode="email" required>
+    <button class="primary" type="submit" data-t="l.send">Stuur mij een inloglink</button>
+  </form>
+
+  <div id="sent" hidden>
+    <p class="ok" data-t="l.sent">Als dit adres bij het café hoort, is er nu een link onderweg. Kijk in uw mail; de link werkt 15 minuten.</p>
+    <button class="quiet" type="button" id="again" data-t="l.again">Ander adres proberen</button>
+  </div>
+
+  <form id="enter" hidden>
+    <p data-t="l.enter">U heeft de inloglink geopend. Klik hieronder om in te loggen op dit apparaat.</p>
+    <button class="primary" type="submit" data-t="l.go">Inloggen</button>
+  </form>
+
+  <p id="err" class="err" role="alert" hidden></p>
+  <p class="lang"><button type="button" data-lang="nl">Nederlands</button> · <button type="button" data-lang="en">English</button></p>
+</main>
+<script src="/beheer/login.js"></script>
+</body>
+</html>

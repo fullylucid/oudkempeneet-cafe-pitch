@@ -5,6 +5,7 @@ import { klaar, geannuleerd } from './pages.js';
 import { createFondue } from './fondue.js';
 import { golive, LIVE_HOST } from './golive.js';
 import { loadSettings, setSetting, getMsp } from './db.js';
+import { admin, publicHours } from './admin.js';
 
 let liveSeen = false;
 export default {
@@ -12,12 +13,14 @@ export default {
     const url = new URL(request.url), p = url.pathname, m = request.method;
     if (!liveSeen && url.host === LIVE_HOST) { liveSeen = true; ctx.waitUntil(markLive(env)); }   // step 6 on the go-live page turns green by itself
     try {
-      if (p === '/robots.txt') return new Response(url.host === LIVE_HOST ? 'User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /klaar/\nDisallow: /golive\n' : 'User-agent: *\nDisallow: /\n', { headers: { 'content-type': 'text/plain' } });
+      if (p === '/robots.txt') return new Response(url.host === LIVE_HOST ? 'User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /klaar/\nDisallow: /golive\nDisallow: /beheer\n' : 'User-agent: *\nDisallow: /\n', { headers: { 'content-type': 'text/plain' } });
       if (p === '/api/orders' && m === 'POST') return await createOrder(request, env);
       if (p.startsWith('/api/orders/') && m === 'GET') return await orderStatus(env, p.slice('/api/orders/'.length));
       if (p === '/api/fondue' && (m === 'POST' || m === 'OPTIONS')) return await createFondue(request, env);
       if (p === '/api/msp/notify' && (m === 'POST' || m === 'GET')) return await notify(request, env);
       if (p === '/api/health' && m === 'GET') return await health(env, url);
+      if (p === '/api/hours' && m === 'GET') return await publicHours(env);
+      if (p === '/beheer' || p.startsWith('/beheer/')) return await admin(request, env, p, ctx);
       if (p.startsWith('/klaar/')) return await klaar(env, p.slice(7));
       if (p.startsWith('/geannuleerd/')) return await geannuleerd(env, p.slice(13));
       if (p === '/golive' || p.startsWith('/golive/')) return await golive(request, env, p);
