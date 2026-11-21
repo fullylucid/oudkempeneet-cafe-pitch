@@ -12,7 +12,8 @@
 //
 // Every write needs (1) a live session cookie, (2) an Origin header equal to this origin and
 // (3) a JSON body — a form on another site can satisfy none of the three. Every write is logged.
-import { loadSettings, loadSchedule, dropScheduleCache } from './db.js';
+import { loadSettings, loadSchedule, dropScheduleCache, dropMenuCache } from './db.js';
+import { readMenu, forCustomers, planOps } from './menu.js';
 import { hex2 } from './seal.js';
 import { sendMail } from './mail.js';
 import { json, CAFE_INBOX } from './orders.js';
@@ -20,7 +21,7 @@ import { amsDate, addDays, validYmd, dayHours, orderingState, hhmm, mins, wdOf, 
 import { parseFondue, FONDUE_ITEM } from './fondue.js';
 
 const COOKIE = '__Secure-beheer';
-const CAN = { staff: ['hours_days'] };
+const CAN = { staff: ['hours_days', 'menu_soldout'] };   // staff may mark a dish sold out for today; prices, names and the rest are the owner's
 export function can(me, action) { return !!me && (me.role === 'owner' || (CAN[me.role] || []).includes(action)); }
 const LINK_MIN = 15, SESSION_DAYS = 30, LINKS_PER_HOUR = 5, LINKS_PER_HOUR_ALL = 30, MAX_RANGE_DAYS = 92;
 const nowIso = () => new Date().toISOString();
@@ -62,7 +63,7 @@ export async function session(request, env) {
 export async function admin(request, env, p, ctx) {
   const url = new URL(request.url), m = request.method;
   // static pieces of the app: nothing secret in them, the data is behind the API
-  if (m === 'GET' && /^\/beheer\/(app|login)\.(js|css)$/.test(p)) return asset(request, env, p);
+  if (m === 'GET' && /^\/beheer\/(app|login|menu)\.(js|css)$/.test(p)) return asset(request, env, p);
   if (m === 'GET' && p.startsWith('/beheer/in/')) return TOKEN_RE.test(p.slice(11)) ? asset(request, env, '/beheer/login') : notFound();
   if (p === '/beheer/login' && m === 'POST') return requestLink(request, env, url, ctx);
   if (p === '/beheer/in' && m === 'POST') return enter(request, env);
@@ -71,6 +72,7 @@ export async function admin(request, env, p, ctx) {
     if (m !== 'GET') return notFound();
     return asset(request, env, me ? '/beheer/app' : '/beheer/login');
   }
+  if (p === '/beheer/menu') return m === 'GET' ? (me ? asset(request, env, '/beheer/menu') : new Response(null, { status: 303, headers: { location: '/beheer', 'cache-control': 'no-store' } })) : notFound();
   if (!me) return p.startsWith('/beheer/api/') ? j({ error: 'login' }, 401) : notFound();
   if (m !== 'GET' && !sameOrigin(request)) return j({ error: 'origin' }, 403);
   if (p === '/beheer/logout' && m === 'POST') {
@@ -83,8 +85,10 @@ export async function admin(request, env, p, ctx) {
     await audit(env, me.email, 'logout_all', { sessions: r.meta && r.meta.changes });
     return j({ ok: true }, 200, { 'set-cookie': COOKIE + '=; Path=/beheer; HttpOnly; Secure; SameSite=Lax; Max-Age=0' });
   }
-  if (p === '/beheer/api/me' && m === 'GET') return j({ email: me.email, role: me.role, can: { hours_week: can(me, 'hours_week'), hours_days: can(me, 'hours_days') }, cafe: env.CAFE_NAME || '', session_until: me.expires_at });
+  if (p === '/beheer/api/me' && m === 'GET') return j({ email: me.email, role: me.role, can: { hours_week: can(me, 'hours_week'), hours_days: can(me, 'hours_days'), menu_edit: can(me, 'menu_edit'), menu_soldout: can(me, 'menu_soldout') }, cafe: env.CAFE_NAME || '', session_until: me.expires_at });
   if (p === '/beheer/api/hours' && m === 'GET') return j(await hoursForStaff(env));
+  if (p === '/beheer/api/menu' && m === 'GET') return j(await readMenu(env));
+  if (p === '/beheer/api/menu/ops' && m === 'POST') return saveMenu(request, env, me);
   if (p === '/beheer/api/log' && m === 'GET') return j({ rows: (await env.DB.prepare('select at,who,action,detail from audit_log order by id desc limit 100').all()).results });
   if (m !== 'PUT') return notFound();
   const body = await request.json().catch(() => null);
@@ -148,6 +152,22 @@ async function enter(request, env) {
   ]);
   await audit(env, staff.email, 'login');
   return j({ ok: true }, 200, { 'set-cookie': COOKIE + '=' + id + '; Path=/beheer; HttpOnly; Secure; SameSite=Lax; Max-Age=' + SESSION_DAYS * 86400 });
+}
+
+// ---- the menu: the manager's operations, validated whole, applied in one batch (all or nothing), logged
+async function saveMenu(request, env, me) {
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object') return j({ error: 'bad_json' }, 400);
+  const plan = planOps(body.ops, await readMenu(env), a => can(me, a), nowIso());
+  if (!plan.ok) return j(plan, plan.error === 'role' ? 403 : 400);
+  await env.DB.batch(plan.statements.map(s => env.DB.prepare(s.sql).bind(...s.args)));
+  dropMenuCache();
+  await audit(env, me.email, 'menu', plan.log);
+  return j({ ok: true, applied: plan.log.length, menu: await readMenu(env) });
+}
+// GET /api/menu — public: the menu a customer may order from, straight from D1.
+export async function publicMenu(env) {
+  return json(forCustomers(await readMenu(env)), 200, { 'cache-control': 'public, max-age=30' });
 }
 
 // ---- opening hours

@@ -5,7 +5,7 @@ import { klaar, geannuleerd } from './pages.js';
 import { createFondue } from './fondue.js';
 import { golive, LIVE_HOST } from './golive.js';
 import { loadSettings, setSetting, getMsp } from './db.js';
-import { admin, publicHours } from './admin.js';
+import { admin, publicHours, publicMenu } from './admin.js';
 
 let liveSeen = false;
 export default {
@@ -20,6 +20,7 @@ export default {
       if (p === '/api/msp/notify' && (m === 'POST' || m === 'GET')) return await notify(request, env);
       if (p === '/api/health' && m === 'GET') return await health(env, url);
       if (p === '/api/hours' && m === 'GET') return await publicHours(env);
+      if (p === '/api/menu' && m === 'GET') return await publicMenu(env);
       if (p === '/beheer' || p.startsWith('/beheer/')) return await admin(request, env, p, ctx);
       if (p.startsWith('/klaar/')) return await klaar(env, p.slice(7));
       if (p.startsWith('/geannuleerd/')) return await geannuleerd(env, p.slice(13));

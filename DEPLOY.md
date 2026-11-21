@@ -248,13 +248,32 @@ reservations follow the café's opening time, not this. It was hotfixed live on 
 branch `hotfix/orders-from-17-live` (the pre-back-office code, Worker version 8c6b15ce); main carries
 the same rule, so deploying main keeps it.
 
+**Menu manager (`/beheer/menu`).** One template, two outputs: `beheer/beheer.template.html` builds
+the practice page (`python3 tools/build-beheer.py`, one file, nothing saved) and the real manager
+(`python3 tools/build-beheer.py --live` → `ordering/site/beheer/menu.{html,css,js}`, no menu baked in,
+no inline script or style). Edit the template, run both, commit all outputs; `tests/menu.test.js`
+fails if `menu.js` is not the template's script.
+- The page sends OPERATIONS (`update`, `option_price`, `reorder`, `archive`, `create`) to
+  `POST /beheer/api/menu/ops`; `menu.js planOps` validates the whole list and D1 applies it as one
+  batch, all or nothing. `orderable` cannot be written; removing a dish archives it; a new dish's id
+  is made by the server.
+- Staff may mark a dish sold out; everything else is the owner's.
+- **Sold out lasts for the Amsterdam day it was set on** and is enforced in the order guard
+  (`db.js loadMenu`), not only shown.
+- Categories live in D1 (`menu_cats`, migration 0004). The ordering page asks `GET /api/menu` on load
+  and every minute; what `tools/build-bestellen.py` inlines is the first paint and the fallback.
+- The page sends the total it showed (`total_cents`); if a price changed since, the Worker answers
+  409 `price_changed` and the page reloads the menu. The amount charged is always the Worker's.
+- From the first save in the manager, D1 and `data/menu.json` differ. D1 is the truth; a rebuild of
+  the ordering page from `data/menu.json` only changes the first paint.
+
 **Deploy order — migration first.** 0003 only adds tables; the old Worker ignores them, the new
 Worker needs them for /beheer (ordering itself falls back and keeps working either way).
 
     cd ordering/worker
     set -a; . ~/.config/shmorganism/secrets.env; set +a
     export CLOUDFLARE_API_TOKEN="$DAVE_CF_TOKEN" CLOUDFLARE_ACCOUNT_ID="$DAVE_CF_ACCOUNT"
-    npx -y wrangler@4 d1 migrations apply oudkempen-bestellen --remote
+    npx -y wrangler@4 d1 migrations apply oudkempen-bestellen --remote   # 0003 (staff, hours) and 0004 (menu categories)
     npx -y wrangler@4 deploy
 
 **Verify after the deploy** (all on the real host):

@@ -31,6 +31,10 @@ export async function createOrder(request, env) {
     id: String((l && l.id) || ''), qty: l && l.qty, note: str(l && l.note, 200), opts: (l && l.opts && typeof l.opts === 'object') ? l.opts : {} })) : [];
   const t = tally(lines, by, limits);
   if (!t.ok) return json({ error: t.error, missing: t.missing }, 400);
+  // The page says what total it showed. If the café changed a price since that page loaded, the
+  // customer must see the new total before paying it: refuse, the page reloads the menu. The amount
+  // charged is still ours (tally over D1), never the browser's.
+  if (Number.isInteger(body.total_cents) && body.total_cents !== t.total) return json({ error: 'price_changed', total_cents: t.total }, 409);
   const c = body.customer || {}, name = str(c.name, 80), email = str(c.email, 120), phone = str(c.phone, 30);
   if (!name || !email || !phone) return json({ error: 'fields' }, 400);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: 'email' }, 400);
