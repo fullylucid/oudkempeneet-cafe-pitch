@@ -114,6 +114,16 @@ async function submit(browser, service, mode) {
     await page.close();
     return { mail, pay, went, msg, tomorrow };
   }
+  // the no-refund notice must be on screen BEFORE the guest pays, in every language (Schyler, 2026-11-21)
+  { const pg = await browser.newPage(); await pg.goto(URL); await pg.waitForTimeout(400); const seen = {};
+    for (const l of ['nl', 'en', 'de']) {
+      await pg.locator(`.lang button[data-lang="${l}"]`).first().click({ force: true }); await pg.waitForTimeout(200);
+      seen[l] = await pg.evaluate(() => { const c = document.getElementById('f-table-fondue'), n = document.getElementById('f-table-fondue-note');
+        const before = n.hidden; c.checked = true; c.dispatchEvent(new Event('change', { bubbles: true })); const r = { before, after: n.hidden, text: n.textContent };
+        c.checked = false; c.dispatchEvent(new Event('change', { bubbles: true })); return r; }); }
+    ok(seen.nl.before && !seen.nl.after && /niet terugbetaald/.test(seen.nl.text) && /non-refundable/.test(seen.en.text) && /nicht erstattet/.test(seen.de.text),
+      `fondue: ticking the box shows the no-refund notice in nl/en/de (got ${JSON.stringify(seen)})`);
+    await pg.close(); }
   const paid = await fondue({ status: 200, body: { id: 'x', public_ref: 'K7MP', payment_url: 'https://payv2.multisafepay.com/connect/test/' } }, 4);
   ok(paid.mail.length === 0, `fondue: nothing is mailed to the café before payment (sent ${paid.mail.length})`);
   ok(paid.pay.length === 1 && paid.pay[0].guests === 4 && paid.pay[0].date === paid.tomorrow && paid.pay[0].time === '18:30' && paid.pay[0].name === 'QA Gast' && paid.pay[0].lang === 'nl',
