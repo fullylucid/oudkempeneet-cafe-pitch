@@ -349,14 +349,16 @@ function eur(c){ var s=Math.floor(c/100)+(lang==='en'?'.':',')+String(c%100).pad
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
 /* hours — the site's engine: Mon–Thu 15:00, Fri–Sun 12:30, close 21:00, Europe/Amsterdam */
 var CLOSE_M=21*60; function openMinsFor(wd){ return (wd>=1&&wd<=4)?15*60:12*60+30; }
+/* takeaway ordering starts at 17:00 every day (Dave, 2026-11-21: "5pm standard for now"); the café itself opens earlier */
+var ORDER_FROM_M=17*60; function orderFrom(wd){ return Math.max(openMinsFor(wd),ORDER_FROM_M); }
 function nowAms(){ var p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Amsterdam',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
   var wd={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[p.find(function(x){return x.type==='weekday';}).value];
   return {wd:wd,m:parseInt(p.find(function(x){return x.type==='hour';}).value,10)*60+parseInt(p.find(function(x){return x.type==='minute';}).value,10)}; }
 function fmt(m){ var h=Math.floor(m/60),mm=m%60; if(lang==='en'){ var ap=h>=12?'pm':'am',h12=h%12||12; return h12+':'+String(mm).padStart(2,'0')+' '+ap; } return h+':'+String(mm).padStart(2,'0'); }
-function orderingState(){ var n=nowAms(), open=openMinsFor(n.wd), last=CLOSE_M-SETTINGS.last_orders_offset_min;
+function orderingState(){ var n=nowAms(), open=orderFrom(n.wd), last=CLOSE_M-SETTINGS.last_orders_offset_min;
   if(n.m>=open&&n.m<last) return {open:true,last:last};
   if(n.m<open) return {open:false,when:'today',at:open};
-  return {open:false,when:'tomorrow',at:openMinsFor((n.wd+1)%7)}; }
+  return {open:false,when:'tomorrow',at:orderFrom((n.wd+1)%7)}; }
 var ST=orderingState();
 function renderState(){ ST=orderingState(); var el=document.getElementById('state'), t=document.getElementById('state-t');
   el.className='state'+(ST.open?'':' shut');

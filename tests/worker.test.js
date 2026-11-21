@@ -50,10 +50,13 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
 
   // ---- hours (same engine as the page)
   const mon14 = new Date('2026-11-16T13:00:00Z'), mon16 = new Date('2026-11-16T15:00:00Z'), sat1240 = new Date('2026-11-14T11:40:00Z'), mon2045 = new Date('2026-11-16T19:45:00Z');  // CET = UTC+1
-  ok(!hours.orderingState(30, mon14).open && hours.orderingState(30, mon14).when === 'today', 'Monday 14:00 Amsterdam: closed, opens today');
-  ok(hours.orderingState(30, mon16).open, 'Monday 16:00: open');
-  ok(hours.orderingState(30, sat1240).open, 'Saturday 12:40: open (12:30 at weekends)');
-  ok(!hours.orderingState(30, mon2045).open && hours.orderingState(30, mon2045).when === 'tomorrow', 'Monday 20:45: last orders passed (20:30)');
+  const mon1730 = new Date('2026-11-16T16:30:00Z'), sat1700 = new Date('2026-11-14T16:00:00Z'), sat1659 = new Date('2026-11-14T15:59:00Z');
+  ok(!hours.orderingState(30, mon14).open && hours.orderingState(30, mon14).when === 'today' && hours.orderingState(30, mon14).at === 1020, 'Monday 14:00 Amsterdam: closed, ordering opens today at 17:00');
+  ok(!hours.orderingState(30, mon16).open && hours.orderingState(30, mon16).at === 1020, 'Monday 16:00: the café is open, ordering is not yet (17:00, Dave 2026-11-21)');
+  ok(hours.orderingState(30, mon1730).open && hours.orderingState(30, mon1730).last === 1230, 'Monday 17:30: ordering open, last orders 20:30');
+  ok(!hours.orderingState(30, sat1240).open && !hours.orderingState(30, sat1659).open && hours.orderingState(30, sat1700).open, 'Saturday: 12:40 and 16:59 not yet, 17:00 open');
+  ok(!hours.orderingState(30, mon2045).open && hours.orderingState(30, mon2045).when === 'tomorrow' && hours.orderingState(30, mon2045).at === 1020, 'Monday 20:45: last orders passed (20:30); tomorrow from 17:00');
+  ok(hours.openMinsFor(1) === 900 && hours.openMinsFor(6) === 750, 'the café\'s own opening time is unchanged (reservations use it)');
   ok(hours.readyAt('2026-11-16T15:00:00Z', 45) === '16:45', 'ready-at = created + wait, Amsterdam clock');
 
   // ---- ids

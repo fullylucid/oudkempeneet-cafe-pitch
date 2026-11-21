@@ -2,6 +2,10 @@
 // side, because the browser is never the guard (Q8: outside hours the cart shows, checkout refuses).
 // Mon–Thu 15:00, Fri–Sun 12:30, close 21:00, Europe/Amsterdam; last orders `offsetMin` before close.
 const CLOSE_M = 21 * 60;
+// Takeaway ordering starts at 17:00 every day (Dave, 2026-11-21: "5pm standard for now"). The café
+// itself opens earlier: openMinsFor stays the café's opening time (table and fondue reservations use it).
+export const ORDER_FROM_M = 17 * 60;
+export function orderFrom(wd) { return Math.max(openMinsFor(wd), ORDER_FROM_M); }
 export function openMinsFor(wd) { return (wd >= 1 && wd <= 4) ? 15 * 60 : 12 * 60 + 30; }
 export function nowAms(date) {
   const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Amsterdam', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(date || new Date());
@@ -10,10 +14,10 @@ export function nowAms(date) {
   return { wd, m: parseInt(get('hour'), 10) % 24 * 60 + parseInt(get('minute'), 10) };
 }
 export function orderingState(offsetMin, date) {
-  const n = nowAms(date), open = openMinsFor(n.wd), last = CLOSE_M - (offsetMin | 0);
+  const n = nowAms(date), open = orderFrom(n.wd), last = CLOSE_M - (offsetMin | 0);
   if (n.m >= open && n.m < last) return { open: true, last };
   if (n.m < open) return { open: false, when: 'today', at: open };
-  return { open: false, when: 'tomorrow', at: openMinsFor((n.wd + 1) % 7) };
+  return { open: false, when: 'tomorrow', at: orderFrom((n.wd + 1) % 7) };
 }
 export function hhmm(m) { return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
 // "ready at" for the ticket: created + wait, as a clock time in Amsterdam
