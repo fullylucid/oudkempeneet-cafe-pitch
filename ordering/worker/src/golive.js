@@ -67,7 +67,9 @@ async function testOrder(request, env) {
   const items = [{ order_id: order.id, line: 1, item_id: 'test', qty: 1, unit_price_cents: 1, vat_rate: 9, name_snapshot: 'Testbetaling (1 cent)', options_snapshot: null, options_cents: 0, line_note: null }];
   await insertOrder(env, order, items);
   await setSetting(env, 'last_test_order', order.id);
-  const r = await startPayment(request, env, settings, msp, order, items);
+  // A customer's link lives half an hour; this one is sent to whoever pays the test cent and may
+  // be opened days later, so it lives a week (MultiSafepay `seconds_active`).
+  const r = await startPayment(request, env, { ...settings, msp_seconds_active: 7 * 24 * 3600 }, msp, order, items);
   const j = await r.json();
   return json(j.payment_url ? { ok: true, id: order.id, public_ref: order.public_ref, payment_url: j.payment_url } : { ok: false, error: 'MultiSafepay refused the order: ' + (j.detail || j.error) });
 }
