@@ -5,6 +5,7 @@
 // without touching the callers.
 import { eur } from './ids.js';
 import { readyAt } from './hours.js';
+import { parseFondue, dateNl } from './fondue.js';
 
 function b64chunks(s) { const b = btoa(unescape(encodeURIComponent(s))); return b.replace(/.{76}/g, '$&\r\n'); }
 function encWord(s) { return /^[\x20-\x7e]*$/.test(s) ? s : '=?UTF-8?B?' + btoa(unescape(encodeURIComponent(s))) + '?='; }
@@ -30,6 +31,26 @@ export async function sendMail(env, { to, subject, text }) {
 }
 // The ticket the café prints from its inbox. Dutch, plain text, everything on it (proposal §7).
 export function alertText(env, order, items, msp) {
+  const f = parseFondue(order);
+  if (f) return [
+    'KAASFONDUE-RESERVERING — VOORUIT BETAALD  ' + order.public_ref,
+    '',
+    'Datum: ' + dateNl(f.date),
+    'Tijd: ' + f.time,
+    'Aantal personen: ' + f.guests,
+    f.note ? 'Opmerking van de gast: ' + f.note : '',
+    '',
+    'Betaald: ' + eur(order.total_cents) + '  (' + f.guests + ' x ' + eur(items[0] ? items[0].unit_price_cents : Math.round(order.total_cents / f.guests)) + ', waarvan btw 9%: ' + eur(order.vat_low_cents) + ')',
+    'Betaald via ' + (msp && msp.method ? msp.method : 'MultiSafepay') + (msp && msp.transaction_id ? ' — MultiSafepay transactie ' + msp.transaction_id : ''),
+    '',
+    'Gast: ' + (order.customer_name || '-'),
+    'E-mail: ' + (order.customer_email || '-'),
+    'Taal: ' + order.lang,
+    '',
+    'Deze reservering is betaald en staat hiermee vast. Het bedrag verrekent u aan tafel.',
+    'Reserveringsnummer voor de gast: ' + order.public_ref + '. Terugbetalen of annuleren: in het MultiSafepay-dashboard, op de transactie hierboven.',
+    env.MAIL_FOOT || '',
+  ].join('\n');
   const ready = readyAt(order.created_at, order.pickup_eta_min);
   const lines = items.map(l => {
     const sub = (l.unit_price_cents + l.options_cents) * l.qty;
@@ -56,5 +77,7 @@ export function alertText(env, order, items, msp) {
   ].filter(x => x !== null && x !== undefined).join('\n');
 }
 export function alertSubject(order) {
+  const f = parseFondue(order);
+  if (f) return 'Kaasfondue BETAALD — ' + f.date + ' ' + f.time + ' — ' + f.guests + ' pers. — ' + (order.customer_name || '') + ' — ' + order.public_ref;
   return 'Afhaalbestelling ' + order.public_ref + ' — ' + eur(order.total_cents) + ' — klaar om ' + readyAt(order.created_at, order.pickup_eta_min);
 }

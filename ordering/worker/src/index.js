@@ -2,6 +2,7 @@
 // tools/build-bestellen.py), API and the customer's return pages here, the go-live page while it is open.
 import { createOrder, orderStatus, notify, reconcile, json } from './orders.js';
 import { klaar, geannuleerd } from './pages.js';
+import { createFondue } from './fondue.js';
 import { golive, LIVE_HOST } from './golive.js';
 import { loadSettings, setSetting, getMsp } from './db.js';
 
@@ -14,6 +15,7 @@ export default {
       if (p === '/robots.txt') return new Response(url.host === LIVE_HOST ? 'User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /klaar/\nDisallow: /golive\n' : 'User-agent: *\nDisallow: /\n', { headers: { 'content-type': 'text/plain' } });
       if (p === '/api/orders' && m === 'POST') return await createOrder(request, env);
       if (p.startsWith('/api/orders/') && m === 'GET') return await orderStatus(env, p.slice('/api/orders/'.length));
+      if (p === '/api/fondue' && (m === 'POST' || m === 'OPTIONS')) return await createFondue(request, env);
       if (p === '/api/msp/notify' && (m === 'POST' || m === 'GET')) return await notify(request, env);
       if (p === '/api/health' && m === 'GET') return await health(env, url);
       if (p.startsWith('/klaar/')) return await klaar(env, p.slice(7));
