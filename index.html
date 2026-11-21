@@ -350,10 +350,11 @@ body[data-takeaway="new"] .ta{border-color:var(--accent-2);background:rgba(231,1
 .info-window h3{font-size:24px;margin-bottom:6px;color:#2A1B10}
 .info-window .addr{color:var(--ink-dim);font-size:15px;margin-bottom:20px}
 .hours{list-style:none;padding:0;margin:0 0 20px;border-top:1px solid #E4D8C1}
-.hours li{display:flex;justify-content:space-between;padding:8px 2px;border-bottom:1px solid #E4D8C1;font-size:14px}
+.hours li{display:flex;flex-wrap:wrap;justify-content:space-between;padding:8px 2px;border-bottom:1px solid #E4D8C1;font-size:14px}
 .hours li .d{color:var(--ink)}
 .hours li .h{color:var(--ink-dim);font-variant-numeric:tabular-nums}
 .hours li.closed .h{color:#A6603A}
+.hours li .n{flex-basis:100%;font-size:12px;color:#A6603A;padding-top:2px}
 .hours li.today{background:linear-gradient(90deg,rgba(231,192,121,.22),transparent);
   margin:0 -8px;padding:8px 10px;border-radius:2px;font-weight:600}
 .hours li.today .d::before{content:"● ";color:var(--accent-2);font-size:9px;vertical-align:middle}
@@ -1772,15 +1773,43 @@ function nowInAmsterdam(){
   const mm=parseInt(p.find(x=>x.type==='minute').value,10);
   return {wd,hh,mm};
 }
+/* The café keeps its own hours in its back office; the ordering Worker serves them (GET /api/hours:
+   the next 14 days, exceptions and their notes included). Everything above is the fallback: what
+   this page shows until the answer arrives, and if it never does. Notes are staff free text and are
+   only ever set as TEXT. */
+const HOURS_URL='https://bestellen.oudkempeneetcafe.nl/api/hours';
+let HRS=null;
+function hm(s){return +s.slice(0,2)*60 + +s.slice(3,5);}
+function amsYmd(){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Amsterdam'}).format(new Date());}
+function loadHours(){
+  if(!window.fetch) return;
+  fetch(HOURS_URL,{credentials:'omit'}).then(r=>r.ok?r.json():null).then(j=>{
+    if(j&&Array.isArray(j.days)&&j.days.length>=7&&typeof j.today==='string'){HRS=j;updateOpenState();}
+  }).catch(()=>{});
+}
+function liveDays(){return HRS&&HRS.today===amsYmd()?HRS.days:null;}   // an answer from yesterday is not today's
+function paintHoursList(lang,wd){
+  const days=liveDays(), dict=I18N[lang]||I18N.nl;
+  document.querySelectorAll('#hours-list li').forEach(li=>{
+    const w=parseInt(li.dataset.day,10); li.classList.toggle('today', w===wd);
+    if(!days) return;
+    const d=days.slice(0,7).find(x=>x.wd===w), h=li.querySelector('.h'); if(!d||!h) return;   // each weekday's NEXT date, so a closed Tuesday shows on Tuesday's line
+    li.classList.toggle('closed', !!d.closed);
+    h.textContent=d.closed?(dict['visit.closed']||'Gesloten'):d.open+' – '+d.close;
+    let n=li.querySelector('.n'); const note=d.note&&(d.note[lang]||d.note.nl)||'';
+    if(note){ if(!n){n=document.createElement('span');n.className='n';li.appendChild(n);} n.textContent=note; } else if(n) n.remove();
+  });
+}
 function updateOpenState(lang){
   lang=lang||document.documentElement.lang||'nl';
   const dict=I18N[lang]||I18N.nl;
   const {wd,hh,mm}=nowInAmsterdam();
   const fig=document.getElementById('oc-fig'), u=document.getElementById('oc-u');
   if(!fig) return;
-  const nowMins=hh*60+mm, openMins=openMinsFor(wd), closeMins=CLOSE_H*60;
-  const open = nowMins>=openMins && nowMins<closeMins;
-  const opensSoon = nowMins<openMins;                       // opens later today
+  const days=liveDays(), d0=days&&days[0], shutToday=!!(d0&&d0.closed);
+  const nowMins=hh*60+mm, openMins=d0&&!d0.closed?hm(d0.open):openMinsFor(wd), closeMins=d0&&!d0.closed?hm(d0.close):CLOSE_H*60;
+  const open = !shutToday && nowMins>=openMins && nowMins<closeMins;
+  const opensSoon = !shutToday && nowMins<openMins;         // opens later today
   const openAt=fmtTime(openMins,lang), closeAt=fmtTime(closeMins,lang);
   const untilBy={nl:'tot '+closeAt,en:'until '+closeAt,de:'bis '+closeAt};
   const fromBy={nl:'vanaf '+openAt,en:'from '+openAt,de:'ab '+openAt};
@@ -1790,9 +1819,7 @@ function updateOpenState(lang){
   if(open){fig.textContent=openWord;fig.className='fig open';u.textContent=untilBy[lang]||untilBy.nl;}
   else if(opensSoon){fig.textContent=openWord;fig.className='fig open';u.textContent=fromBy[lang]||fromBy.nl;}
   else{fig.textContent=shutWord;fig.className='fig shut';u.textContent=closedBy[lang]||closedBy.nl;}
-  document.querySelectorAll('#hours-list li').forEach(li=>{
-    li.classList.toggle('today', parseInt(li.dataset.day,10)===wd);
-  });
+  paintHoursList(lang,wd);
 }
 
 /* weather codes → short label per lang */
@@ -1834,6 +1861,7 @@ async function loadWeather(){
   applyLang(saved);       // also calls updateOpenState
   loadWeather();
   setInterval(function(){updateOpenState();},60000);
+  loadHours(); setInterval(loadHours,300000);   // the café's own hours, refreshed every five minutes
 })();
 
 /* ============================================================
