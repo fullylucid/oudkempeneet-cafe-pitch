@@ -87,6 +87,19 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
   const srcA = fs.readFileSync('ordering/worker/src/admin.js', 'utf8');
   ok(/hit\.length && body\.confirm !== true\) return j\(\{ error: 'reservations'/.test(srcA), 'the save is refused with the guests named until staff confirm with the boolean true');
 
+  // ---- review of #36: the weekly rule gets the same check, and a refunded reservation is not one
+  const wkm = f => { const x = D.week.map(r => ({ ...r })); f(x); return x; };   // 10 Dec 2026 = Thursday (4), 12 Dec = Saturday (6)
+  ok(admin.hitByWeek(D.week, RES, []).length === 0, 'the usual week breaks no reservation');
+  ok(admin.hitByWeek(wkm(x => { x[4].closed = true; }), RES, []).map(r => r.ref).join() === 'K7MP', 'closing Thursdays hits the Thursday table');
+  ok(admin.hitByWeek(wkm(x => { x[6].open = 900; }), RES, []).map(r => r.ref).join() === 'D5JT', 'Saturdays from 15:00 hits the 13:00 table');
+  ok(admin.hitByWeek(wkm(x => { x[4].closed = true; }), RES, ['2026-12-10']).length === 0, 'a date with its own calendar entry is not governed by the week');
+  ok(/hitByWeek\(v\.week, await paidFondue\(env, today\), exDates\)\.filter\(r => fineUnder\(cur, r\)\);\n  if \(hit\.length && body\.confirm !== true\) return j\(\{ error: 'reservations'/.test(srcA), 'saveWeek refuses with the guests named until staff confirm');
+  const thuShut = { week: wkm(x => { x[4].closed = true; }), ex: {} };
+  ok(admin.fineUnder(D, RES[0]) && !admin.fineUnder(thuShut, RES[0]) && admin.fineUnder(thuShut, RES[1]), 'fineUnder: a table is fine while its day is open at its time');
+  ok(!admin.fineUnder({ week: D.week, ex: { '2026-12-10': { closed: false, open: 720, close: 1080 } } }, RES[0]), 'a table AT closing time is not inside the hours');
+  ok(/hitBy\(v, await paidFondue\(env, amsDate\(\)\)\)\.filter\(r => fineUnder\(cur, r\)\)/.test(srcA), 'the calendar warns only for reservations the change newly breaks, like the week');
+  ok(/o\.status='paid' and o\.msp_refund_cents<o\.total_cents/.test(srcA), 'a fully refunded fondue order is left out of the paid reservations');
+
   // ---- review point 2: role is enforced
   ok(admin.can({ role: 'owner' }, 'hours_week') && admin.can({ role: 'owner' }, 'anything_new'), 'an owner may do everything');
   ok(admin.can({ role: 'staff' }, 'hours_days') && !admin.can({ role: 'staff' }, 'hours_week') && !admin.can({ role: 'staff' }, 'anything_new'), 'staff: calendar days only; an action nobody listed is owner-only');
