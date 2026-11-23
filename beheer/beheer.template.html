@@ -85,6 +85,7 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 .lang-tag{font-size:10px;letter-spacing:.14em;color:var(--accent-3)}
 .note{font-size:12.5px;color:var(--muted);line-height:1.45}
 .note.warn{color:var(--warn)}
+.note.tight{margin:4px 0 0}
 .stub{border:1px dashed var(--line);border-radius:3px;padding:10px;background:rgba(198,180,151,.12)}
 
 /* options editor */
@@ -121,6 +122,7 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 <div class="sandbox" data-i18n-html="sandbox">Oefenversie — <b>er wordt niets opgeslagen</b>. Wijzigingen blijven alleen in deze browser staan.</div>
 
 <nav class="nav"><div class="nav-in">
+  <a class="btn btn-quiet" id="back" href="/beheer" hidden data-i18n="back">← Openingstijden</a>
   <h1 data-i18n="title">Menukaart beheren</h1>
   <span class="grow"></span>
   <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="nl" aria-pressed="true">NL</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="de" aria-pressed="false">DE</button></div>
@@ -152,6 +154,9 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+/* LIVE = this is the real manager at /beheer/menu (tools/build-beheer.py --live): the menu comes from
+   the Worker and Opslaan sends the operations to it. Not LIVE = the practice version, one file, nothing saved. */
+var LIVE=/*__LIVE__*/false;
 var MENU=/*__MENU__*/[];
 var CATS=/*__CATS__*/{};
 var CATORDER=/*__ORDER__*/[];   // from data/menu.json (cats), never a list kept here
@@ -171,8 +176,9 @@ var BY={}; MENU.forEach(function(m){ BY[m.id]=m; });
    OPERATION rather than as a new copy of the menu, because that is what the Worker will accept
    later: one endpoint per verb, and a price edit that never touches an order already placed. */
 var DRAFT={edits:{},added:[],removed:{},order:{}};
-try{ var d=JSON.parse(localStorage.getItem('ok-beheer')||'null'); if(d&&d.edits) DRAFT=d; }catch(e){}
-function store(){ try{ localStorage.setItem('ok-beheer',JSON.stringify(DRAFT)); }catch(e){} }
+var DKEY=LIVE?'ok-beheer-live':'ok-beheer';   /* a practice draft must never be sent to the real menu */
+try{ var d=JSON.parse(localStorage.getItem(DKEY)||'null'); if(d&&d.edits) DRAFT=d; }catch(e){}
+function store(){ try{ localStorage.setItem(DKEY,JSON.stringify(DRAFT)); }catch(e){} }
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 function eur(c){ return '€ '+Math.floor(c/100)+','+String(Math.abs(c)%100).padStart(2,'0'); }
@@ -185,7 +191,9 @@ function toast(m){ var el=document.getElementById('toast'); el.textContent=m; el
    fondue would quietly put a reservation-only dish on the takeaway menu. Here the second kind is
    shown as a locked state with its reason. Whether the database should separate them is a
    question for the gate, raised from this sandbox rather than guessed at. */
-function soldOut(m){ return !!m.sold_out_at; }
+/* sold out lasts for the Amsterdam day it was set on: yesterday's mark is over, here as on the ordering page */
+function amsDay(d){ return new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Amsterdam'}).format(new Date(d)); }
+function soldOut(m){ if(!m.sold_out_at) return false; var t=Date.parse(m.sold_out_at); return !isNaN(t)&&amsDay(t)===amsDay(Date.now()); }
 function lockShort(m){ return m.orderable_note==='draught' ? T('lockBar') : T('lockRes'); }
 function lockWhy(m){ return m.orderable_note==='draught'
   ? T('whyDraught') : T('whyReserve'); }
@@ -290,10 +298,10 @@ function fillEditor(box,id){ var m=view(id);
     '<div class="fld"><label>'+esc(T('fPrep'))+'</label><input type="number" min="0" max="180" data-f="prep" value="'+(m.prep_minutes==null?'':m.prep_minutes)+'" placeholder="'+esc(T('prepPh'))+'"></div>'+
     '<div class="fld"><label>'+esc(T('fVat'))+'</label><select data-f="vat"><option value="9"'+(m.vat_rate===9?' selected':'')+'>'+esc(T('vat9'))+'</option><option value="21"'+(m.vat_rate===21?' selected':'')+'>'+esc(T('vat21'))+'</option></select></div>'+
   '</div>';
-  if(m.orderable_note) h+='<div class="stub"><strong>'+esc(T('notTake'))+'</strong><p class="note" style="margin:4px 0 0">'+esc(lockWhy(m))+' '+esc(T('notDaily'))+'</p></div>';
+  if(m.orderable_note) h+='<div class="stub"><strong>'+esc(T('notTake'))+'</strong><p class="note tight">'+esc(lockWhy(m))+' '+esc(T('notDaily'))+'</p></div>';
   h+='<p class="note warn" data-vatwarn hidden>'+esc(T('vatWarn'))+'</p>';
   /* photos: the field is hidden rather than broken while R2 is off and the question is open */
-  h+='<div class="stub"><strong>'+esc(T('photo'))+'</strong><p class="note" style="margin:4px 0 0">'+esc(T('photoOff'))+'</p></div>';
+  h+='<div class="stub"><strong>'+esc(T('photo'))+'</strong><p class="note tight">'+esc(T('photoOff'))+'</p></div>';
   h+=optionsEditor(id,m);
   h+='<div><button class="btn btn-quiet" type="button" data-act="rm">'+esc(T('remove'))+'</button> '+
      '<span class="note">'+esc(T('removeNote'))+'</span></div>';
@@ -371,7 +379,7 @@ function wireDrag(){ document.querySelectorAll('.rows').forEach(function(box){
 /* ---- a new dish ---- */
 var newSeq=0;
 document.getElementById('add').addEventListener('click',function(){
-  var cat=filterCat||'main';
+  var cat=filterCat||(LIVE&&CATORDER.length?CATORDER[0]:'main');
   var id='nieuw-'+(++newSeq)+'-'+Date.now().toString(36).slice(-4);
   var maxPos=allIds().filter(function(i){return view(i).cat===cat;}).reduce(function(a,i){return Math.max(a,view(i).pos||0);},-1);
   DRAFT.added.push({id:id,kind:(['hot','soft','beer','wine','cocktail','spirit'].indexOf(cat)>=0?'drink':'food'),
@@ -383,21 +391,35 @@ document.getElementById('add').addEventListener('click',function(){
 
 /* ---- what would actually be sent ---- */
 function ops(){ var out=[];
-  Object.keys(DRAFT.edits).forEach(function(id){ if(DRAFT.removed[id]) return;
+  var isNew={}; DRAFT.added.forEach(function(a){ isNew[a.id]=1; });
+  Object.keys(DRAFT.edits).forEach(function(id){ if(DRAFT.removed[id]||isNew[id]) return;   /* a new dish travels whole, in its create */
     var e=DRAFT.edits[id], fields={}, optp=null;
     Object.keys(e).forEach(function(k){ if(k==='optPrices') optp=e[k]; else fields[k]=e[k]; });
     if(Object.keys(fields).length) out.push({op:'update',id:id,fields:fields});
     if(optp) Object.keys(optp).forEach(function(k){ var p=k.split('/');
       out.push({op:'option_price',item_id:id,group_id:p[0],option_id:p[1],price_cents:optp[k]}); }); });
-  DRAFT.added.forEach(function(a){ if(!DRAFT.removed[a.id]) out.push({op:'create',item:a}); });
-  Object.keys(DRAFT.removed).forEach(function(id){ out.push({op:'archive',id:id}); });
+  DRAFT.added.forEach(function(a){ if(!DRAFT.removed[a.id]) out.push({op:'create',item:view(a.id)}); });   /* as the owner sees it: their edits laid over the blank */
+  Object.keys(DRAFT.removed).forEach(function(id){ if(!isNew[id]) out.push({op:'archive',id:id}); });
   Object.keys(DRAFT.order).forEach(function(cat){ out.push({op:'reorder',cat:cat,ids:DRAFT.order[cat]}); });
   return out; }
 function refreshCount(){ var n=ops().length;
   document.getElementById('count').textContent=n?(n===1?T('one'):T('many',{n:n})):T('noChanges');
   document.getElementById('save').disabled=!n; document.getElementById('reset').disabled=!n; }
 
+/* ---- the real manager: load from the Worker, save to it ---- */
+function setMenu(j){ MENU=j.items; BY={}; MENU.forEach(function(m){ BY[m.id]=m; });
+  CATS={nl:{},en:{},de:{}}; j.cats.forEach(function(c){ ['nl','en','de'].forEach(function(l){ CATS[l][c.id]=c.label[l]||c.label.nl; }); });
+  CATORDER=j.cats.map(function(c){ return c.id; }); }
+function say(k,v){ var m=T(k,v); toast(m); }
+function saveLive(){ var btn=document.getElementById('save'), list=ops(); if(!list.length) return; btn.disabled=true;
+  fetch('/beheer/api/menu/ops',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({ops:list})})
+    .then(function(r){ if(r.status===401){ location.replace('/beheer'); return null; } return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+    .then(function(r){ if(!r) return; btn.disabled=false;
+      if(!r.ok){ say(r.j.error==='role'?'eRole':'eSave',{why:r.j.error+(r.j.at!=null?' #'+(r.j.at+1):'')}); return; }   /* nothing was written: the batch is all or nothing */
+      DRAFT={edits:{},added:[],removed:{},order:{}}; store(); setMenu(r.j.menu); document.getElementById('list').dataset.open=''; refresh(); say('tSaved',{n:r.j.applied}); })
+    .catch(function(){ btn.disabled=false; say('eNet'); }); }
 document.getElementById('save').addEventListener('click',function(){
+  if(LIVE){ saveLive(); return; }
   document.getElementById('payload').textContent=JSON.stringify(ops(),null,1);
   document.getElementById('modal').classList.add('on'); document.getElementById('mx').focus(); });
 document.getElementById('mx').addEventListener('click',function(){ document.getElementById('modal').classList.remove('on'); });
@@ -423,7 +445,20 @@ function applyLang(l){ if(!UI[l]) l='nl'; LANG=l; document.documentElement.lang=
   refresh(); }
 document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.dataset.lang); }); });
 function refresh(){ renderCats(); renderList(); refreshCount(); }
-applyLang(LANG);
+UI.nl.back='← Openingstijden'; UI.en.back='← Opening hours'; UI.de.back='← Öffnungszeiten';
+UI.nl.tSaved='Opgeslagen ({n}). Gasten zien dit binnen een minuut.'; UI.en.tSaved='Saved ({n}). Guests see this within a minute.'; UI.de.tSaved='Gespeichert ({n}). Gäste sehen das innerhalb einer Minute.';
+UI.nl.eSave='Niet opgeslagen: {why}. Er is niets gewijzigd.'; UI.en.eSave='Not saved: {why}. Nothing was changed.'; UI.de.eSave='Nicht gespeichert: {why}. Es wurde nichts geändert.';
+UI.nl.eRole='Niet opgeslagen: alleen de eigenaar mag dit wijzigen. U kunt wel gerechten uitverkocht melden.'; UI.en.eRole='Not saved: only the owner may change this. You can still mark dishes sold out.'; UI.de.eRole='Nicht gespeichert: nur der Inhaber darf das ändern. Ausverkauft melden geht.';
+UI.nl.eNet='Dat lukte niet. Controleer de verbinding en probeer het opnieuw.'; UI.en.eNet='That did not work. Check the connection and try again.'; UI.de.eNet='Das hat nicht geklappt. Verbindung prüfen und erneut versuchen.';
+UI.nl.eLoad='De menukaart kon niet worden geladen.'; UI.en.eLoad='The menu could not be loaded.'; UI.de.eLoad='Die Speisekarte konnte nicht geladen werden.';
+if(!LIVE) applyLang(LANG);
+else { var sb=document.querySelector('.sandbox'); if(sb) sb.remove(); document.getElementById('back').hidden=false;
+  fetch('/beheer/api/menu',{credentials:'same-origin'}).then(function(r){ if(r.status===401){ location.replace('/beheer'); return null; } return r.ok?r.json():Promise.reject(); })
+    .then(function(j){ if(!j) return; setMenu(j);
+      /* a draft that names dishes which no longer exist is dropped rather than sent */
+      Object.keys(DRAFT.edits).concat(Object.keys(DRAFT.removed)).forEach(function(id){ if(!BY[id]&&!DRAFT.added.some(function(a){return a.id===id;})){ delete DRAFT.edits[id]; delete DRAFT.removed[id]; } }); store();
+      applyLang(LANG); })
+    .catch(function(){ applyLang(LANG); say('eLoad'); }); }
 </script>
 </body>
 </html>

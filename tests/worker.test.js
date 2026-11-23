@@ -105,6 +105,25 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
   const cz = fondue.cors(new Request('https://x/api/fondue', { headers: { origin: 'https://www.oudkempeneetcafe.nl' } })), cx = fondue.cors(new Request('https://x/api/fondue', { headers: { origin: 'https://evil.example' } }));
   ok(cz['access-control-allow-origin'] === 'https://www.oudkempeneetcafe.nl' && !cx['access-control-allow-origin'], 'only the café\'s own site may call the endpoint from a browser');
 
+  // ---- the order guard reads the menu as it is NOW (merritt, review of #41): no cache between a price
+  // change and the next order, so price_changed always carries a total the page can then show
+  {
+    const orders = await import('../ordering/worker/src/orders.js'), dbm = await import('../ordering/worker/src/db.js');
+    const row = { id: 'pizza-margherita', kind: 'food', cat: 'pizza', price_cents: 1250, vat_rate: 9, orderable: 1, orderable_note: null, sold_out_at: null, name_nl: 'Margherita', name_en: 'Margherita', name_de: 'Margherita' };
+    let reads = 0; const env = { DB: { prepare: sql => ({ all: async () => { if (/from menu_items/.test(sql)) { reads++; return { results: [{ ...row }] }; } return { results: [] }; } }) } };
+    const ask = total => orders.priceOrder(env, { total_cents: total, lines: [{ id: 'pizza-margherita', qty: 2, opts: {} }] }, {});
+    const body = async r => ({ s: r.refuse.status, j: await r.refuse.json() });
+    let r = await ask(2500); ok(!r.refuse && r.t.total === 2500 && r.by['pizza-margherita'].price_cents === 1250, 'the total the page showed matches: priced');
+    row.price_cents = 1350;   // the café changes the price; no cache is dropped, nothing waits a minute
+    r = await body(await ask(2500)); ok(r.s === 409 && r.j.error === 'price_changed' && r.j.total_cents === 2700, 'the very next order with the old total is refused, with the NEW total');
+    r = await ask(2700); ok(!r.refuse && r.t.total === 2700, 'and the same order with the new total goes through');
+    r = await orders.priceOrder(env, { lines: [{ id: 'pizza-margherita', qty: 1, opts: {} }] }, {}); ok(!r.refuse && r.t.total === 1350, 'a request without total_cents is priced by the server as before');
+    row.sold_out_at = new Date().toISOString();
+    r = await body(await ask(2700)); ok(r.s === 400 && r.j.error !== 'price_changed', 'marked sold out a moment ago: the next order is refused (' + r.j.error + ')');
+    row.sold_out_at = '2001-01-01T00:00:00Z'; r = await ask(2700); ok(!r.refuse, 'sold out on an earlier day: orderable again');
+    ok(reads === 6 && !('dropMenuCache' in dbm) && dbm.loadMenu.length === 1, 'every order read D1 (6 reads for 6 orders); there is no menu cache left to go stale');
+  }
+
   console.log(fails.length ? `tests/worker.test.js: FAIL ${fails.length}/${n}\n  - ` + fails.join('\n  - ') : `tests/worker.test.js: ${n} checks passed`);
   process.exit(fails.length ? 1 : 0);
 })();

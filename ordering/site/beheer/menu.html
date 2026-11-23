@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menukaart beheren — Oud-Kempen Eetcafé</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/beheer/menu.css">
+</head>
+<body>
+<div class="sandbox" data-i18n-html="sandbox">Oefenversie — <b>er wordt niets opgeslagen</b>. Wijzigingen blijven alleen in deze browser staan.</div>
+
+<nav class="nav"><div class="nav-in">
+  <a class="btn btn-quiet" id="back" href="/beheer" hidden data-i18n="back">← Openingstijden</a>
+  <h1 data-i18n="title">Menukaart beheren</h1>
+  <span class="grow"></span>
+  <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="nl" aria-pressed="true">NL</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="de" aria-pressed="false">DE</button></div>
+  <button class="btn" id="add" type="button" data-i18n="add">+ Nieuw gerecht</button>
+</div></nav>
+
+<div class="wrap">
+  <div class="tools">
+    <input type="search" id="q" placeholder="Zoek een gerecht of drankje…" aria-label="Zoeken" data-i18n-ph="search" data-i18n-aria="searchA">
+    <button class="btn btn-quiet" id="only-so" type="button" aria-pressed="false" data-i18n="onlySo">Alleen uitverkocht</button>
+  </div>
+  <div class="cats" id="cats" role="group" aria-label="Categorieën"></div>
+  <div id="list"></div>
+</div>
+
+<div class="saveline">
+  <span class="c" id="count"></span>
+  <button class="btn btn-quiet" id="reset" type="button" disabled data-i18n="reset">Alles terugzetten</button>
+  <button class="btn btn-gold" id="save" type="button" disabled data-i18n="save">Opslaan</button>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="box">
+  <h2 id="mt" data-i18n="mTitle">Dit zou naar de kassa gaan</h2>
+  <p class="note" data-i18n="mBody">In de echte versie stuurt deze knop precies dit naar de server, die het in de database zet. Nu niet — dit is een oefenversie.</p>
+  <pre id="payload"></pre>
+  <button class="btn" id="mx" type="button" data-i18n="close">Sluiten</button>
+</div></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/beheer/menu.js"></script>
+</body>
+</html>

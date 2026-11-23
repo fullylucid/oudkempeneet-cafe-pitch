@@ -2,7 +2,7 @@
 // No framework and no build step; every number on screen comes from /beheer/api/hours.
 (function () {
   var T = {
-    nl: { 'a.title': 'Beheer', 'a.logout': 'Uitloggen', 't.hours': 'Openingstijden', 't.log': 'Logboek',
+    nl: { 'a.title': 'Beheer', 'a.logout': 'Uitloggen', 't.hours': 'Openingstijden', 't.log': 'Logboek', 't.menu': 'Menukaart', 'g.menu': 'Menukaart gewijzigd',
       'h.cal': 'Kalender', 'h.cal.hint': 'Tik op een dag om het café die dag te sluiten of andere tijden te geven. Voor een vakantie kiest u een begin- en einddatum.',
       'h.today': 'Vandaag', 'h.l.open': 'Normale tijden', 'h.l.diff': 'Andere tijden', 'h.l.shut': 'Gesloten', 'h.up': 'Komende afwijkingen', 'h.up.none': 'Geen afwijkingen gepland.',
       'h.week': 'Vaste openingstijden', 'h.week.hint': 'Deze tijden gelden elke week, tenzij de kalender voor een dag iets anders zegt.', 'h.week.save': 'Vaste tijden opslaan',
@@ -15,7 +15,7 @@
       's.open': 'Online bestellen is nu open tot {l}. Het café sluit om {c}.', 's.today': 'Online bestellen is nu dicht. Vandaag weer vanaf {t}.', 's.tomorrow': 'Online bestellen is nu dicht. Morgen weer vanaf {t}.', 's.later': 'Online bestellen is nu dicht. Weer op {d} vanaf {t}.', 's.never': 'Er staat de komende twee maanden geen open dag in de kalender.',
       'f.saved': 'Opgeslagen. Gasten zien dit binnen een minuut.', 'e.times': 'De openingstijd moet voor de sluitingstijd liggen.', 'e.dates': 'Controleer de datums: de einddatum moet op of na de begindatum liggen.', 'e.past': 'Deze dag is al voorbij.', 'e.range': 'Maximaal drie maanden in één keer.',
       'e.all_closed': 'Elke dag staat op gesloten. Gebruik de kalender voor een vakantie.', 'e.mode': 'Kies gesloten, andere tijden of normale tijden.', 'e.net': 'Dat lukte niet. Controleer de verbinding en probeer het opnieuw.', 'other': 'English' },
-    en: { 'a.title': 'Back office', 'a.logout': 'Log out', 't.hours': 'Opening hours', 't.log': 'Change log',
+    en: { 'a.title': 'Back office', 'a.logout': 'Log out', 't.hours': 'Opening hours', 't.log': 'Change log', 't.menu': 'Menu', 'g.menu': 'Menu changed',
       'h.cal': 'Calendar', 'h.cal.hint': 'Tap a day to close the café that day or give it different hours. For a holiday, choose a first and a last date.',
       'h.today': 'Today', 'h.l.open': 'Usual hours', 'h.l.diff': 'Different hours', 'h.l.shut': 'Closed', 'h.up': 'Coming changes', 'h.up.none': 'Nothing planned.',
       'h.week': 'Usual opening hours', 'h.week.hint': 'These hours apply every week, unless the calendar says something else for a day.', 'h.week.save': 'Save usual hours',
@@ -184,7 +184,7 @@
       var tb = $('logrows'); tb.textContent = '';
       if (!r.j.rows.length) { var tr0 = el('tr'); tr0.appendChild(el('td', 'none', t('g.none'))); tb.appendChild(tr0); return; }
       r.j.rows.forEach(function (x) {
-        var tr = el('tr'), detail = ''; try { var d = JSON.parse(x.detail || 'null'); if (Array.isArray(d)) detail = d.join('  '); else if (d && d.sessions !== undefined) detail = String(d.sessions); else if (d) detail = (d.from === d.to ? d.from : d.from + ' – ' + d.to) + (d.mode === 'closed' ? ' · ' + t('shut') : d.mode === 'times' ? ' · ' + d.open + '–' + d.close : '') + (d.note ? ' · ' + d.note : ''); } catch (e) {}
+        var tr = el('tr'), detail = ''; try { var d = JSON.parse(x.detail || 'null'); if (Array.isArray(d) && x.action !== 'menu') detail = d.join('  '); else if (d && d.sessions !== undefined) detail = String(d.sessions); else if (x.action === 'menu' && Array.isArray(d)) detail = d.map(function (o) { return o.op + ' ' + (o.id || o.cat || '') + (o.fields ? ' (' + o.fields.join(', ') + ')' : '') + (o.price_cents != null ? ' ' + (o.price_cents / 100).toFixed(2) : ''); }).join('; '); else if (d) detail = (d.from === d.to ? d.from : d.from + ' – ' + d.to) + (d.mode === 'closed' ? ' · ' + t('shut') : d.mode === 'times' ? ' · ' + d.open + '–' + d.close : '') + (d.note ? ' · ' + d.note : ''); } catch (e) {}
         tr.appendChild(el('td', 'at', new Intl.DateTimeFormat(loc(), { timeZone: 'Europe/Amsterdam', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(x.at))));
         tr.appendChild(el('td', 'act', t('g.' + x.action))); tr.appendChild(el('td', 'det', detail)); tr.appendChild(el('td', 'who', x.who)); tb.appendChild(tr);
       });
