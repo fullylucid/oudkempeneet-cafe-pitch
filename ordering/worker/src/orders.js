@@ -16,6 +16,21 @@ const str = (v, max) => typeof v === 'string' ? v.trim().slice(0, max) : '';
 const nowIso = () => new Date().toISOString();
 export const CAFE_INBOX = 'reservationsoke@gmail.com';   // ruling Q1 = a
 
+// The lines priced against the menu as D1 has it at this moment (no cache: db.js loadMenu), or the
+// refusal. The page says what total it showed; if the café changed a price since that page loaded,
+// the customer must see the new total before paying it: refuse with the new total, the page reloads
+// the menu. The amount charged is still ours (tally over D1), never the browser's.
+export async function priceOrder(env, body, settings) {
+  const by = await loadMenu(env);
+  const limits = { maxLines: +settings.cart_max_lines || 50, maxQty: +settings.cart_max_qty_per_line || 20, maxTotalCents: +settings.cart_max_total_cents || 50000, minOrderCents: +settings.min_order_cents || 0 };
+  const lines = Array.isArray(body.lines) ? body.lines.slice(0, limits.maxLines + 1).map(l => ({
+    id: String((l && l.id) || ''), qty: l && l.qty, note: str(l && l.note, 200), opts: (l && l.opts && typeof l.opts === 'object') ? l.opts : {} })) : [];
+  const t = tally(lines, by, limits);
+  if (!t.ok) return { refuse: json({ error: t.error, missing: t.missing }, 400) };
+  if (Number.isInteger(body.total_cents) && body.total_cents !== t.total) return { refuse: json({ error: 'price_changed', total_cents: t.total }, 409) };
+  return { t, by };
+}
+
 export async function createOrder(request, env) {
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== 'object') return json({ error: 'bad_json' }, 400);
@@ -25,16 +40,9 @@ export async function createOrder(request, env) {
   if (!st.open) return json({ error: 'closed' }, 409);
   const msp = await getMsp(env, settings);
   if (!msp) return json({ error: 'no_psp' }, 503);
-  const by = await loadMenu(env);
-  const limits = { maxLines: +settings.cart_max_lines || 50, maxQty: +settings.cart_max_qty_per_line || 20, maxTotalCents: +settings.cart_max_total_cents || 50000, minOrderCents: +settings.min_order_cents || 0 };
-  const lines = Array.isArray(body.lines) ? body.lines.slice(0, limits.maxLines + 1).map(l => ({
-    id: String((l && l.id) || ''), qty: l && l.qty, note: str(l && l.note, 200), opts: (l && l.opts && typeof l.opts === 'object') ? l.opts : {} })) : [];
-  const t = tally(lines, by, limits);
-  if (!t.ok) return json({ error: t.error, missing: t.missing }, 400);
-  // The page says what total it showed. If the café changed a price since that page loaded, the
-  // customer must see the new total before paying it: refuse, the page reloads the menu. The amount
-  // charged is still ours (tally over D1), never the browser's.
-  if (Number.isInteger(body.total_cents) && body.total_cents !== t.total) return json({ error: 'price_changed', total_cents: t.total }, 409);
+  const pr = await priceOrder(env, body, settings);
+  if (pr.refuse) return pr.refuse;
+  const { t, by } = pr;
   const c = body.customer || {}, name = str(c.name, 80), email = str(c.email, 120), phone = str(c.phone, 30);
   if (!name || !email || !phone) return json({ error: 'fields' }, 400);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: 'email' }, 400);

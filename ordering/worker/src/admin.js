@@ -12,7 +12,7 @@
 //
 // Every write needs (1) a live session cookie, (2) an Origin header equal to this origin and
 // (3) a JSON body — a form on another site can satisfy none of the three. Every write is logged.
-import { loadSettings, loadSchedule, dropScheduleCache, dropMenuCache } from './db.js';
+import { loadSettings, loadSchedule, dropScheduleCache } from './db.js';
 import { readMenu, forCustomers, planOps } from './menu.js';
 import { hex2 } from './seal.js';
 import { sendMail } from './mail.js';
@@ -48,9 +48,8 @@ async function asset(request, env, path) {
   const h = new Headers(SEC); h.set('content-type', r.headers.get('content-type') || 'text/html; charset=utf-8');
   return new Response(r.body, { status: 200, headers: h });
 }
-async function audit(env, who, action, detail) {
-  await env.DB.prepare('insert into audit_log(at,who,action,detail) values(?,?,?,?)').bind(nowIso(), who, action, detail ? JSON.stringify(detail).slice(0, 2000) : null).run();
-}
+const auditStmt = (env, who, action, detail) => env.DB.prepare('insert into audit_log(at,who,action,detail) values(?,?,?,?)').bind(nowIso(), who, action, detail ? JSON.stringify(detail).slice(0, 2000) : null);
+async function audit(env, who, action, detail) { await auditStmt(env, who, action, detail).run(); }
 export async function session(request, env) {
   const id = readCookie(request); if (!id) return null;
   const h = await sha256(id), now = nowIso();
@@ -158,11 +157,12 @@ async function enter(request, env) {
 async function saveMenu(request, env, me) {
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== 'object') return j({ error: 'bad_json' }, 400);
-  const plan = planOps(body.ops, await readMenu(env), a => can(me, a), nowIso());
+  // every id ever used, archived dishes included: a new dish must not be given one of them
+  const [menu, ids] = await Promise.all([readMenu(env), env.DB.prepare('select id from menu_items').all()]);
+  const plan = planOps(body.ops, menu, a => can(me, a), nowIso(), ids.results.map(r => r.id));
   if (!plan.ok) return j(plan, plan.error === 'role' ? 403 : 400);
-  await env.DB.batch(plan.statements.map(s => env.DB.prepare(s.sql).bind(...s.args)));
-  dropMenuCache();
-  await audit(env, me.email, 'menu', plan.log);
+  // the log line is part of the batch: a change cannot exist without it
+  await env.DB.batch([...plan.statements.map(s => env.DB.prepare(s.sql).bind(...s.args)), auditStmt(env, me.email, 'menu', plan.log)]);
   return j({ ok: true, applied: plan.log.length, menu: await readMenu(env) });
 }
 // GET /api/menu — public: the menu a customer may order from, straight from D1.

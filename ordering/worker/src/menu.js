@@ -58,10 +58,12 @@ function triIn(v, need, max) {   // {nl,en,de} partial → cleaned partial, or n
 }
 // Pure: the manager's operations against the menu as it stands → SQL to run, or the first refusal.
 // `may(action)` says what this staff member is allowed: 'menu_soldout' (the daily switch) or 'menu_edit' (everything).
-export function planOps(ops, menu, may, now) {
+// `allIds` is every id in menu_items, archived rows too: an archived dish keeps its primary key, so a
+// dish added back next season gets the next free id instead of failing the whole batch.
+export function planOps(ops, menu, may, now, allIds) {
   if (!Array.isArray(ops) || !ops.length) return { error: 'empty' };
   if (ops.length > MAX_OPS) return { error: 'too_many' };
-  const items = new Map(menu.items.map(m => [m.id, m])), cats = new Set(menu.cats.map(c => c.id)), st = [], log = [], fresh = new Set();
+  const items = new Map(menu.items.map(m => [m.id, m])), cats = new Set(menu.cats.map(c => c.id)), st = [], log = [], fresh = new Set(), taken = new Set([...(allIds || []), ...menu.items.map(m => m.id)]);
   const bad = (i, why) => ({ error: why, at: i });
   for (let i = 0; i < ops.length; i++) {
     const o = ops[i]; if (!o || typeof o !== 'object') return bad(i, 'op');
@@ -71,7 +73,7 @@ export function planOps(ops, menu, may, now) {
       if (!may(keys.every(k => k === 'sold_out_at') ? 'menu_soldout' : 'menu_edit')) return bad(i, 'role');
       const set = [], args = [];
       for (const k of keys) {
-        if (k === 'name' || k === 'desc') { const t = triIn(f[k], k === 'name', k === 'name' ? 80 : 400); if (!t) return bad(i, k); for (const l of Object.keys(t)) { set.push(k + '_' + l + '=?'); args.push(k === 'desc' && !t[l] ? null : t[l]); } }
+        if (k === 'name' || k === 'desc') { const t = triIn(f[k], k === 'name', k === 'name' ? 80 : 400); if (!t) return bad(i, k); for (const l of Object.keys(t)) { set.push(k + '_' + l + '=?'); args.push(t[l] ? t[l] : k === 'desc' ? null : (t.nl || m.name.nl)); } }   // an emptied English or German name falls back to the Dutch one, as on create
         else if (k === 'price_cents') { if (!isInt(f[k], 1, MAX_PRICE)) return bad(i, 'price'); set.push('price_cents=?'); args.push(f[k]); }
         else if (k === 'vat_rate') { if (f[k] !== 9 && f[k] !== 21) return bad(i, 'vat'); set.push('vat_rate=?'); args.push(f[k]); }
         else if (k === 'prep_minutes') { if (f[k] !== null && !isInt(f[k], 0, 180)) return bad(i, 'prep'); set.push('prep_minutes=?'); args.push(f[k]); }
@@ -84,7 +86,8 @@ export function planOps(ops, menu, may, now) {
       if (!may('menu_edit')) return bad(i, 'role');
       const m = items.get(o.item_id), g = m && m.options.find(x => x.id === o.group_id), opt = g && g.options.find(x => x.id === o.option_id);
       if (!opt) return bad(i, 'unknown_option'); if (!isInt(o.price_cents, 0, MAX_PRICE)) return bad(i, 'price');
-      st.push({ sql: 'update item_options set price_cents=? where item_id=? and group_id=? and option_id=? and archived_at is null', args: [o.price_cents, o.item_id, o.group_id, o.option_id] }); log.push({ op: 'option_price', id: o.item_id + '/' + o.group_id + '/' + o.option_id, price_cents: o.price_cents });
+      st.push({ sql: 'update item_options set price_cents=? where item_id=? and group_id=? and option_id=? and archived_at is null', args: [o.price_cents, o.item_id, o.group_id, o.option_id] });
+      st.push({ sql: 'update menu_items set updated_at=? where id=?', args: [now, o.item_id] }); log.push({ op: 'option_price', id: o.item_id + '/' + o.group_id + '/' + o.option_id, price_cents: o.price_cents });
     } else if (o.op === 'archive') {
       if (!may('menu_edit')) return bad(i, 'role'); if (!items.has(o.id) || fresh.has(o.id)) return bad(i, 'unknown_item');
       st.push({ sql: 'update menu_items set archived_at=?,updated_at=? where id=? and archived_at is null', args: [now, now, o.id] }); log.push({ op: 'archive', id: o.id }); items.delete(o.id);
@@ -103,8 +106,10 @@ export function planOps(ops, menu, may, now) {
       if (a.kind !== 'food' && a.kind !== 'drink') return bad(i, 'kind'); if (a.prep_minutes != null && !isInt(a.prep_minutes, 0, 180)) return bad(i, 'prep');
       // the page's draft id is only a handle for this batch (a later reorder names it); the stored id is made here
       const base = (a.cat + '-' + name.nl.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')).slice(0, 48) || a.cat + '-nieuw';
-      let id = base, n = 2; while (items.has(id) || !ID_RE.test(id)) { id = base.slice(0, 44) + '-' + n++; if (n > 99) return bad(i, 'name'); }
+      let id = base, n = 2; while (taken.has(id) || items.has(id) || !ID_RE.test(id)) { id = base.slice(0, 44) + '-' + n++; if (n > 99) return bad(i, 'name'); }
       const pos = isInt(a.pos, 0, 10000) ? a.pos : 999, handle = typeof a.id === 'string' ? a.id : id;
+      if (handle !== id && (taken.has(handle) || items.has(handle))) return bad(i, 'handle');   // a draft handle may not shadow a real dish
+      taken.add(id);
       st.push({ fresh: handle, sql: 'insert into menu_items(id,kind,cat,pos,name_nl,name_en,name_de,desc_nl,desc_en,desc_de,price_cents,vat_rate,orderable,prep_minutes,updated_at) values(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)',
         args: [id, a.kind, a.cat, pos, name.nl, name.en || name.nl, name.de || name.nl, desc.nl || null, desc.en || null, desc.de || null, a.price_cents, a.vat_rate, a.prep_minutes == null ? null : a.prep_minutes, now] });
       items.set(handle, { id: handle, cat: a.cat, options: [] }); fresh.add(handle); log.push({ op: 'create', id, price_cents: a.price_cents, vat_rate: a.vat_rate });

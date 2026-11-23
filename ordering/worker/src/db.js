@@ -5,9 +5,10 @@ import { DEFAULT_SCHED, amsDate, addDays } from './hours.js';
 import { soldOutToday } from './menu.js';
 
 const L = ['nl', 'en', 'de'];
-let menuCache = null;   // per isolate, 60 s — a menu edit shows within a minute, a burst of orders reads D1 once
-export async function loadMenu(env, force) {
-  if (!force && menuCache && Date.now() - menuCache.at < 60000) return menuCache.by;
+// No cache, on purpose. A per-isolate cache made an order disagree with the page for up to a minute
+// after a price change (refused as price_changed with the OLD total, and nothing newer to load), and
+// let a stale isolate accept a dish marked sold out (merritt, review of #41). Two reads per order.
+export async function loadMenu(env) {
   const items = (await env.DB.prepare('select id,kind,cat,price_cents,vat_rate,orderable,orderable_note,sold_out_at,name_nl,name_en,name_de from menu_items where archived_at is null').all()).results;
   const opts = (await env.DB.prepare('select item_id,group_id,option_id,required,group_nl,group_en,group_de,label_nl,label_en,label_de,price_cents from item_options where archived_at is null order by item_id,group_pos,option_pos').all()).results;
   const by = {}, today = amsDate();
@@ -19,7 +20,6 @@ export async function loadMenu(env, force) {
     if (!g) { g = { id: o.group_id, required: !!o.required, label: { nl: o.group_nl, en: o.group_en, de: o.group_de }, options: [] }; m.options.push(g); }
     g.options.push({ id: o.option_id, price_cents: o.price_cents, label: { nl: o.label_nl, en: o.label_en, de: o.label_de } });
   }
-  menuCache = { at: Date.now(), by };
   return by;
 }
 // The café's opening hours (0003): the weekly rule and the calendar exceptions from yesterday on.
@@ -42,7 +42,6 @@ export async function loadSchedule(env, force) {
   return v;
 }
 export function dropScheduleCache() { schedCache = null; }
-export function dropMenuCache() { menuCache = null; }
 export async function loadSettings(env) {
   const rows = (await env.DB.prepare('select key,value from settings').all()).results;
   const s = {}; for (const r of rows) s[r.key] = r.value; return s;

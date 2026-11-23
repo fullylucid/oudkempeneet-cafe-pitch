@@ -82,9 +82,27 @@ const ok = (c, m) => { n++; if (!c) fails.push(m); };
 
   // ---- wiring
   const adm = fs.readFileSync('ordering/worker/src/admin.js', 'utf8'), db = fs.readFileSync('ordering/worker/src/db.js', 'utf8'), ord = fs.readFileSync('ordering/worker/src/orders.js', 'utf8');
-  ok(/planOps\(body\.ops, await readMenu\(env\), a => can\(me, a\), nowIso\(\)\)/.test(adm) && /env\.DB\.batch\(plan\.statements/.test(adm) && /dropMenuCache\(\);\n  await audit\(env, me\.email, 'menu'/.test(adm), 'saveMenu: plan with the caller\'s rights, one batch, cache dropped, logged');
+  ok(/planOps\(body\.ops, menu, a => can\(me, a\), nowIso\(\), ids\.results\.map\(r => r\.id\)\)/.test(adm) && /select id from menu_items'\)/.test(adm) && /env\.DB\.batch\(\[\.\.\.plan\.statements\.map\([^\n]*auditStmt\(env, me\.email, 'menu', plan\.log\)\]\)/.test(adm), 'saveMenu: plan with the caller\'s rights and every id ever used, one batch that carries its own log line');
+  // ---- ids (merritt, review of #41): a new dish never gets an id that exists, archived rows included
+  const mk = (nl, id) => ({ op: 'create', item: { id, kind: 'food', cat: 'pizza', name: { nl }, price_cents: 1400, vat_rate: 9 } });
+  let q = plan([mk('Tonno', 'a'), mk('Tonno', 'b')]);
+  ok(q.ok && q.statements[0].args[0] === 'pizza-tonno' && q.statements[1].args[0] === 'pizza-tonno-2', 'two new dishes with the same name in one batch get different ids');
+  q = menu.planOps([mk('Hawaii', 'a')], M(), owner, NOW, ['pizza-hawaii', 'pizza-margherita']);
+  ok(q.ok && q.statements[0].args[0] === 'pizza-hawaii-2', 'a dish archived earlier and added again gets the next free id, not the archived row\'s key');
+  q = menu.planOps([mk('Hawaii'), mk('Hawaii')], M(), owner, NOW, ['pizza-hawaii']);
+  ok(q.ok && q.statements[0].args[0] === 'pizza-hawaii-2' && q.statements[1].args[0] === 'pizza-hawaii-3', 'the same without draft handles');
+  q = plan([mk('Nieuw', 'pizza-margherita')]); ok(q.error === 'handle' && q.at === 0, 'a draft handle equal to an existing dish id is refused, it cannot shadow that dish');
+  q = menu.planOps([mk('Nieuw', 'pizza-hawaii')], M(), owner, NOW, ['pizza-hawaii']); ok(q.error === 'handle', 'nor equal to an archived one');
+  q = plan([mk('Tonno', 'h1'), { op: 'reorder', cat: 'pizza', ids: ['h1', 'pizza-margherita', 'pizza-funghi'] }]); ok(q.ok && q.statements[0].args[3] === 0, 'a later reorder still finds the new dish by its handle');
+  // ---- an emptied English or German name falls back to Dutch; a choice price touches updated_at
+  q = plan([{ op: 'update', id: 'friet-normaal', fields: { name: { en: '', de: 'Fritten' } } }]);
+  ok(q.ok && /name_en=\?,name_de=\?/.test(q.statements[0].sql) && q.statements[0].args[0] === 'Friet' && q.statements[0].args[1] === 'Fritten', 'name.en emptied is stored as the Dutch name');
+  q = plan([{ op: 'update', id: 'friet-normaal', fields: { name: { nl: 'Patat', en: '' } } }]); ok(q.ok && q.statements[0].args[1] === 'Patat', 'and as the NEW Dutch name when that changes in the same op');
+  q = plan([{ op: 'option_price', item_id: 'friet-normaal', group_id: 'saus', option_id: 'mayo', price_cents: 120 }]);
+  ok(q.ok && q.statements.length === 2 && /update menu_items set updated_at=\? where id=\?/.test(q.statements[1].sql) && q.statements[1].args[1] === 'friet-normaal' && q.log.length === 1, 'a choice price also stamps the dish\'s updated_at');
   ok(/orderable: !!i\.orderable && !soldOutToday\(i\.sold_out_at, today\)/.test(db), 'the order guard treats sold-out-today as not orderable');
-  ok(/Number\.isInteger\(body\.total_cents\) && body\.total_cents !== t\.total\) return json\(\{ error: 'price_changed'/.test(ord), 'an order whose shown total no longer matches is refused before any payment starts');
+  { const co = ord.slice(ord.indexOf('export async function createOrder(')), a = co.indexOf('const pr = await priceOrder(env, body, settings);\n  if (pr.refuse) return pr.refuse;'), b = co.indexOf('await insertOrder(');
+    ok(a > 0 && b > a && /body\.total_cents !== t\.total\) return \{ refuse: json\(\{ error: 'price_changed', total_cents: t\.total \}, 409\)/.test(ord), 'an order whose shown total no longer matches is refused before any order row or payment exists (behaviour: tests/worker.test.js)'); }
   const page = fs.readFileSync('ordering/site/index.html', 'utf8');
   ok(/fetch\('\/api\/menu'/.test(page) && /total_cents:t\.total/.test(page) && /price_changed/.test(page), 'the built ordering page asks /api/menu, sends the total it showed and knows price_changed');
   const live = fs.readFileSync('ordering/site/beheer/menu.html', 'utf8'), ljs = fs.readFileSync('ordering/site/beheer/menu.js', 'utf8');
